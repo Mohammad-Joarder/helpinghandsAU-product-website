@@ -10,7 +10,12 @@ export default function CookieBanner() {
 
   useEffect(() => {
     setMounted(true);
-    const accepted = localStorage.getItem("cookie-consent");
+    let accepted: string | null = null;
+    try {
+      accepted = localStorage.getItem("cookie-consent");
+    } catch {
+      /* private mode / blocked storage */
+    }
     if (!accepted) {
       const timer = setTimeout(() => setVisible(true), 2000);
       return () => clearTimeout(timer);
@@ -20,12 +25,20 @@ export default function CookieBanner() {
   if (!mounted) return null;
 
   const accept = () => {
-    localStorage.setItem("cookie-consent", "accepted");
+    try {
+      localStorage.setItem("cookie-consent", "accepted");
+    } catch {
+      /* ignore */
+    }
     setVisible(false);
   };
 
   const decline = () => {
-    localStorage.setItem("cookie-consent", "declined");
+    try {
+      localStorage.setItem("cookie-consent", "declined");
+    } catch {
+      /* ignore */
+    }
     setVisible(false);
   };
 

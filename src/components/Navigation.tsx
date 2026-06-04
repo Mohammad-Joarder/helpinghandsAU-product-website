@@ -27,47 +27,75 @@ export default function Navigation() {
   useEffect(() => {
     setMounted(true);
     setScrolled(window.scrollY > 20);
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        ticking = false;
+        const next = window.scrollY > 20;
+        setScrolled((prev) => (prev === next ? prev : next));
+      });
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   // Intersection Observer — highlights the nav link for whichever section
-  // occupies the most of the upper viewport at any given moment
+  // occupies the most of the upper viewport at any given moment.
+  // Uses sparse thresholds + rAF + setState only when the winner changes to
+  // avoid scroll-time allocation storms and excessive re-renders.
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
+    const ratios = new Map<string, number>();
+    sectionIds.forEach((id) => ratios.set(id, 0));
 
-    // We keep a map of { sectionId → intersectionRatio } and pick the highest
-    const ratios: Record<string, number> = {};
+    let rafId = 0;
+    let lastPosted = "";
 
-    const updateActive = () => {
+    const flush = () => {
+      rafId = 0;
       let best = "";
       let bestRatio = 0;
-      for (const [id, ratio] of Object.entries(ratios)) {
-        if (ratio > bestRatio) { bestRatio = ratio; best = id; }
+      for (const id of sectionIds) {
+        const ratio = ratios.get(id) ?? 0;
+        if (ratio > bestRatio) {
+          bestRatio = ratio;
+          best = id;
+        }
       }
-      if (best) setActiveSection(best);
+      if (best && best !== lastPosted) {
+        lastPosted = best;
+        setActiveSection(best);
+      }
     };
+
+    const scheduleFlush = () => {
+      if (rafId !== 0) return;
+      rafId = requestAnimationFrame(flush);
+    };
+
+    const thresholds = [0, 0.15, 0.35, 0.55, 0.75, 1];
 
     sectionIds.forEach((id) => {
       const el = document.getElementById(id);
       if (!el) return;
-      ratios[id] = 0;
 
       const obs = new IntersectionObserver(
         ([entry]) => {
-          ratios[id] = entry.intersectionRatio;
-          updateActive();
+          ratios.set(id, entry.intersectionRatio);
+          scheduleFlush();
         },
-        // rootMargin clips the top by nav height so sections are judged from
-        // just below the nav downwards
-        { threshold: Array.from({ length: 21 }, (_, i) => i / 20), rootMargin: "-72px 0px 0px 0px" }
+        { threshold: thresholds, rootMargin: "-72px 0px 0px 0px" }
       );
       obs.observe(el);
       observers.push(obs);
     });
 
-    return () => observers.forEach((o) => o.disconnect());
+    return () => {
+      if (rafId !== 0) cancelAnimationFrame(rafId);
+      observers.forEach((o) => o.disconnect());
+    };
   }, []);
 
   const handleNavClick = (href: string) => {
@@ -84,6 +112,7 @@ export default function Navigation() {
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] as [number,number,number,number] }}
+        suppressHydrationWarning
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           mounted && scrolled ? "glass shadow-[0_1px_0_rgba(0,0,0,0.06)]" : "bg-transparent"
         }`}
@@ -99,14 +128,14 @@ export default function Navigation() {
             >
               <div className="flex items-center gap-2.5">
                 <div className="relative w-8 h-8 flex-shrink-0">
-                  <Image src="/icon-helpinghandsau.png" alt="HelpingHandsAu" fill sizes="32px" className="object-contain" />
+                  <Image src="/icon-helpinghandsau.png" alt="HelpingHandsAu" fill sizes="32px" className="object-contain" priority />
                 </div>
                 <span className="font-semibold text-[14px] text-[#111111] tracking-tight hidden sm:block">
                   HelpingHands<span className="text-[#1AABF0]">Au</span>
                 </span>
                 <div className="w-px h-5 bg-[rgba(0,0,0,0.12)] mx-0.5" aria-hidden="true" />
                 <div className="relative w-8 h-8 flex-shrink-0">
-                  <Image src="/icon_letsgo.png" alt="LetsGO" fill sizes="32px" className="object-contain" />
+                  <Image src="/icon_letsgo.png" alt="LetsGO" fill sizes="32px" className="object-contain" priority />
                 </div>
                 <span className="font-semibold text-[14px] text-[#111111] tracking-tight hidden sm:block">
                   Let&rsquo;s<span className="text-[#E8511A]">GO</span>

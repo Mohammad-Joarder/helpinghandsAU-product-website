@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Mail, MapPin, ArrowRight, MessageCircle, CheckCircle, Loader2 } from "lucide-react";
 
 const contactDetails = [
@@ -30,6 +30,16 @@ type Status = "idle" | "sending" | "sent" | "error";
 export default function ContactSection() {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
+  const submitTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (submitTimeoutRef.current !== null) {
+        clearTimeout(submitTimeoutRef.current);
+        submitTimeoutRef.current = null;
+      }
+    };
+  }, []);
 
   const [status, setStatus] = useState<Status>("idle");
   const [form, setForm] = useState({
@@ -65,8 +75,9 @@ export default function ContactSection() {
     // Open the user's mail client pre-filled — works without a backend
     window.location.href = `mailto:admin@helpinghandsau.com?subject=${subject}&body=${body}`;
 
-    // Brief delay then show success state
-    setTimeout(() => {
+    if (submitTimeoutRef.current !== null) clearTimeout(submitTimeoutRef.current);
+    submitTimeoutRef.current = setTimeout(() => {
+      submitTimeoutRef.current = null;
       setStatus("sent");
       setForm({ firstName: "", lastName: "", email: "", enquiryType: "", message: "" });
     }, 800);
@@ -172,7 +183,7 @@ export default function ContactSection() {
                   aria-label="Contact form"
                 >
                   <div className="grid grid-cols-2 gap-4">
-                    <div>
+                    <div suppressHydrationWarning>
                       <label htmlFor="firstName" className="block text-xs font-medium text-[#4A4F4A] mb-1.5">
                         First Name
                       </label>
@@ -188,7 +199,7 @@ export default function ContactSection() {
                         placeholder="Alex"
                       />
                     </div>
-                    <div>
+                    <div suppressHydrationWarning>
                       <label htmlFor="lastName" className="block text-xs font-medium text-[#4A4F4A] mb-1.5">
                         Last Name
                       </label>

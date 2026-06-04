@@ -1,7 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { useInView } from "framer-motion";
+import { motion, useInView, useReducedMotion } from "framer-motion";
 import { useRef, useState } from "react";
 import {
   MapPin, DollarSign, Star, Clock, CheckCircle, ArrowRight,
@@ -208,6 +207,7 @@ function ProviderScreen() {
 }
 
 function TrackingScreen() {
+  const reduceMotion = useReducedMotion();
   return (
     <div className="w-full h-full bg-[#ECECE8] relative overflow-hidden">
       {/* Simulated map */}
@@ -229,7 +229,11 @@ function TrackingScreen() {
           strokeDasharray="8,4"
           initial={{ pathLength: 0 }}
           animate={{ pathLength: 1 }}
-          transition={{ duration: 2.5, ease: "easeInOut", repeat: Infinity }}
+          transition={
+            reduceMotion
+              ? { duration: 0.35, ease: "easeOut" }
+              : { duration: 2.5, ease: "easeInOut", repeat: Infinity }
+          }
         />
         {/* Car */}
         <circle cx="160" cy="240" r="8" fill="#3D7A7A" />

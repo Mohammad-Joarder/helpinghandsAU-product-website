@@ -117,28 +117,66 @@ export default function Footer() {
               </div>
             </div>
 
-            {/* Right: compact QR pair */}
+            {/* Right: HelpingHandsAu QR + LetsGO coming soon */}
             <div className="flex items-start gap-6">
-              {[
-                { src: "/qr-apple.png",   label: "iOS App",     store: "App Store",    color: "#1AABF0" },
-                { src: "/qr-android.png", label: "Android App", store: "Google Play",  color: "#E8511A" },
-              ].map((qr) => (
-                <div key={qr.store} className="flex flex-col items-center gap-2">
-                  <div className="relative w-[80px] h-[80px] bg-white rounded-xl p-1.5 shadow-[0_4px_16px_rgba(0,0,0,0.3)]">
-                    <Image
-                      src={qr.src}
-                      alt={`Scan to download on ${qr.store}`}
-                      fill
-                      sizes="80px"
-                      className="object-contain p-0.5 rounded-lg"
-                    />
-                  </div>
-                  <div className="text-center">
-                    <div className="text-[10px] font-bold text-white">{qr.label}</div>
-                    <div className="text-[9px] text-gray-500">{qr.store}</div>
-                  </div>
+              {/* HelpingHandsAu — iOS QR */}
+              <div className="flex flex-col items-center gap-2">
+                <div className="relative w-[80px] h-[80px] bg-white rounded-xl p-1.5 shadow-[0_4px_16px_rgba(0,0,0,0.3)]">
+                  <Image
+                    src="/qr-apple.png"
+                    alt="Scan to download HelpingHandsAu on App Store"
+                    fill
+                    sizes="80px"
+                    className="object-contain p-0.5 rounded-lg"
+                  />
                 </div>
-              ))}
+                <div className="text-center">
+                  <div className="text-[10px] font-bold text-white">iOS App</div>
+                  <div className="text-[9px] text-gray-500">App Store</div>
+                </div>
+              </div>
+
+              {/* HelpingHandsAu — Android QR */}
+              <div className="flex flex-col items-center gap-2">
+                <div className="relative w-[80px] h-[80px] bg-white rounded-xl p-1.5 shadow-[0_4px_16px_rgba(0,0,0,0.3)]">
+                  <Image
+                    src="/qr-android.png"
+                    alt="Scan to download HelpingHandsAu on Google Play"
+                    fill
+                    sizes="80px"
+                    className="object-contain p-0.5 rounded-lg"
+                  />
+                </div>
+                <div className="text-center">
+                  <div className="text-[10px] font-bold text-white">Android App</div>
+                  <div className="text-[9px] text-gray-500">Google Play</div>
+                </div>
+              </div>
+
+              {/* LetsGO — Coming Soon */}
+              <div className="flex flex-col items-center gap-2">
+                <div
+                  className="w-[80px] h-[80px] rounded-xl flex flex-col items-center justify-center gap-1 border"
+                  style={{
+                    background: "rgba(232,81,26,0.08)",
+                    borderColor: "rgba(232,81,26,0.25)",
+                    boxShadow: "0 4px 16px rgba(232,81,26,0.15)",
+                  }}
+                >
+                  <svg viewBox="0 0 24 24" fill="none" className="w-5 h-5" aria-hidden="true">
+                    <rect x="5" y="2" width="14" height="20" rx="2.5" stroke="#E8511A" strokeWidth="1.5" fill="rgba(232,81,26,0.1)"/>
+                    <circle cx="12" cy="18" r="1" fill="#E8511A" opacity="0.7"/>
+                    <rect x="9" y="5" width="6" height="1" rx="0.5" fill="#E8511A" opacity="0.4"/>
+                  </svg>
+                  <span className="text-[8px] font-black uppercase tracking-wide leading-tight text-center" style={{ color: "#E8511A" }}>
+                    June<br/>2026
+                  </span>
+                </div>
+                <div className="text-center">
+                  <div className="text-[10px] font-bold" style={{ color: "#E8511A" }}>LetsGO</div>
+                  <div className="text-[9px] text-gray-500">Coming Soon</div>
+                </div>
+              </div>
             </div>
           </div>
         </motion.div>

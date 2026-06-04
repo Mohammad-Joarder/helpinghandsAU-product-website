@@ -1,38 +1,36 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jakarta = Plus_Jakarta_Sans({
+  variable: "--font-jakarta",
   subsets: ["latin"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "HelpingHandsAu & LetsGO — Powering Local Economies & Mobility",
+  title: "HelpingHandsAU — Australia's Trusted Services Marketplace",
   description:
-    "HelpingHandsAu and LetsGO are production-grade Australian platforms connecting service providers, customers, riders and drivers through intelligent, secure, and compliant technology.",
+    "Post a task, receive bids, and get it done. HelpingHandsAU connects Australians with skilled local service providers — safely, securely, and affordably.",
   keywords: [
-    "HelpingHandsAu", "LetsGO", "Australian marketplace", "rideshare", "service providers",
-    "Stripe payments", "AI fraud prevention", "driver compliance", "realtime tracking"
+    "HelpingHandsAU", "Australian marketplace", "local services", "task platform",
+    "hire local", "service providers", "post a task", "Stripe escrow",
   ],
-  authors: [{ name: "HelpingHandsAu & LetsGO" }],
+  authors: [{ name: "HelpingHandsAU" }],
+  icons: {
+    icon: "/icon-helpinghandsau.png",
+    apple: "/icon-helpinghandsau.png",
+  },
   openGraph: {
-    title: "HelpingHandsAu & LetsGO",
-    description: "Two intelligent platforms powering local economies and mobility across Australia.",
+    title: "HelpingHandsAU — Australia's Trusted Services Marketplace",
+    description: "Post a task. Get bids. Hire confidently. Funds held in escrow until the job is done.",
     type: "website",
     locale: "en_AU",
   },
   twitter: {
     card: "summary_large_image",
-    title: "HelpingHandsAu & LetsGO",
-    description: "Two intelligent platforms powering local economies and mobility across Australia.",
+    title: "HelpingHandsAU — Australia's Trusted Services Marketplace",
+    description: "Post a task. Get bids. Hire confidently. Funds held in escrow until the job is done.",
   },
   robots: { index: true, follow: true },
 };
@@ -50,12 +48,11 @@ export default function RootLayout({
   return (
     <html
       lang="en-AU"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${jakarta.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col bg-[#F7F7F5] text-[#111111]">
-        <div className="flex flex-col flex-1" style={{ paddingTop: "var(--nav-height)" }}>
-          {children}
-        </div>
+      <body className="min-h-full flex flex-col bg-[#F7F7F5] text-[#111111]" suppressHydrationWarning>
+        {children}
       </body>
     </html>
   );

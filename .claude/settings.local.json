@@ -1,7 +1,14 @@
 {
   "permissions": {
     "allow": [
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(netstat -ano)",
+      "Bash(taskkill *)",
+      "Bash(kill 22516)",
+      "Bash(xargs grep -l \"favicon\\\\|icon\")",
+      "Bash(cp -r \"/c/Users/mohammad.joarder/Downloads/helpinghands-website\" \"/c/Users/mohammad.joarder/Downloads/helpinghandsau-website\")",
+      "Bash(cp -r \"/c/Users/mohammad.joarder/Downloads/helpinghands-website\" \"/c/Users/mohammad.joarder/Downloads/letsgo-website\")",
+      "Bash(cat *)"
     ]
   }
 }
