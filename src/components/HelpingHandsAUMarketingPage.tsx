@@ -797,7 +797,7 @@ function Footer() {
           ))}
         </div>
         <div style={{ borderTop: `1px solid #21262D`, paddingTop: 32, display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
-          <p style={{ fontSize: 13, color: "#8B949E" }}>© 2026 HelpingHandsAU Pty Ltd. All rights reserved. ABN 00 000 000 000</p>
+          <p style={{ fontSize: 13, color: "#8B949E" }}>© 2026 HelpingHandsAU Pty Ltd. All rights reserved. ABN 94 693 919 185</p>
           <p style={{ fontSize: 13, color: "#8B949E" }}>Made with care in Australia 🇦🇺</p>
         </div>
       </div>
