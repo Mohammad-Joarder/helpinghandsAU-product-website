@@ -1,14 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --bg-primary: #F7F7F5;
-  --bg-secondary: #ECECE8;
-  --text-primary: #111111;
-  --text-secondary: #2A2D2A;
-  --text-muted: #6B7280;
-  --accent-green: #4A7C6B;
-  --accent-teal: #3D7A7A;
-  --accent-graphite: #4A4F4A;
+  /* Cool paper — slight blue bias reads premium next to logo cyan */
+  --bg-primary: #F4F8FB;
+  --bg-secondary: #E8EEF3;
+  --text-primary: #0B1220;
+  --text-secondary: #1A2433;
+  --text-muted: #5C6B7A;
+  /* Logo cyan + deep shade (icon / HelpingHandsAu lockup) */
+  --accent-primary: #1AABF0;
+  --accent-primary-deep: #0A8FCC;
+  --accent-graphite: #3D4A5C;
   --border-subtle: rgba(0, 0, 0, 0.06);
   --border-medium: rgba(0, 0, 0, 0.1);
   --shadow-subtle: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
@@ -38,18 +40,18 @@ body {
 }
 
 *:focus-visible {
-  outline: 2px solid var(--accent-teal);
+  outline: 2px solid var(--accent-primary);
   outline-offset: 2px;
   border-radius: 4px;
 }
 
 ::selection {
-  background: rgba(61, 122, 122, 0.15);
+  background: rgba(26, 171, 240, 0.18);
   color: var(--text-primary);
 }
 
 .glass {
-  background: rgba(247, 247, 245, 0.75);
+  background: rgba(244, 248, 251, 0.82);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.6);
@@ -67,7 +69,7 @@ body {
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, #4A7C6B 0%, #3D7A7A 50%, #4A4F4A 100%);
+  background: linear-gradient(135deg, #1AABF0 0%, #0A8FCC 45%, #3D4A5C 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -173,5 +175,5 @@ body {
 .device-screen {
   border-radius: 30px;
   overflow: hidden;
-  background: #F7F7F5;
+  background: var(--bg-primary);
 }

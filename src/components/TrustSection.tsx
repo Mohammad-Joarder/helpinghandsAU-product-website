@@ -15,7 +15,7 @@ const trustPillars = [
     description:
       "All transactions processed via Stripe's PCI-DSS Level 1 infrastructure. Escrow protection ensures funds are only released upon verified completion.",
     badge: "PCI-DSS Level 1",
-    color: "#4A7C6B",
+    color: "#1AABF0",
   },
   {
     icon: UserCheck,
@@ -23,7 +23,7 @@ const trustPillars = [
     description:
       "Every provider and driver undergoes rigorous identity verification during onboarding — ID checks, document validation, and background screening.",
     badge: "KYC Compliant",
-    color: "#3D7A7A",
+    color: "#0A8FCC",
   },
   {
     icon: Server,
@@ -39,7 +39,7 @@ const trustPillars = [
     description:
       "Built around Australian Privacy Principles, Privacy Act 1988, and transport regulations. Every data collection is disclosed and consented.",
     badge: "Privacy Act 1988",
-    color: "#4A7C6B",
+    color: "#1AABF0",
   },
   {
     icon: AlertTriangle,
@@ -47,7 +47,7 @@ const trustPillars = [
     description:
       "Machine learning models continuously analyse patterns across both platforms — identifying suspicious activity and flagging accounts in realtime.",
     badge: "Realtime AI",
-    color: "#3D7A7A",
+    color: "#0A8FCC",
   },
   {
     icon: Eye,
@@ -78,7 +78,7 @@ export default function TrustSection() {
   const badgesInView = useInView(badgesRef, { once: true, margin: "-60px" });
 
   return (
-    <section id="trust" className="section-padding bg-[#F7F7F5]" aria-labelledby="trust-heading">
+    <section id="trust" className="section-padding bg-[#F4F8FB]" aria-labelledby="trust-heading">
       <div className="container-tight">
         {/* Section header */}
         <motion.div
@@ -88,7 +88,7 @@ export default function TrustSection() {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="text-center mb-16"
         >
-          <span className="text-xs font-semibold uppercase tracking-widest text-[#4A7C6B] mb-4 block">
+          <span className="text-xs font-semibold uppercase tracking-widest text-[#1AABF0] mb-4 block">
             Trust & Safety
           </span>
           <h2
@@ -149,15 +149,15 @@ export default function TrustSection() {
         >
           <div className="absolute inset-0 pointer-events-none">
             <div className="absolute top-0 right-0 w-96 h-96 rounded-full opacity-[0.04]"
-              style={{ background: "radial-gradient(circle, #4A7C6B 0%, transparent 70%)", transform: "translate(30%, -30%)" }} />
+              style={{ background: "radial-gradient(circle, #1AABF0 0%, transparent 70%)", transform: "translate(30%, -30%)" }} />
             <div className="absolute bottom-0 left-0 w-64 h-64 rounded-full opacity-[0.04]"
-              style={{ background: "radial-gradient(circle, #3D7A7A 0%, transparent 70%)", transform: "translate(-30%, 30%)" }} />
+              style={{ background: "radial-gradient(circle, #0A8FCC 0%, transparent 70%)", transform: "translate(-30%, 30%)" }} />
           </div>
 
           <div className="relative z-10">
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-xl bg-[#4A7C6B]/20 flex items-center justify-center">
-                <ShieldCheck size={20} className="text-[#4A7C6B]" aria-hidden="true" />
+              <div className="w-10 h-10 rounded-xl bg-[#1AABF0]/20 flex items-center justify-center">
+                <ShieldCheck size={20} className="text-[#1AABF0]" aria-hidden="true" />
               </div>
               <div>
                 <h3 className="text-xl font-semibold text-white">Australian Compliance Standards</h3>
@@ -174,7 +174,7 @@ export default function TrustSection() {
                   transition={{ duration: 0.4, delay: i * 0.06 }}
                   className="flex items-center gap-1.5 bg-white/8 border border-white/10 text-xs text-gray-300 px-3.5 py-1.5 rounded-full font-medium hover:bg-white/12 transition-colors"
                 >
-                  <KeyRound size={10} className="text-[#4A7C6B]" aria-hidden="true" />
+                  <KeyRound size={10} className="text-[#1AABF0]" aria-hidden="true" />
                   {badge}
                 </motion.span>
               ))}

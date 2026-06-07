@@ -12,7 +12,7 @@ const legalDocuments = [
     description: "How we collect, use, store and protect your personal information in accordance with the Privacy Act 1988 and Australian Privacy Principles.",
     href: "/legal/privacy",
     badge: "Privacy Act 1988",
-    color: "#4A7C6B",
+    color: "#1AABF0",
   },
   {
     icon: FileText,
@@ -20,7 +20,7 @@ const legalDocuments = [
     description: "The legal agreement governing your use of HelpingHandsAu and LetsGO platforms, including user rights and obligations.",
     href: "/legal/terms",
     badge: "Updated 2025",
-    color: "#3D7A7A",
+    color: "#0A8FCC",
   },
   {
     icon: Cookie,
@@ -36,7 +36,7 @@ const legalDocuments = [
     description: "The standards of behaviour expected from all users, providers, drivers, and riders on our platforms.",
     href: "/legal/community",
     badge: "Community",
-    color: "#4A7C6B",
+    color: "#1AABF0",
   },
   {
     icon: Star,
@@ -44,7 +44,7 @@ const legalDocuments = [
     description: "Our comprehensive safety framework covering identity verification, trip monitoring, and incident response.",
     href: "/legal/safety",
     badge: "Safety",
-    color: "#3D7A7A",
+    color: "#0A8FCC",
   },
   {
     icon: RefreshCw,
@@ -60,7 +60,7 @@ const legalDocuments = [
     description: "Our commitment to WCAG 2.1 AA compliance and the specific measures we've taken to ensure equal access.",
     href: "/legal/accessibility",
     badge: "WCAG 2.1 AA",
-    color: "#4A7C6B",
+    color: "#1AABF0",
   },
 ];
 
@@ -69,7 +69,7 @@ export default function LegalSection() {
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="legal" className="section-padding bg-[#F7F7F5]" aria-labelledby="legal-heading">
+    <section id="legal" className="section-padding bg-[#F4F8FB]" aria-labelledby="legal-heading">
       <div className="container-tight">
         {/* Header */}
         <motion.div
@@ -105,7 +105,7 @@ export default function LegalSection() {
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: i * 0.07 }}
-              className="group bg-white rounded-[20px] p-5 border border-[rgba(0,0,0,0.05)] shadow-[var(--shadow-subtle)] hover:shadow-[var(--shadow-card)] hover:border-[rgba(0,0,0,0.1)] transition-all duration-300 flex flex-col focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3D7A7A] focus-visible:ring-offset-2"
+              className="group bg-white rounded-[20px] p-5 border border-[rgba(0,0,0,0.05)] shadow-[var(--shadow-subtle)] hover:shadow-[var(--shadow-card)] hover:border-[rgba(0,0,0,0.1)] transition-all duration-300 flex flex-col focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A8FCC] focus-visible:ring-offset-2"
               aria-label={`Read our ${doc.title}`}
             >
               <div className="flex items-start justify-between mb-4">
@@ -146,7 +146,7 @@ export default function LegalSection() {
             HelpingHandsAu and LetsGO are operated by Australian entities and comply with all applicable
             Australian laws including the Privacy Act 1988, Competition and Consumer Act 2010, and
             relevant state transport regulations. For legal enquiries, contact{" "}
-            <a href="mailto:admin@helpinghandsau.com" className="text-[#4A7C6B] hover:underline font-medium">
+            <a href="mailto:admin@helpinghandsau.com" className="text-[#1AABF0] hover:underline font-medium">
               admin@helpinghandsau.com
             </a>
           </p>

@@ -12,7 +12,7 @@ const showcaseItems = [
     id: "rider",
     label: "Rider App",
     platform: "LetsGO",
-    color: "#3D7A7A",
+    color: "#0A8FCC",
     description: "Seamless ride booking with live tracking, transparent pricing, and driver safety ratings.",
     screen: "rider",
   },
@@ -20,7 +20,7 @@ const showcaseItems = [
     id: "driver",
     label: "Driver App",
     platform: "LetsGO",
-    color: "#3D7A7A",
+    color: "#0A8FCC",
     description: "Driver-first design with optimised dispatch, live earnings, and compliance onboarding.",
     screen: "driver",
   },
@@ -28,7 +28,7 @@ const showcaseItems = [
     id: "provider",
     label: "Provider Dashboard",
     platform: "HelpingHandsAu",
-    color: "#4A7C6B",
+    color: "#1AABF0",
     description: "Complete job management, payment tracking, and customer communication in one view.",
     screen: "provider",
   },
@@ -44,7 +44,7 @@ const showcaseItems = [
     id: "bidding",
     label: "Bidding Flow",
     platform: "HelpingHandsAu",
-    color: "#4A7C6B",
+    color: "#1AABF0",
     description: "Transparent task bidding where customers compare providers by price, rating, and availability.",
     screen: "bidding",
   },
@@ -52,12 +52,12 @@ const showcaseItems = [
 
 function RiderScreen() {
   return (
-    <div className="w-full h-full bg-[#F7F7F5] flex flex-col">
+    <div className="w-full h-full bg-[#F4F8FB] flex flex-col">
       {/* Map area */}
       <div className="flex-1 relative bg-[#E8EDE8] overflow-hidden">
         <svg className="absolute inset-0 w-full h-full opacity-30" viewBox="0 0 300 300">
-          <path d="M0 150 Q75 100 150 150 T300 150" stroke="#4A7C6B" strokeWidth="2" fill="none" />
-          <path d="M0 120 Q75 80 150 120 T300 120" stroke="#3D7A7A" strokeWidth="1.5" fill="none" opacity="0.5" />
+          <path d="M0 150 Q75 100 150 150 T300 150" stroke="#1AABF0" strokeWidth="2" fill="none" />
+          <path d="M0 120 Q75 80 150 120 T300 120" stroke="#0A8FCC" strokeWidth="1.5" fill="none" opacity="0.5" />
           <path d="M50 0 L50 300" stroke="#111" strokeWidth="0.5" opacity="0.1" />
           <path d="M150 0 L150 300" stroke="#111" strokeWidth="0.5" opacity="0.1" />
           <path d="M250 0 L250 300" stroke="#111" strokeWidth="0.5" opacity="0.1" />
@@ -66,10 +66,10 @@ function RiderScreen() {
         </svg>
         {/* Driver marker */}
         <div className="absolute top-[40%] left-[45%] transform -translate-x-1/2 -translate-y-1/2">
-          <div className="w-8 h-8 bg-[#3D7A7A] rounded-full flex items-center justify-center shadow-lg">
+          <div className="w-8 h-8 bg-[#0A8FCC] rounded-full flex items-center justify-center shadow-lg">
             <Navigation size={14} className="text-white" />
           </div>
-          <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-6 border-transparent border-t-[#3D7A7A]" />
+          <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-6 border-transparent border-t-[#0A8FCC]" />
         </div>
         {/* Destination marker */}
         <div className="absolute top-[25%] right-[30%]">
@@ -79,15 +79,15 @@ function RiderScreen() {
         </div>
         {/* Route line */}
         <svg className="absolute inset-0 w-full h-full" viewBox="0 0 300 300">
-          <path d="M135 120 Q160 110 200 90" stroke="#3D7A7A" strokeWidth="2.5" fill="none" strokeDasharray="5,3" />
+          <path d="M135 120 Q160 110 200 90" stroke="#0A8FCC" strokeWidth="2.5" fill="none" strokeDasharray="5,3" />
         </svg>
       </div>
 
       {/* Bottom card */}
       <div className="bg-white p-4 rounded-t-3xl shadow-[0_-4px_24px_rgba(0,0,0,0.08)]">
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-10 h-10 rounded-full bg-[#3D7A7A]/10 flex items-center justify-center">
-            <User size={18} className="text-[#3D7A7A]" />
+          <div className="w-10 h-10 rounded-full bg-[#0A8FCC]/10 flex items-center justify-center">
+            <User size={18} className="text-[#0A8FCC]" />
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-1.5">
@@ -103,8 +103,8 @@ function RiderScreen() {
             <Phone size={14} className="text-white" />
           </div>
         </div>
-        <div className="flex items-center gap-2 bg-[#F7F7F5] rounded-2xl px-3 py-2.5">
-          <Clock size={12} className="text-[#3D7A7A]" />
+        <div className="flex items-center gap-2 bg-[#F4F8FB] rounded-2xl px-3 py-2.5">
+          <Clock size={12} className="text-[#0A8FCC]" />
           <span className="text-xs text-[#4A4F4A] font-medium">Arriving in 2 min</span>
           <div className="ml-auto flex items-center gap-1">
             <DollarSign size={11} className="text-[#111111]" />
@@ -118,15 +118,15 @@ function RiderScreen() {
 
 function DriverScreen() {
   return (
-    <div className="w-full h-full bg-[#F7F7F5] flex flex-col">
+    <div className="w-full h-full bg-[#F4F8FB] flex flex-col">
       <div className="bg-[#111111] px-4 pt-5 pb-6">
         <div className="flex items-center justify-between mb-4">
           <div>
             <div className="text-[10px] text-gray-400 uppercase tracking-widest mb-1">Today's Earnings</div>
             <div className="text-2xl font-bold text-white">$284.50</div>
           </div>
-          <div className="w-10 h-10 rounded-full bg-[#3D7A7A]/20 flex items-center justify-center">
-            <div className="w-2 h-2 bg-[#4A7C6B] rounded-full animate-pulse" />
+          <div className="w-10 h-10 rounded-full bg-[#0A8FCC]/20 flex items-center justify-center">
+            <div className="w-2 h-2 bg-[#1AABF0] rounded-full animate-pulse" />
           </div>
         </div>
         <div className="flex gap-3">
@@ -143,18 +143,18 @@ function DriverScreen() {
         <div className="text-[10px] font-semibold uppercase tracking-widest text-[#6B7280] mb-3">New Request</div>
         <div className="bg-white rounded-2xl p-4 shadow-[var(--shadow-card)] border border-[rgba(0,0,0,0.05)]">
           <div className="flex items-start gap-3">
-            <div className="w-9 h-9 rounded-full bg-[#F7F7F5] flex items-center justify-center">
+            <div className="w-9 h-9 rounded-full bg-[#F4F8FB] flex items-center justify-center">
               <User size={16} className="text-[#4A4F4A]" />
             </div>
             <div className="flex-1">
               <span className="text-xs font-semibold text-[#111111]">Sarah M.</span>
               <div className="text-[10px] text-[#6B7280] mt-0.5">2.4 km · ~12 min</div>
             </div>
-            <span className="text-sm font-bold text-[#3D7A7A]">$22.00</span>
+            <span className="text-sm font-bold text-[#0A8FCC]">$22.00</span>
           </div>
           <div className="mt-3 flex gap-2">
-            <button className="flex-1 bg-[#3D7A7A] text-white rounded-xl py-2 text-xs font-semibold">Accept</button>
-            <button className="flex-1 bg-[#F7F7F5] text-[#4A4F4A] rounded-xl py-2 text-xs font-semibold">Decline</button>
+            <button className="flex-1 bg-[#0A8FCC] text-white rounded-xl py-2 text-xs font-semibold">Accept</button>
+            <button className="flex-1 bg-[#F4F8FB] text-[#4A4F4A] rounded-xl py-2 text-xs font-semibold">Decline</button>
           </div>
         </div>
       </div>
@@ -164,7 +164,7 @@ function DriverScreen() {
 
 function ProviderScreen() {
   return (
-    <div className="w-full h-full bg-[#F7F7F5] flex flex-col">
+    <div className="w-full h-full bg-[#F4F8FB] flex flex-col">
       <div className="px-4 pt-5 pb-3">
         <div className="text-[10px] font-semibold uppercase tracking-widest text-[#6B7280] mb-1">Dashboard</div>
         <div className="text-base font-bold text-[#111111]">Good morning, Alex</div>
@@ -175,7 +175,7 @@ function ProviderScreen() {
           <div className="text-[10px] text-gray-400 mb-1">Active Escrow</div>
           <div className="text-xl font-bold">$1,240.00</div>
           <div className="mt-2 flex items-center gap-1.5">
-            <div className="w-1.5 h-1.5 bg-[#4A7C6B] rounded-full" />
+            <div className="w-1.5 h-1.5 bg-[#1AABF0] rounded-full" />
             <span className="text-[10px] text-gray-300">3 jobs in progress</span>
           </div>
         </div>
@@ -188,8 +188,8 @@ function ProviderScreen() {
           { client: "David R.", job: "Garden Maintenance", status: "Awaiting", amount: "$85" },
         ].map((item) => (
           <div key={item.client} className="flex items-center gap-3 bg-white rounded-xl p-3 mb-2 border border-[rgba(0,0,0,0.05)]">
-            <div className="w-8 h-8 rounded-full bg-[#4A7C6B]/10 flex items-center justify-center">
-              <User size={14} className="text-[#4A7C6B]" />
+            <div className="w-8 h-8 rounded-full bg-[#1AABF0]/10 flex items-center justify-center">
+              <User size={14} className="text-[#1AABF0]" />
             </div>
             <div className="flex-1">
               <div className="text-xs font-semibold text-[#111111]">{item.client}</div>
@@ -197,7 +197,7 @@ function ProviderScreen() {
             </div>
             <div className="text-right">
               <div className="text-xs font-bold text-[#111111]">{item.amount}</div>
-              <div className="text-[9px] text-[#4A7C6B]">{item.status}</div>
+              <div className="text-[9px] text-[#1AABF0]">{item.status}</div>
             </div>
           </div>
         ))}
@@ -212,8 +212,8 @@ function TrackingScreen() {
     <div className="w-full h-full bg-[#ECECE8] relative overflow-hidden">
       {/* Simulated map */}
       <svg className="absolute inset-0 w-full h-full" viewBox="0 0 300 500">
-        <path d="M0 250 Q150 200 300 250" stroke="#4A7C6B" strokeWidth="3" fill="none" />
-        <path d="M0 200 Q150 160 300 200" stroke="#3D7A7A" strokeWidth="1.5" fill="none" opacity="0.4" />
+        <path d="M0 250 Q150 200 300 250" stroke="#1AABF0" strokeWidth="3" fill="none" />
+        <path d="M0 200 Q150 160 300 200" stroke="#0A8FCC" strokeWidth="1.5" fill="none" opacity="0.4" />
         {[50, 100, 150, 200, 250].map((x) => (
           <line key={x} x1={x} y1="0" x2={x} y2="500" stroke="#111" strokeWidth="0.4" opacity="0.08" />
         ))}
@@ -223,7 +223,7 @@ function TrackingScreen() {
         {/* Route */}
         <motion.path
           d="M60 380 Q120 300 180 230 T250 140"
-          stroke="#3D7A7A"
+          stroke="#0A8FCC"
           strokeWidth="3"
           fill="none"
           strokeDasharray="8,4"
@@ -236,8 +236,8 @@ function TrackingScreen() {
           }
         />
         {/* Car */}
-        <circle cx="160" cy="240" r="8" fill="#3D7A7A" />
-        <circle cx="160" cy="240" r="14" fill="#3D7A7A" opacity="0.2" />
+        <circle cx="160" cy="240" r="8" fill="#0A8FCC" />
+        <circle cx="160" cy="240" r="14" fill="#0A8FCC" opacity="0.2" />
         {/* Destination */}
         <circle cx="250" cy="140" r="8" fill="#111111" />
         <circle cx="250" cy="140" r="16" fill="#111111" opacity="0.15" />
@@ -246,19 +246,19 @@ function TrackingScreen() {
       {/* Bottom overlay */}
       <div className="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl p-4 shadow-[0_-4px_20px_rgba(0,0,0,0.1)]">
         <div className="flex items-center gap-2 mb-2">
-          <div className="w-2 h-2 bg-[#4A7C6B] rounded-full animate-pulse" />
+          <div className="w-2 h-2 bg-[#1AABF0] rounded-full animate-pulse" />
           <span className="text-xs font-semibold text-[#111111]">Live Tracking Active</span>
         </div>
         <div className="flex items-center gap-3">
-          <div className="flex-1 bg-[#F7F7F5] rounded-xl p-2.5">
+          <div className="flex-1 bg-[#F4F8FB] rounded-xl p-2.5">
             <div className="text-[10px] text-[#6B7280]">ETA</div>
             <div className="text-sm font-bold text-[#111111]">4 min</div>
           </div>
-          <div className="flex-1 bg-[#F7F7F5] rounded-xl p-2.5">
+          <div className="flex-1 bg-[#F4F8FB] rounded-xl p-2.5">
             <div className="text-[10px] text-[#6B7280]">Distance</div>
             <div className="text-sm font-bold text-[#111111]">1.2 km</div>
           </div>
-          <div className="flex-1 bg-[#F7F7F5] rounded-xl p-2.5">
+          <div className="flex-1 bg-[#F4F8FB] rounded-xl p-2.5">
             <div className="text-[10px] text-[#6B7280]">Speed</div>
             <div className="text-sm font-bold text-[#111111]">42 km/h</div>
           </div>
@@ -270,7 +270,7 @@ function TrackingScreen() {
 
 function BiddingScreen() {
   return (
-    <div className="w-full h-full bg-[#F7F7F5] flex flex-col">
+    <div className="w-full h-full bg-[#F4F8FB] flex flex-col">
       <div className="px-4 pt-5 pb-3">
         <div className="text-[10px] font-semibold uppercase tracking-widest text-[#6B7280] mb-1">Task Bidding</div>
         <div className="text-sm font-bold text-[#111111]">House Cleaning — 3BR</div>
@@ -287,17 +287,17 @@ function BiddingScreen() {
           <div
             key={bid.name}
             className={`flex items-center gap-3 bg-white rounded-xl p-3 mb-2 border transition-all ${
-              i === 0 ? "border-[#4A7C6B]/30 shadow-[0_2px_12px_rgba(74,124,107,0.1)]" : "border-[rgba(0,0,0,0.05)]"
+              i === 0 ? "border-[#1AABF0]/30 shadow-[0_2px_12px_rgba(26,171,240,0.14)]" : "border-[rgba(0,0,0,0.05)]"
             }`}
           >
-            <div className="w-8 h-8 rounded-full bg-[#4A7C6B]/10 flex items-center justify-center">
-              <User size={14} className="text-[#4A7C6B]" />
+            <div className="w-8 h-8 rounded-full bg-[#1AABF0]/10 flex items-center justify-center">
+              <User size={14} className="text-[#1AABF0]" />
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-1.5">
                 <span className="text-xs font-semibold text-[#111111]">{bid.name}</span>
                 {bid.badge && (
-                  <span className="text-[8px] font-bold bg-[#4A7C6B]/10 text-[#4A7C6B] px-1.5 py-0.5 rounded-full">
+                  <span className="text-[8px] font-bold bg-[#1AABF0]/10 text-[#1AABF0] px-1.5 py-0.5 rounded-full">
                     {bid.badge}
                   </span>
                 )}
@@ -310,8 +310,8 @@ function BiddingScreen() {
             <div className="text-right">
               <div className="text-sm font-bold text-[#111111]">{bid.price}</div>
               <div className="flex items-center gap-0.5 justify-end">
-                <CheckCircle size={9} className="text-[#4A7C6B]" />
-                <span className="text-[9px] text-[#4A7C6B]">Verified</span>
+                <CheckCircle size={9} className="text-[#1AABF0]" />
+                <span className="text-[9px] text-[#1AABF0]">Verified</span>
               </div>
             </div>
           </div>
@@ -377,7 +377,7 @@ export default function ProductShowcase() {
               role="tab"
               aria-selected={activeTab === item.id}
               onClick={() => setActiveTab(item.id)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3D7A7A] ${
+              className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A8FCC] ${
                 activeTab === item.id
                   ? "bg-[#111111] text-white shadow-[0_2px_8px_rgba(0,0,0,0.15)]"
                   : "bg-white text-[#4A4F4A] border border-[rgba(0,0,0,0.08)] hover:border-[rgba(0,0,0,0.15)]"

@@ -20,7 +20,7 @@ export default function HeroSection() {
     <section
       ref={ref}
       id="hero"
-      className="relative min-h-[calc(100vh-var(--nav-height))] flex items-center justify-center overflow-hidden bg-[#F7F7F5] noise-bg"
+      className="relative min-h-[calc(100vh-var(--nav-height))] flex items-center justify-center overflow-hidden bg-[#F4F8FB] noise-bg"
       aria-label="Hero section"
     >
       {/* Ambient bg */}
@@ -174,7 +174,7 @@ export default function HeroSection() {
       </motion.div>
 
       {/* Bottom fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#F7F7F5] to-transparent pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#F4F8FB] to-transparent pointer-events-none" />
 
       {/* Scroll indicator */}
       <motion.div

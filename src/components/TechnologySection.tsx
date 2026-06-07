@@ -15,7 +15,7 @@ const techPillars = [
     description: "Distributed across multiple availability zones with automatic failover and zero-downtime deployments.",
     metric: "99.9%",
     metricLabel: "Uptime SLA",
-    color: "#4A7C6B",
+    color: "#1AABF0",
   },
   {
     icon: Zap,
@@ -23,7 +23,7 @@ const techPillars = [
     description: "WebSocket-powered infrastructure handles thousands of concurrent connections with sub-100ms latency.",
     metric: "<100ms",
     metricLabel: "Response Time",
-    color: "#3D7A7A",
+    color: "#0A8FCC",
   },
   {
     icon: Cpu,
@@ -39,7 +39,7 @@ const techPillars = [
     description: "All data stored and processed within Australia. Full compliance with Australian Privacy Principles.",
     metric: "AU-Only",
     metricLabel: "Data Residency",
-    color: "#4A7C6B",
+    color: "#1AABF0",
   },
   {
     icon: Shield,
@@ -47,7 +47,7 @@ const techPillars = [
     description: "Penetration-tested, SOC 2 aligned, with continuous vulnerability scanning and a coordinated disclosure program.",
     metric: "SOC 2",
     metricLabel: "Aligned",
-    color: "#3D7A7A",
+    color: "#0A8FCC",
   },
   {
     icon: Activity,
@@ -79,7 +79,7 @@ export default function TechnologySection() {
       {/* Background decoration */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full opacity-[0.04]"
-          style={{ background: "radial-gradient(circle, #4A7C6B 0%, transparent 70%)" }} />
+          style={{ background: "radial-gradient(circle, #1AABF0 0%, transparent 70%)" }} />
         <svg className="absolute inset-0 w-full h-full opacity-[0.03]" xmlns="http://www.w3.org/2000/svg">
           <defs>
             <pattern id="grid-dark" width="60" height="60" patternUnits="userSpaceOnUse">
@@ -99,7 +99,7 @@ export default function TechnologySection() {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          <span className="text-xs font-semibold uppercase tracking-widest text-[#4A7C6B] mb-4 block">
+          <span className="text-xs font-semibold uppercase tracking-widest text-[#1AABF0] mb-4 block">
             AI Infrastructure
           </span>
           <h2
@@ -155,8 +155,8 @@ export default function TechnologySection() {
           className="bg-white/[0.03] border border-white/[0.08] rounded-[32px] p-8 md:p-10"
         >
           <div className="flex items-center gap-3 mb-8">
-            <div className="w-8 h-8 rounded-xl bg-[#4A7C6B]/20 flex items-center justify-center">
-              <Layers size={16} className="text-[#4A7C6B]" aria-hidden="true" />
+            <div className="w-8 h-8 rounded-xl bg-[#1AABF0]/20 flex items-center justify-center">
+              <Layers size={16} className="text-[#1AABF0]" aria-hidden="true" />
             </div>
             <div>
               <h3 className="text-base font-semibold text-white">Technology Stack</h3>
@@ -192,13 +192,13 @@ export default function TechnologySection() {
 
           <div className="mt-8 pt-6 border-t border-white/8 flex flex-col sm:flex-row items-start sm:items-center gap-4 justify-between">
             <div className="flex items-center gap-2">
-              <Globe size={14} className="text-[#4A7C6B]" />
+              <Globe size={14} className="text-[#1AABF0]" />
               <span className="text-xs text-gray-400">
                 Designed, built, and operated in <span className="text-white font-medium">Australia</span>
               </span>
             </div>
             <div className="flex items-center gap-2 text-xs text-gray-500">
-              <Activity size={12} className="text-[#4A7C6B] animate-pulse" />
+              <Activity size={12} className="text-[#1AABF0] animate-pulse" />
               <span>All systems operational</span>
             </div>
           </div>

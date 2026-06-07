@@ -312,7 +312,7 @@ Set to **`false`** for instant rollback of client behavior; **database RPCs** ma
 
 ## 12. Theming
 
-- **`src/theme/colors.js`**: brand teal palette, ink neutrals, semantic success/warning/error, chat colors.
+- **`src/theme/helpinghands-brand.ts`**: logo-aligned cyan (`#1AABF0`) and deep shade for web accents; pair with CSS variables in `globals.css`.
 - **`src/theme/navigationTheme.js`**: React Navigation theme alignment.
 
 ---

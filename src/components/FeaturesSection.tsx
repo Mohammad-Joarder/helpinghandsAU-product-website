@@ -16,7 +16,7 @@ const features = [
     subtitle: "Intelligent by design",
     description:
       "Proprietary AI models monitor every transaction, trip, and interaction in realtime — detecting anomalies, flagging risk, and accelerating review queues before issues arise.",
-    color: "#4A7C6B",
+    color: "#1AABF0",
     details: [
       "Fraud pattern recognition",
       "Behavioural anomaly detection",
@@ -31,7 +31,7 @@ const features = [
     subtitle: "Stripe-powered, escrow-protected",
     description:
       "Every dollar is protected. Stripe-secured escrow holds payments until work is verified. Stripe Connect enables instant, compliant driver payouts. PCI-DSS compliant end-to-end.",
-    color: "#3D7A7A",
+    color: "#0A8FCC",
     details: [
       "Escrow payment protection",
       "Stripe Connect driver payouts",
@@ -61,7 +61,7 @@ const features = [
     subtitle: "Australian-first regulatory design",
     description:
       "Built around the Privacy Act 1988, Australian Privacy Principles, and transport regulations. Every data flow is auditable, every consent is documented.",
-    color: "#4A7C6B",
+    color: "#1AABF0",
     details: [
       "Privacy Act 1988 alignment",
       "Australian Privacy Principles",
@@ -76,7 +76,7 @@ const features = [
     subtitle: "Protecting everyone, always",
     description:
       "Multi-layer safety systems protect riders, drivers, customers, and providers alike — from identity verification at onboarding through to post-trip safety check-ins.",
-    color: "#3D7A7A",
+    color: "#0A8FCC",
     details: [
       "Identity verification (IDV)",
       "In-trip safety monitoring",
@@ -182,7 +182,7 @@ export default function FeaturesSection() {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="text-center mb-16"
         >
-          <span className="text-xs font-semibold uppercase tracking-widest text-[#3D7A7A] mb-4 block">
+          <span className="text-xs font-semibold uppercase tracking-widest text-[#0A8FCC] mb-4 block">
             Platform Capabilities
           </span>
           <h2
@@ -214,7 +214,7 @@ export default function FeaturesSection() {
           className="mt-16 text-center"
         >
           <div className="inline-flex items-center gap-3 bg-white rounded-2xl px-6 py-4 border border-[rgba(0,0,0,0.06)] shadow-[var(--shadow-subtle)]">
-            <Globe size={16} className="text-[#4A7C6B]" />
+            <Globe size={16} className="text-[#1AABF0]" />
             <span className="text-sm text-[#4A4F4A]">
               Fully operational across <strong className="text-[#111111]">Australia</strong> — compliant, secure, and scalable
             </span>

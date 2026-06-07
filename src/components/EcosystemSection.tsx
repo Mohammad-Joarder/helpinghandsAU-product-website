@@ -105,7 +105,7 @@ function PlatformCard({
             initial="hidden"
             animate={inView ? "visible" : "hidden"}
             variants={fadeUp}
-            className="flex flex-col gap-2 p-4 rounded-2xl bg-[#F7F7F5] hover:bg-[#ECECE8] transition-colors duration-200 cursor-default"
+            className="flex flex-col gap-2 p-4 rounded-2xl bg-[#F4F8FB] hover:bg-[#E8EEF3] transition-colors duration-200 cursor-default"
           >
             <div
               className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0"
@@ -129,7 +129,7 @@ export default function EcosystemSection() {
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="ecosystem" className="section-padding bg-[#F7F7F5]" aria-labelledby="ecosystem-heading">
+    <section id="ecosystem" className="section-padding bg-[#F4F8FB]" aria-labelledby="ecosystem-heading">
       <div className="container-tight">
 
         {/* Section header */}

@@ -57,21 +57,21 @@ export default function CookieBanner() {
         >
           <div className="glass rounded-[20px] p-5 shadow-[var(--shadow-elevated)] border border-[rgba(0,0,0,0.08)]">
             <div className="flex items-start gap-3 mb-4">
-              <div className="w-9 h-9 rounded-xl bg-[#4A7C6B]/10 flex items-center justify-center flex-shrink-0">
-                <Cookie size={16} className="text-[#4A7C6B]" aria-hidden="true" />
+              <div className="w-9 h-9 rounded-xl bg-[#1AABF0]/10 flex items-center justify-center flex-shrink-0">
+                <Cookie size={16} className="text-[#1AABF0]" aria-hidden="true" />
               </div>
               <div className="flex-1">
                 <h3 className="text-sm font-semibold text-[#111111] mb-1">Cookie Disclosure</h3>
                 <p className="text-xs text-[#6B7280] leading-relaxed">
                   We use cookies to improve your experience, analyse usage, and support AI-assisted
                   fraud prevention. By continuing, you agree to our{" "}
-                  <a href="/legal/cookies" className="text-[#4A7C6B] hover:underline">Cookie Policy</a>.
+                  <a href="/legal/cookies" className="text-[#1AABF0] hover:underline">Cookie Policy</a>.
                   Location data is only collected during active trips.
                 </p>
               </div>
               <button
                 onClick={decline}
-                className="text-[#BEBEBE] hover:text-[#6B7280] transition-colors p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3D7A7A] rounded"
+                className="text-[#BEBEBE] hover:text-[#6B7280] transition-colors p-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A8FCC] rounded"
                 aria-label="Dismiss cookie banner"
               >
                 <X size={14} />
@@ -80,7 +80,7 @@ export default function CookieBanner() {
             <div className="flex gap-2">
               <button
                 onClick={decline}
-                className="flex-1 bg-[#ECECE8] text-[#4A4F4A] text-xs font-medium py-2.5 px-4 rounded-xl hover:bg-[#E0E0DC] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3D7A7A]"
+                className="flex-1 bg-[#ECECE8] text-[#4A4F4A] text-xs font-medium py-2.5 px-4 rounded-xl hover:bg-[#E0E0DC] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0A8FCC]"
               >
                 Decline
               </button>

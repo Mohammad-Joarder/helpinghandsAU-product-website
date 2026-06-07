@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { HH_BRAND_PRIMARY } from "@/theme/helpinghands-brand";
 
 const STORAGE_KEY = "hh-cookie-consent";
-const A = "#22C55E";
+const A = HH_BRAND_PRIMARY;
 
 export default function CookieBannerHH() {
   const [mounted, setMounted] = useState(false);
@@ -68,7 +69,7 @@ export default function CookieBannerHH() {
             <div style={{ display: "flex", alignItems: "flex-start", gap: 12, marginBottom: 16 }}>
               <div style={{
                 width: 36, height: 36, borderRadius: 12, flexShrink: 0,
-                background: "#22C55E1A", display: "flex", alignItems: "center", justifyContent: "center",
+                background: "rgba(26,171,240,0.1)", display: "flex", alignItems: "center", justifyContent: "center",
               }}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={A} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
                   <path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5" />

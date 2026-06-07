@@ -95,7 +95,7 @@ export default function ContactSection() {
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] as [number,number,number,number] }}
           >
-            <span className="text-xs font-semibold uppercase tracking-widest text-[#4A7C6B] mb-4 block">
+            <span className="text-xs font-semibold uppercase tracking-widest text-[#1AABF0] mb-4 block">
               Get in Touch
             </span>
             <h2
@@ -122,7 +122,7 @@ export default function ContactSection() {
                     {item.href ? (
                       <a
                         href={item.href}
-                        className="text-sm font-medium text-[#111111] hover:text-[#4A7C6B] transition-colors link-underline"
+                        className="text-sm font-medium text-[#111111] hover:text-[#1AABF0] transition-colors link-underline"
                       >
                         {item.value}
                       </a>
@@ -136,7 +136,7 @@ export default function ContactSection() {
 
             {/* Response time note */}
             <div className="mt-8 flex items-center gap-3 bg-white rounded-2xl px-5 py-4 border border-[rgba(0,0,0,0.06)] shadow-[var(--shadow-subtle)] max-w-sm">
-              <div className="w-2 h-2 bg-[#4A7C6B] rounded-full animate-pulse-subtle flex-shrink-0" />
+              <div className="w-2 h-2 bg-[#1AABF0] rounded-full animate-pulse-subtle flex-shrink-0" />
               <p className="text-xs text-[#4A4F4A]">
                 We typically respond within <strong className="text-[#111111]">2 business days</strong>
               </p>
@@ -158,8 +158,8 @@ export default function ContactSection() {
                 transition={{ duration: 0.4 }}
                 className="flex flex-col items-center justify-center text-center py-10 gap-4"
               >
-                <div className="w-16 h-16 rounded-full bg-[#4A7C6B]/10 flex items-center justify-center">
-                  <CheckCircle size={32} className="text-[#4A7C6B]" />
+                <div className="w-16 h-16 rounded-full bg-[#1AABF0]/10 flex items-center justify-center">
+                  <CheckCircle size={32} className="text-[#1AABF0]" />
                 </div>
                 <h3 className="text-xl font-semibold text-[#111111]">Message sent!</h3>
                 <p className="text-sm text-[#6B7280] max-w-xs leading-relaxed">
@@ -169,7 +169,7 @@ export default function ContactSection() {
                 </p>
                 <button
                   onClick={() => setStatus("idle")}
-                  className="mt-2 text-sm text-[#4A7C6B] hover:underline font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#4A7C6B] rounded"
+                  className="mt-2 text-sm text-[#1AABF0] hover:underline font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1AABF0] rounded"
                 >
                   Send another message
                 </button>
@@ -195,7 +195,7 @@ export default function ContactSection() {
                         required
                         value={form.firstName}
                         onChange={handleChange}
-                        className="w-full bg-[#F7F7F5] border border-[rgba(0,0,0,0.08)] rounded-xl px-4 py-3 text-sm text-[#111111] placeholder:text-[#BEBEBE] focus:outline-none focus:border-[#4A7C6B] focus:ring-1 focus:ring-[#4A7C6B] transition-all"
+                        className="w-full bg-[#F4F8FB] border border-[rgba(0,0,0,0.08)] rounded-xl px-4 py-3 text-sm text-[#111111] placeholder:text-[#BEBEBE] focus:outline-none focus:border-[#1AABF0] focus:ring-1 focus:ring-[#1AABF0] transition-all"
                         placeholder="Alex"
                       />
                     </div>
@@ -211,7 +211,7 @@ export default function ContactSection() {
                         required
                         value={form.lastName}
                         onChange={handleChange}
-                        className="w-full bg-[#F7F7F5] border border-[rgba(0,0,0,0.08)] rounded-xl px-4 py-3 text-sm text-[#111111] placeholder:text-[#BEBEBE] focus:outline-none focus:border-[#4A7C6B] focus:ring-1 focus:ring-[#4A7C6B] transition-all"
+                        className="w-full bg-[#F4F8FB] border border-[rgba(0,0,0,0.08)] rounded-xl px-4 py-3 text-sm text-[#111111] placeholder:text-[#BEBEBE] focus:outline-none focus:border-[#1AABF0] focus:ring-1 focus:ring-[#1AABF0] transition-all"
                         placeholder="Johnson"
                       />
                     </div>
@@ -229,7 +229,7 @@ export default function ContactSection() {
                       required
                       value={form.email}
                       onChange={handleChange}
-                      className="w-full bg-[#F7F7F5] border border-[rgba(0,0,0,0.08)] rounded-xl px-4 py-3 text-sm text-[#111111] placeholder:text-[#BEBEBE] focus:outline-none focus:border-[#4A7C6B] focus:ring-1 focus:ring-[#4A7C6B] transition-all"
+                      className="w-full bg-[#F4F8FB] border border-[rgba(0,0,0,0.08)] rounded-xl px-4 py-3 text-sm text-[#111111] placeholder:text-[#BEBEBE] focus:outline-none focus:border-[#1AABF0] focus:ring-1 focus:ring-[#1AABF0] transition-all"
                       placeholder="alex@company.com.au"
                     />
                   </div>
@@ -243,7 +243,7 @@ export default function ContactSection() {
                       name="enquiryType"
                       value={form.enquiryType}
                       onChange={handleChange}
-                      className="w-full bg-[#F7F7F5] border border-[rgba(0,0,0,0.08)] rounded-xl px-4 py-3 text-sm text-[#111111] focus:outline-none focus:border-[#4A7C6B] focus:ring-1 focus:ring-[#4A7C6B] transition-all appearance-none"
+                      className="w-full bg-[#F4F8FB] border border-[rgba(0,0,0,0.08)] rounded-xl px-4 py-3 text-sm text-[#111111] focus:outline-none focus:border-[#1AABF0] focus:ring-1 focus:ring-[#1AABF0] transition-all appearance-none"
                     >
                       <option value="">Select enquiry type…</option>
                       <option value="partnership">Partnership Enquiry</option>
@@ -266,7 +266,7 @@ export default function ContactSection() {
                       required
                       value={form.message}
                       onChange={handleChange}
-                      className="w-full bg-[#F7F7F5] border border-[rgba(0,0,0,0.08)] rounded-xl px-4 py-3 text-sm text-[#111111] placeholder:text-[#BEBEBE] focus:outline-none focus:border-[#4A7C6B] focus:ring-1 focus:ring-[#4A7C6B] transition-all resize-none"
+                      className="w-full bg-[#F4F8FB] border border-[rgba(0,0,0,0.08)] rounded-xl px-4 py-3 text-sm text-[#111111] placeholder:text-[#BEBEBE] focus:outline-none focus:border-[#1AABF0] focus:ring-1 focus:ring-[#1AABF0] transition-all resize-none"
                       placeholder="Tell us about your enquiry…"
                     />
                   </div>
@@ -274,7 +274,7 @@ export default function ContactSection() {
                   <p className="text-[10px] text-[#6B7280] leading-relaxed">
                     By submitting this form you consent to HelpingHandsAu processing your data in
                     accordance with our{" "}
-                    <a href="/legal/privacy" className="text-[#4A7C6B] hover:underline">
+                    <a href="/legal/privacy" className="text-[#1AABF0] hover:underline">
                       Privacy Policy
                     </a>
                     . Your message will be sent directly to{" "}

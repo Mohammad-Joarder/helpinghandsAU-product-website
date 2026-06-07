@@ -18,10 +18,10 @@ export default function LegalLayout({
   children,
   backHref = "/",
   backLabel = "Back to Home",
-  accentColor = "#4A7C6B",
+  accentColor = "#1AABF0",
 }: LegalLayoutProps) {
   return (
-    <div className="min-h-full bg-[#F7F7F5]">
+    <div className="min-h-full bg-[#F4F8FB]">
       <div className="bg-white border-b border-[rgba(0,0,0,0.06)]">
         <div className="container-tight py-6">
           <Link

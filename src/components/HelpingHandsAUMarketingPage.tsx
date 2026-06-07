@@ -3,20 +3,20 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import CookieBannerHH from "@/components/CookieBannerHH";
 
-/* ─── colour tokens ─── */
+/* ─── colour tokens — logo cyan (#1AABF0) + deep shade from app icon ─── */
 const C = {
-  green: "#22C55E",
-  greenDim: "#16A34A",
-  teal: "#14B8A6",
-  bg: "#F7F7F5",
+  brand: "#1AABF0",
+  brandDeep: "#0A8FCC",
+  brandMid: "#4DC4FF",
+  bg: "#F4F8FB",
   bgAlt: "#ffffff",
-  bgCard: "#F8FAFC",
-  bgCardHover: "#F1F5F9",
-  border: "#E2E8F0",
-  borderLight: "#EEF2F7",
-  muted: "#64748B",
-  text: "#0F172A",
-  textSub: "#475569",
+  bgCard: "#F6FAFD",
+  bgCardHover: "#EDF5FA",
+  border: "#D5E3EE",
+  borderLight: "#E8F2F9",
+  muted: "#5C6B7A",
+  text: "#0B1220",
+  textSub: "#364152",
   white: "#0F172A",
 };
 
@@ -139,7 +139,7 @@ function Nav({ logoHref }: { logoHref: string }) {
             style={{ borderRadius: 10, display: "block", flexShrink: 0 }}
           />
           <span style={{ fontFamily: "var(--font-jakarta)", fontWeight: 700, fontSize: 18, color: C.text, letterSpacing: "-0.03em" }}>
-            HelpingHands<span style={{ color: C.green }}>AU</span>
+            HelpingHands<span style={{ color: C.brand }}>AU</span>
           </span>
         </a>
 
@@ -162,9 +162,10 @@ function Nav({ logoHref }: { logoHref: string }) {
             title="Coming soon"
             className="hh-cta-btn"
             style={{
-              background: `linear-gradient(135deg, ${C.green}, ${C.teal})`,
-              color: "#000", fontWeight: 700, fontSize: 14, padding: "10px 20px",
+              background: `linear-gradient(135deg, ${C.brand}, ${C.brandDeep})`,
+              color: "#fff", fontWeight: 700, fontSize: 14, padding: "10px 20px",
               borderRadius: 10, textDecoration: "none", letterSpacing: "-0.01em",
+              boxShadow: "0 8px 24px rgba(26,171,240,0.25)",
             }}>
             Post a Task
           </a>
@@ -182,9 +183,9 @@ function Hero() {
     <section style={{
       minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center",
       alignItems: "center", textAlign: "center", padding: "120px 24px 80px",
-      background: `radial-gradient(ellipse 80% 60% at 50% 0%, rgba(34,197,94,0.12) 0%, transparent 70%),
-                   radial-gradient(ellipse 60% 40% at 80% 50%, rgba(20,184,166,0.08) 0%, transparent 60%),
-                   #F7F7F5`,
+      background: `radial-gradient(ellipse 80% 60% at 50% 0%, rgba(26,171,240,0.14) 0%, transparent 70%),
+                   radial-gradient(ellipse 60% 40% at 80% 50%, rgba(10,143,204,0.09) 0%, transparent 60%),
+                   #F4F8FB`,
       position: "relative", overflow: "hidden", maxWidth: "100vw",
     }}>
       {/* Grid overlay */}
@@ -193,17 +194,17 @@ function Hero() {
         backgroundImage: `linear-gradient(${C.text} 1px, transparent 1px), linear-gradient(90deg, ${C.text} 1px, transparent 1px)`,
         backgroundSize: "40px 40px",
       }} />
-      <div style={{ position: "absolute", width: 600, height: 600, borderRadius: "50%", background: `radial-gradient(circle, rgba(34,197,94,0.06) 0%, transparent 70%)`, top: -200, left: "50%", transform: "translateX(-50%)", pointerEvents: "none" }} />
+      <div style={{ position: "absolute", width: 600, height: 600, borderRadius: "50%", background: `radial-gradient(circle, rgba(26,171,240,0.07) 0%, transparent 70%)`, top: -200, left: "50%", transform: "translateX(-50%)", pointerEvents: "none" }} />
 
       <div style={{ position: "relative", maxWidth: 900, zIndex: 1 }}>
         {/* Badge */}
         <div style={{
           display: "inline-flex", alignItems: "center", gap: 8,
-          background: "rgba(34,197,94,0.1)", border: `1px solid rgba(34,197,94,0.2)`,
+          background: "rgba(26,171,240,0.1)", border: `1px solid rgba(26,171,240,0.22)`,
           borderRadius: 100, padding: "6px 16px", marginBottom: 32,
         }}>
-          <span style={{ width: 6, height: 6, borderRadius: "50%", background: C.green, display: "inline-block", boxShadow: `0 0 8px ${C.green}` }} />
-          <span style={{ fontSize: 13, fontWeight: 600, color: C.green, letterSpacing: "0.05em", textTransform: "uppercase" }}>
+          <span style={{ width: 6, height: 6, borderRadius: "50%", background: C.brand, display: "inline-block", boxShadow: `0 0 8px ${C.brand}` }} />
+          <span style={{ fontSize: 13, fontWeight: 600, color: C.brand, letterSpacing: "0.05em", textTransform: "uppercase" }}>
             Australia&rsquo;s #1 Services Marketplace
           </span>
         </div>
@@ -214,7 +215,7 @@ function Hero() {
           fontSize: "clamp(44px, 7vw, 88px)",
         }}>
           Get Any Task Done —<br />
-          <span style={{ background: `linear-gradient(135deg, ${C.green} 0%, ${C.teal} 100%)`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+          <span style={{ background: `linear-gradient(135deg, ${C.brand} 0%, ${C.brandDeep} 100%)`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
             Fast, Safe & Affordable
           </span>
         </h1>
@@ -231,10 +232,10 @@ function Hero() {
             title="Coming soon"
             className="hh-hero-btn-primary"
             style={{
-              background: `linear-gradient(135deg, ${C.green}, ${C.teal})`,
-              color: "#000", fontWeight: 800, fontSize: 16,
+              background: `linear-gradient(135deg, ${C.brand}, ${C.brandDeep})`,
+              color: "#fff", fontWeight: 800, fontSize: 16,
               padding: "16px 36px", borderRadius: 14, textDecoration: "none",
-              letterSpacing: "-0.02em", boxShadow: `0 0 40px rgba(34,197,94,0.3)`,
+              letterSpacing: "-0.02em", boxShadow: `0 12px 40px rgba(26,171,240,0.35)`,
             }}>
             Post a Task — It&rsquo;s Free
           </a>
@@ -276,17 +277,17 @@ function HowItWorks() {
   const steps = [
     {
       n: "01",
-      icon: <Icon d={Icons.clipboard} size={28} color={C.green} />,
+      icon: <Icon d={Icons.clipboard} size={28} color={C.brand} />,
       title: "Post Your Task",
       desc: "Describe what you need done, set your budget, and choose a deadline. Takes under 2 minutes.",
-      color: C.green,
+      color: C.brand,
     },
     {
       n: "02",
-      icon: <Icon d={Icons.messageCircle} size={28} color={C.teal} />,
+      icon: <Icon d={Icons.messageCircle} size={28} color={C.brandMid} />,
       title: "Receive Bids",
       desc: "Verified local providers review your task and send competitive bids with their approach and price.",
-      color: C.teal,
+      color: C.brandMid,
     },
     {
       n: "03",
@@ -307,7 +308,7 @@ function HowItWorks() {
   return (
     <section id="how-it-works" style={{ padding: "120px 24px", background: "#ffffff", position: "relative" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-        <SectionLabel color={C.green}>Simple Process</SectionLabel>
+        <SectionLabel color={C.brand}>Simple Process</SectionLabel>
         <h2 style={h2Style}>How HelpingHandsAU Works</h2>
         <p style={subStyle}>Four simple steps between you and a completed task.</p>
 
@@ -344,21 +345,21 @@ function HowItWorks() {
 ══════════════════════════════════════════════ */
 function Features() {
   const feats = [
-    { icon: <Icon d={Icons.shieldCheck} size={24} color={C.green} />, iconColor: C.green, title: "Escrow Protection", desc: "Every payment is held securely until you confirm the job is done. Zero risk of losing your money." },
-    { icon: <Icon d={Icons.userCheck} size={24} color={C.teal} />, iconColor: C.teal, title: "Verified Providers", desc: "All service providers undergo identity verification and background checks before joining the platform." },
+    { icon: <Icon d={Icons.shieldCheck} size={24} color={C.brand} />, iconColor: C.brand, title: "Escrow Protection", desc: "Every payment is held securely until you confirm the job is done. Zero risk of losing your money." },
+    { icon: <Icon d={Icons.userCheck} size={24} color={C.brandMid} />, iconColor: C.brandMid, title: "Verified Providers", desc: "All service providers undergo identity verification and background checks before joining the platform." },
     { icon: <Icon d={Icons.star} size={24} color="#F59E0B" />, iconColor: "#F59E0B", title: "Ratings & Reviews", desc: "Transparent feedback system so you always know who you're hiring — and providers build their reputation." },
     { icon: <Icon d={Icons.messageSquare} size={24} color="#A78BFA" />, iconColor: "#A78BFA", title: "Built-in Messaging", desc: "Communicate directly with providers, share files and photos, all within the secure HelpingHandsAU chat." },
     { icon: <Icon d={Icons.zap} size={24} color="#F97316" />, iconColor: "#F97316", title: "Instant Bids", desc: "Receive bids from multiple providers within minutes of posting. Compare and choose the best fit." },
     { icon: <Icon d={Icons.smartphone} size={24} color="#06B6D4" />, iconColor: "#06B6D4", title: "Mobile First", desc: "Manage tasks, bids, chat, and payments seamlessly on iOS or Android — wherever you are." },
     { icon: <Icon d={Icons.bell} size={24} color="#EC4899" />, iconColor: "#EC4899", title: "Smart Notifications", desc: "Action Centre keeps you on top of bids, messages, task updates, and payment confirmations in real time." },
-    { icon: <Icon d={Icons.globe} size={24} color="#22C55E" />, iconColor: "#22C55E", title: "Australian Made", desc: "Built for Australia — AUD payments, Australian providers, local support. GST compliant." },
-    { icon: <Icon d={Icons.wallet} size={24} color="#14B8A6" />, iconColor: "#14B8A6", title: "Wallet & Payouts", desc: "Providers get paid via Stripe Connect. Takers top up a wallet. Fast, reliable, transparent." },
+    { icon: <Icon d={Icons.globe} size={24} color={C.brand} />, iconColor: C.brand, title: "Australian Made", desc: "Built for Australia — AUD payments, Australian providers, local support. GST compliant." },
+    { icon: <Icon d={Icons.wallet} size={24} color={C.brandDeep} />, iconColor: C.brandDeep, title: "Wallet & Payouts", desc: "Providers get paid via Stripe Connect. Takers top up a wallet. Fast, reliable, transparent." },
   ];
 
   return (
     <section id="features" style={{ padding: "120px 24px", background: C.bg, position: "relative" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-        <SectionLabel color={C.teal}>Platform Features</SectionLabel>
+        <SectionLabel color={C.brandDeep}>Platform Features</SectionLabel>
         <h2 style={{ ...h2Style, color: C.text }}>Everything You Need to Get Things Done</h2>
         <p style={{ ...subStyle, color: C.muted }}>Built with enterprise-grade security and a consumer-grade experience.</p>
 
@@ -390,12 +391,12 @@ function Features() {
 ══════════════════════════════════════════════ */
 function Categories() {
   const cats = [
-    { icon: <Icon d={Icons.home} size={22} color="#22C55E" />, name: "Home & Garden", tasks: "8,400+ tasks", color: "#22C55E" },
+    { icon: <Icon d={Icons.home} size={22} color={C.brand} />, name: "Home & Garden", tasks: "8,400+ tasks", color: C.brand },
     { icon: <Icon d={Icons.wrench} size={22} color="#3B82F6" />, name: "Repairs & Trades", tasks: "6,200+ tasks", color: "#3B82F6" },
     { icon: <Icon d={Icons.truck} size={22} color="#F59E0B" />, name: "Removals & Delivery", tasks: "4,800+ tasks", color: "#F59E0B" },
     { icon: <Icon d={Icons.monitor} size={22} color="#A78BFA" />, name: "Tech & IT", tasks: "3,500+ tasks", color: "#A78BFA" },
     { icon: <Icon d={Icons.camera} size={22} color="#EC4899" />, name: "Photography & Video", tasks: "2,100+ tasks", color: "#EC4899" },
-    { icon: <Icon d={Icons.sparkles} size={22} color="#14B8A6" />, name: "Cleaning", tasks: "5,600+ tasks", color: "#14B8A6" },
+    { icon: <Icon d={Icons.sparkles} size={22} color={C.brandDeep} />, name: "Cleaning", tasks: "5,600+ tasks", color: C.brandDeep },
     { icon: <Icon d={Icons.palette} size={22} color="#F97316" viewBox="0 0 24 24" strokeWidth={0} />, name: "Design & Creative", tasks: "1,900+ tasks", color: "#F97316" },
     { icon: <Icon d={Icons.users} size={22} color="#06B6D4" />, name: "Childcare & Tutoring", tasks: "2,700+ tasks", color: "#06B6D4" },
   ];
@@ -403,7 +404,7 @@ function Categories() {
   return (
     <section id="categories" style={{ padding: "120px 24px", background: "#ffffff" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-        <SectionLabel color={C.green}>Popular Categories</SectionLabel>
+        <SectionLabel color={C.brand}>Popular Categories</SectionLabel>
         <h2 style={h2Style}>What Can We Help You With?</h2>
         <p style={subStyle}>Thousands of tasks posted daily across every service category imaginable.</p>
 
@@ -438,29 +439,29 @@ function Categories() {
 function TrustSafety() {
   const pillars = [
     {
-      icon: <Icon d={Icons.creditCard} size={28} color="#A78BFA" />,
-      iconColor: "#A78BFA",
+      icon: <Icon d={Icons.creditCard} size={28} color={C.brand} />,
+      iconColor: C.brand,
       title: "Stripe Escrow",
       desc: "Payments are held by Stripe — not HelpingHandsAU — until you confirm the job is complete. Industry-standard financial security.",
       badge: "PCI-DSS Compliant",
     },
     {
-      icon: <Icon d={Icons.userCheck} size={28} color="#A78BFA" />,
-      iconColor: "#A78BFA",
+      icon: <Icon d={Icons.userCheck} size={28} color={C.brandDeep} />,
+      iconColor: C.brandDeep,
       title: "Identity Verified",
       desc: "Every provider submits ID verification before they can accept tasks. You always know who's coming to your door.",
       badge: "ID Checked",
     },
     {
-      icon: <Icon d={Icons.award} size={28} color="#A78BFA" />,
-      iconColor: "#A78BFA",
+      icon: <Icon d={Icons.award} size={28} color={C.brand} />,
+      iconColor: C.brand,
       title: "Dispute Resolution",
       desc: "If something goes wrong, our trained dispute team steps in. Evidence-based resolution with fair outcomes for both parties.",
       badge: "24/7 Protection",
     },
     {
-      icon: <Icon d={Icons.star} size={28} color="#A78BFA" />,
-      iconColor: "#A78BFA",
+      icon: <Icon d={Icons.star} size={28} color={C.brandDeep} />,
+      iconColor: C.brandDeep,
       title: "Ratings System",
       desc: "Every completed task generates a rating. Poor performers are removed. Excellent providers rise to the top.",
       badge: "4.9★ Average",
@@ -470,10 +471,10 @@ function TrustSafety() {
   return (
     <section id="trust-safety" style={{
       padding: "120px 24px",
-      background: `linear-gradient(180deg, #F0F4FF 0%, #EEF2FF 100%)`,
+      background: `linear-gradient(180deg, #EEF6FC 0%, #E4F1FA 100%)`,
     }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-        <SectionLabel color="#A78BFA">Trust & Safety</SectionLabel>
+        <SectionLabel color={C.brand}>Trust & Safety</SectionLabel>
         <h2 style={{ ...h2Style, color: C.text }}>Your Safety is Non-Negotiable</h2>
         <p style={{ ...subStyle, color: C.muted }}>
           We built every feature around one principle: you should be able to hire anyone on HelpingHandsAU with complete confidence.
@@ -487,12 +488,12 @@ function TrustSafety() {
             }}>
               <div style={{
                 width: 56, height: 56, borderRadius: 14,
-                background: "rgba(167,139,250,0.12)",
+                background: "rgba(26,171,240,0.1)",
                 display: "flex", alignItems: "center", justifyContent: "center",
-                marginBottom: 20, border: "1px solid rgba(167,139,250,0.2)",
+                marginBottom: 20, border: "1px solid rgba(26,171,240,0.22)",
               }}>{p.icon}</div>
               <div style={{
-                display: "inline-block", background: "rgba(167,139,250,0.15)", color: "#A78BFA",
+                display: "inline-block", background: "rgba(26,171,240,0.12)", color: C.brandDeep,
                 fontSize: 11, fontWeight: 700, padding: "4px 10px", borderRadius: 6,
                 letterSpacing: "0.05em", textTransform: "uppercase", marginBottom: 16,
               }}>{p.badge}</div>
@@ -524,10 +525,10 @@ function ForProviders() {
       <div className="hh-for-providers-grid" style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80, alignItems: "center" }}>
         {/* Left */}
         <div>
-          <SectionLabel color={C.green} align="left">For Service Providers</SectionLabel>
+          <SectionLabel color={C.brand} align="left">For Service Providers</SectionLabel>
           <h2 style={{ ...h2Style, textAlign: "left" }}>
             Grow Your Business.<br />
-            <span style={{ color: C.greenDim }}>On Your Terms.</span>
+            <span style={{ color: C.brandDeep }}>On Your Terms.</span>
           </h2>
           <p style={{ fontSize: 17, color: "#475569", lineHeight: 1.75, marginBottom: 36 }}>
             Join thousands of skilled Australians earning on HelpingHandsAU. Browse tasks, place bids, and build a client base — all without the overhead of running your own marketing.
@@ -536,10 +537,10 @@ function ForProviders() {
             {perks.map(p => (
               <li key={p} style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
                 <div style={{
-                  width: 20, height: 20, borderRadius: "50%", background: `${C.green}20`,
+                  width: 20, height: 20, borderRadius: "50%", background: `${C.brand}20`,
                   display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1,
                 }}>
-                  <Icon d={Icons.check} size={12} color={C.green} strokeWidth={2.5} />
+                  <Icon d={Icons.check} size={12} color={C.brand} strokeWidth={2.5} />
                 </div>
                 <span style={{ fontSize: 15, color: "#374151" }}>{p}</span>
               </li>
@@ -550,9 +551,10 @@ function ForProviders() {
             title="Coming soon"
             style={{
               display: "inline-block",
-              background: `linear-gradient(135deg, ${C.green}, ${C.teal})`,
-              color: "#000", fontWeight: 800, fontSize: 15,
+              background: `linear-gradient(135deg, ${C.brand}, ${C.brandDeep})`,
+              color: "#fff", fontWeight: 800, fontSize: 15,
               padding: "14px 32px", borderRadius: 12, textDecoration: "none",
+              boxShadow: "0 8px 28px rgba(26,171,240,0.28)",
             }}>
             Become a Provider — Free
           </a>
@@ -566,7 +568,7 @@ function ForProviders() {
           }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
               <span style={{ fontSize: 14, color: C.muted, fontWeight: 600 }}>Monthly Earnings</span>
-              <span style={{ fontSize: 12, background: "rgba(34,197,94,0.15)", color: C.green, padding: "4px 10px", borderRadius: 6, fontWeight: 700 }}>+24% this month</span>
+              <span style={{ fontSize: 12, background: "rgba(26,171,240,0.15)", color: C.brand, padding: "4px 10px", borderRadius: 6, fontWeight: 700 }}>+24% this month</span>
             </div>
             <div style={{ fontSize: 52, fontWeight: 800, color: "#F0F6FC", fontFamily: "var(--font-jakarta)", letterSpacing: "-0.04em", marginBottom: 8 }}>
               $4,280
@@ -587,7 +589,7 @@ function ForProviders() {
                   <div style={{ fontSize: 14, color: "#F0F6FC", fontWeight: 600 }}>{t.task}</div>
                   <div style={{ fontSize: 12, color: "#8B949E", marginTop: 2 }}>{t.date}</div>
                 </div>
-                <div style={{ fontSize: 15, color: C.green, fontWeight: 700 }}>{t.amt}</div>
+                <div style={{ fontSize: 15, color: C.brand, fontWeight: 700 }}>{t.amt}</div>
               </div>
             ))}
           </div>
@@ -611,9 +613,9 @@ function Testimonials() {
   ];
 
   return (
-    <section id="testimonials" style={{ padding: "120px 24px", background: "#F7F7F5" }}>
+    <section id="testimonials" style={{ padding: "120px 24px", background: C.bg }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-        <SectionLabel color={C.green}>Real Stories</SectionLabel>
+        <SectionLabel color={C.brand}>Real Stories</SectionLabel>
         <h2 style={{ ...h2Style, color: C.text }}>What Australians Are Saying</h2>
         <p style={{ ...subStyle, color: C.muted }}>From first task to loyal platform members — real results, real people.</p>
 
@@ -637,9 +639,9 @@ function Testimonials() {
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                 <div style={{
                   width: 40, height: 40, borderRadius: "50%",
-                  background: `linear-gradient(135deg, ${C.green}, ${C.teal})`,
+                  background: `linear-gradient(135deg, ${C.brand}, ${C.brandDeep})`,
                   display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 13, fontWeight: 800, color: "#000", flexShrink: 0,
+                  fontSize: 13, fontWeight: 800, color: "#fff", flexShrink: 0,
                 }}>{r.avatar}</div>
                 <div>
                   <div style={{ fontSize: 14, fontWeight: 700, color: C.text }}>{r.name}</div>
@@ -661,12 +663,12 @@ function AppDownload() {
   return (
     <section id="download" style={{
       padding: "120px 24px",
-      background: "linear-gradient(135deg, #F0FDF4 0%, #ECFDF5 50%, #F0FDFA 100%)",
+      background: "linear-gradient(135deg, #EEF6FC 0%, #E8F3FA 50%, #F4F8FB 100%)",
       position: "relative", overflow: "hidden",
     }}>
       <div style={{
         position: "absolute", inset: 0,
-        background: `radial-gradient(ellipse 50% 80% at 50% 50%, rgba(34,197,94,0.06) 0%, transparent 70%)`,
+        background: `radial-gradient(ellipse 50% 80% at 50% 50%, rgba(26,171,240,0.08) 0%, transparent 70%)`,
       }} />
       <div style={{ maxWidth: 760, margin: "0 auto", textAlign: "center", position: "relative" }}>
         {/* App icon */}
@@ -676,7 +678,7 @@ function AppDownload() {
             alt="HelpingHandsAU"
             width={80}
             height={80}
-            style={{ borderRadius: 22, display: "block", boxShadow: `0 0 60px rgba(34,197,94,0.3)` }}
+            style={{ borderRadius: 22, display: "block", boxShadow: `0 16px 48px rgba(26,171,240,0.28)` }}
           />
         </div>
 
@@ -698,7 +700,7 @@ function AppDownload() {
             <div style={{
               background: "#fff", borderRadius: 16, padding: 12,
               boxShadow: "0 8px 40px rgba(0,0,0,0.2)",
-              border: `2px solid ${C.green}40`,
+              border: `2px solid ${C.brand}40`,
             }}>
               <Image src="/qr-apple.png" alt="Scan to download HelpingHandsAU on the App Store" width={120} height={120} style={{ display: "block", borderRadius: 8 }} />
             </div>
@@ -719,7 +721,7 @@ function AppDownload() {
             <div style={{
               background: "#fff", borderRadius: 16, padding: 12,
               boxShadow: "0 8px 40px rgba(0,0,0,0.2)",
-              border: `2px solid ${C.green}40`,
+              border: `2px solid ${C.brand}40`,
             }}>
               <Image src="/qr-android.png" alt="Scan to download HelpingHandsAU on Google Play" width={120} height={120} style={{ display: "block", borderRadius: 8 }} />
             </div>
@@ -729,7 +731,7 @@ function AppDownload() {
 
         {/* Trust line */}
         <div style={{ marginTop: 48, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={C.green} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={C.brand} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
           </svg>
           <span style={{ fontSize: 13, color: C.muted }}>Free to download · Australian servers · Privacy Act 1988 compliant</span>
@@ -760,7 +762,7 @@ function Footer() {
           <div>
             <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
               <Image src="/icon-helpinghandsau.png" alt="HelpingHandsAU" width={32} height={32} style={{ borderRadius: 8, display: "block", flexShrink: 0 }} />
-              <span style={{ fontFamily: "var(--font-jakarta)", fontWeight: 700, fontSize: 16, color: "#F0F6FC" }}>HelpingHands<span style={{ color: C.green }}>AU</span></span>
+              <span style={{ fontFamily: "var(--font-jakarta)", fontWeight: 700, fontSize: 16, color: "#F0F6FC" }}>HelpingHands<span style={{ color: C.brand }}>AU</span></span>
             </div>
             <p style={{ fontSize: 14, color: "#8B949E", lineHeight: 1.75, maxWidth: 280 }}>
               Australia&rsquo;s trusted marketplace connecting people who need tasks done with skilled local providers. Safe, fast, and affordable.
@@ -853,17 +855,17 @@ export function HelpingHandsAUMarketingPage({ logoHref }: { logoHref: string }) 
         .hh-cat-card { transition: transform 0.2s, box-shadow 0.2s; }
         .hh-cat-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.1); }
         .hh-trust-card { transition: border-color 0.3s, background 0.3s; }
-        .hh-trust-card:hover { border-color: rgba(167,139,250,0.4) !important; background: rgba(167,139,250,0.04) !important; }
+        .hh-trust-card:hover { border-color: rgba(26,171,240,0.45) !important; background: rgba(26,171,240,0.04) !important; }
         .hh-review-card { transition: border-color 0.3s, transform 0.3s; }
-        .hh-review-card:hover { transform: translateY(-4px); border-color: rgba(34,197,94,0.25) !important; }
+        .hh-review-card:hover { transform: translateY(-4px); border-color: rgba(26,171,240,0.28) !important; }
         .hh-nav-link { transition: color 0.2s; }
         .hh-nav-link:hover { color: #0F172A !important; }
         .hh-cta-btn { transition: opacity 0.2s; }
         .hh-cta-btn:hover { opacity: 0.85; }
         .hh-hero-btn-primary { transition: transform 0.2s, box-shadow 0.2s; }
-        .hh-hero-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 50px rgba(34,197,94,0.4) !important; }
+        .hh-hero-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 48px rgba(26,171,240,0.45) !important; }
         .hh-hero-btn-secondary { transition: border-color 0.2s, background 0.2s; }
-        .hh-hero-btn-secondary:hover { border-color: #22C55E !important; background: rgba(34,197,94,0.05) !important; }
+        .hh-hero-btn-secondary:hover { border-color: #1AABF0 !important; background: rgba(26,171,240,0.06) !important; }
         .hh-footer-link { transition: color 0.2s; }
         .hh-footer-link:hover { color: #ffffff !important; }
       `}</style>
