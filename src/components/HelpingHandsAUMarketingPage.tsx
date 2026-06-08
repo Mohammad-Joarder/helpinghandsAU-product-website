@@ -604,12 +604,14 @@ function ForProviders() {
 ══════════════════════════════════════════════ */
 function Testimonials() {
   const reviews = [
-    { name: "Sarah M.", role: "Task Poster · Sydney", rating: 5, text: "I needed my pergola built in 3 days. Posted the task, had 7 bids within an hour, hired Jake — incredible work. Escrow made me feel totally safe.", avatar: "SM" },
-    { name: "David K.", role: "Service Provider · Melbourne", rating: 5, text: "Been on HelpingHandsAU for 8 months. Replaced my entire client base with better-paying, more reliable work. My rating speaks for itself — 4.98 from 163 reviews.", avatar: "DK" },
-    { name: "Priya R.", role: "Task Poster · Brisbane", rating: 5, text: "Fixed my leaking roof, deep cleaned the house, and got my garden sorted — all through HelpingHandsAU. The chat and payment system is better than anything I've used.", avatar: "PR" },
-    { name: "Tom W.", role: "Service Provider · Perth", rating: 5, text: "The Stripe Connect payout is seamless. I finish a job, taker approves, and money's in my account same day. This is how it should work.", avatar: "TW" },
-    { name: "Angela C.", role: "Task Poster · Adelaide", rating: 5, text: "Raised a dispute once when a provider didn't show. HelpingHandsAU resolved it in 24 hours and I got a full refund. Trust is everything and they deliver.", avatar: "AC" },
-    { name: "Marcus B.", role: "Service Provider · Gold Coast", rating: 5, text: "The Action Centre notifications are amazing — I never miss a new task in my area. Earned $12K in my first 3 months just on weekends.", avatar: "MB" },
+    { name: "Tanzil", role: "Task Poster · Yarrabilba", rating: 5, text: "I needed my pergola built in 3 days. Posted the task, had 7 bids within an hour — incredible work. Escrow made me feel totally safe.", avatar: "TZ" },
+    { name: "Fahim", role: "Service Provider · Brisbane", rating: 5, text: "Been on HelpingHandsAU for months. Better-paying, more reliable work than I was getting elsewhere. The rating system keeps everyone honest.", avatar: "FH" },
+    { name: "Kowser", role: "Task Poster · Gold Coast", rating: 5, text: "Fixed my leaking roof, deep cleaned the house, and got my garden sorted — all through HelpingHandsAU. The chat and payment system is better than anything I've used.", avatar: "KW" },
+    { name: "Sabbin", role: "Service Provider · Labrador", rating: 5, text: "The Stripe Connect payout is seamless. I finish a job, taker approves, and money's in my account same day. This is how it should work.", avatar: "SB" },
+    { name: "Shahrina", role: "Task Poster · Brisbane", rating: 5, text: "Raised a dispute once when a provider didn't show. HelpingHandsAU resolved it quickly and I got a full refund. Trust is everything and they deliver.", avatar: "SH" },
+    { name: "Rizwan", role: "Service Provider · Sydney", rating: 5, text: "The Action Centre notifications are great — I never miss a new task in my area. Steady weekend work without chasing invoices.", avatar: "RZ" },
+    { name: "Sadeq", role: "Task Poster · Sydney", rating: 5, text: "Posted a few odd jobs around the house — each time I got clear bids, good comms in chat, and paid only when the work was done. Very happy.", avatar: "SQ" },
+    { name: "Humaira", role: "Service Provider · Yarrabilba", rating: 5, text: "Local tasks close to home, fair rates, and support actually replies. HelpingHandsAU has become my main way to fill the diary.", avatar: "HM" },
   ];
 
   return (
