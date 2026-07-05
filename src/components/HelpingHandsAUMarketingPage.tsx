@@ -3,7 +3,9 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import CookieBannerHH from "@/components/CookieBannerHH";
 
-/* ─── colour tokens — logo cyan (#1AABF0) + deep shade from app icon ─── */
+const STORE_LINKS = {
+  android: "https://play.google.com/store/apps/details?id=com.helpinghandsau.app",
+};
 const C = {
   brand: "#1AABF0",
   brandDeep: "#0A8FCC",
@@ -157,9 +159,8 @@ function Nav({ logoHref }: { logoHref: string }) {
 
         {/* CTA */}
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
-          <a href="#how-it-works"
-            onClick={e => { e.preventDefault(); document.querySelector("#how-it-works")?.scrollIntoView({ behavior: "smooth" }); }}
-            title="Coming soon"
+          <a href="#download"
+            onClick={e => { e.preventDefault(); document.querySelector("#download")?.scrollIntoView({ behavior: "smooth" }); }}
             className="hh-cta-btn"
             style={{
               background: `linear-gradient(135deg, ${C.brand}, ${C.brandDeep})`,
@@ -167,7 +168,7 @@ function Nav({ logoHref }: { logoHref: string }) {
               borderRadius: 10, textDecoration: "none", letterSpacing: "-0.01em",
               boxShadow: "0 8px 24px rgba(26,171,240,0.25)",
             }}>
-            Post a Task
+            Get the App
           </a>
         </div>
       </div>
@@ -188,7 +189,6 @@ function Hero() {
                    #F4F8FB`,
       position: "relative", overflow: "hidden", maxWidth: "100vw",
     }}>
-      {/* Grid overlay */}
       <div style={{
         position: "absolute", inset: 0, opacity: 0.03,
         backgroundImage: `linear-gradient(${C.text} 1px, transparent 1px), linear-gradient(90deg, ${C.text} 1px, transparent 1px)`,
@@ -196,8 +196,7 @@ function Hero() {
       }} />
       <div style={{ position: "absolute", width: 600, height: 600, borderRadius: "50%", background: `radial-gradient(circle, rgba(26,171,240,0.07) 0%, transparent 70%)`, top: -200, left: "50%", transform: "translateX(-50%)", pointerEvents: "none" }} />
 
-      <div style={{ position: "relative", maxWidth: 900, zIndex: 1 }}>
-        {/* Badge */}
+      <div style={{ position: "relative", maxWidth: 960, zIndex: 1, width: "100%" }}>
         <div style={{
           display: "inline-flex", alignItems: "center", gap: 8,
           background: "rgba(26,171,240,0.1)", border: `1px solid rgba(26,171,240,0.22)`,
@@ -205,63 +204,90 @@ function Hero() {
         }}>
           <span style={{ width: 6, height: 6, borderRadius: "50%", background: C.brand, display: "inline-block", boxShadow: `0 0 8px ${C.brand}` }} />
           <span style={{ fontSize: 13, fontWeight: 600, color: C.brand, letterSpacing: "0.05em", textTransform: "uppercase" }}>
-            Australia&rsquo;s #1 Services Marketplace
+            Local · Verified · Escrow-Protected
           </span>
         </div>
 
         <h1 style={{
           fontFamily: "var(--font-jakarta)", fontWeight: 800, letterSpacing: "-0.04em",
-          lineHeight: 1.05, color: C.text, marginBottom: 24,
-          fontSize: "clamp(44px, 7vw, 88px)",
+          lineHeight: 1.08, color: C.text, marginBottom: 24,
+          fontSize: "clamp(36px, 5.5vw, 64px)",
         }}>
-          Get Any Task Done —<br />
-          <span style={{ background: `linear-gradient(135deg, ${C.brand} 0%, ${C.brandDeep} 100%)`, WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-            Fast, Safe & Affordable
-          </span>
+          Get Any Local Task Done. Safe, Fast, and Escrow-Protected.
         </h1>
 
-        <p style={{ fontSize: "clamp(17px, 2vw, 22px)", color: C.muted, maxWidth: 620, margin: "0 auto 48px", lineHeight: 1.65, fontWeight: 400 }}>
-          Post your task in minutes. Receive competitive bids from verified local providers.
-          Funds held in escrow — you only pay when the job is done perfectly.
-        </p>
+        <h2 style={{
+          fontFamily: "var(--font-jakarta)", fontWeight: 500, letterSpacing: "-0.02em",
+          fontSize: "clamp(17px, 2vw, 22px)", color: C.muted, maxWidth: 720,
+          margin: "0 auto 48px", lineHeight: 1.65,
+        }}>
+          Australia&rsquo;s community marketplace connecting homeowners with verified local providers. No upfront fees to join, no hidden catches.
+        </h2>
 
-        {/* CTA row */}
-        <div style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
-          <a href="#how-it-works"
-            onClick={e => { e.preventDefault(); document.querySelector("#how-it-works")?.scrollIntoView({ behavior: "smooth" }); }}
-            title="Coming soon"
-            className="hh-hero-btn-primary"
-            style={{
-              background: `linear-gradient(135deg, ${C.brand}, ${C.brandDeep})`,
-              color: "#fff", fontWeight: 800, fontSize: 16,
-              padding: "16px 36px", borderRadius: 14, textDecoration: "none",
-              letterSpacing: "-0.02em", boxShadow: `0 12px 40px rgba(26,171,240,0.35)`,
-            }}>
-            Post a Task — It&rsquo;s Free
-          </a>
-          <a href="#categories"
-            onClick={e => { e.preventDefault(); document.querySelector("#categories")?.scrollIntoView({ behavior: "smooth" }); }}
-            className="hh-hero-btn-secondary"
-            style={{
-              background: "transparent", color: C.text, fontWeight: 700, fontSize: 16,
-              padding: "16px 36px", borderRadius: 14, textDecoration: "none",
-              border: `1px solid ${C.border}`, letterSpacing: "-0.02em",
-            }}>
-            Browse Tasks →
-          </a>
+        {/* Split CTA — Customers vs Providers */}
+        <div className="hh-hero-split-cta" style={{
+          display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 20,
+          maxWidth: 720, margin: "0 auto", textAlign: "center",
+        }}>
+          <div style={{
+            background: "#ffffff", border: `1px solid ${C.border}`,
+            borderRadius: 20, padding: "28px 24px",
+            boxShadow: "0 12px 40px rgba(11,18,32,0.06)",
+          }}>
+            <a href="#download"
+              onClick={e => { e.preventDefault(); document.querySelector("#download")?.scrollIntoView({ behavior: "smooth" }); }}
+              className="hh-hero-btn-primary"
+              style={{
+                display: "block", width: "100%",
+                background: `linear-gradient(135deg, ${C.brand}, ${C.brandDeep})`,
+                color: "#fff", fontWeight: 800, fontSize: 16,
+                padding: "16px 20px", borderRadius: 14, textDecoration: "none",
+                letterSpacing: "-0.02em", boxShadow: `0 12px 40px rgba(26,171,240,0.35)`,
+              }}>
+              Need Help? Post a Task Free →
+            </a>
+            <p style={{ fontSize: 13, color: C.muted, marginTop: 12, marginBottom: 0, fontWeight: 500 }}>
+              Takes less than 2 minutes.
+            </p>
+          </div>
+
+          <div style={{
+            background: "#ffffff", border: `1px solid ${C.border}`,
+            borderRadius: 20, padding: "28px 24px",
+            boxShadow: "0 12px 40px rgba(11,18,32,0.06)",
+          }}>
+            <a href="#for-providers"
+              onClick={e => { e.preventDefault(); document.querySelector("#for-providers")?.scrollIntoView({ behavior: "smooth" }); }}
+              className="hh-hero-btn-secondary"
+              style={{
+                display: "block", width: "100%",
+                background: C.text, color: "#fff", fontWeight: 800, fontSize: 16,
+                padding: "16px 20px", borderRadius: 14, textDecoration: "none",
+                letterSpacing: "-0.02em", border: `1px solid ${C.text}`,
+              }}>
+              Want to Earn? Become a Provider →
+            </a>
+            <p style={{ fontSize: 13, color: C.muted, marginTop: 12, marginBottom: 0, fontWeight: 500 }}>
+              Keep 100% of your first 3 jobs.
+            </p>
+          </div>
         </div>
 
-        {/* Trust bar */}
-        <div style={{ display: "flex", gap: 32, justifyContent: "center", marginTop: 64, flexWrap: "wrap" }}>
+        {/* Local trust signals — no inflated global stats */}
+        <div style={{ display: "flex", gap: 24, justifyContent: "center", marginTop: 56, flexWrap: "wrap" }}>
           {[
-            { stat: "50K+", label: "Tasks Completed" },
-            { stat: "12K+", label: "Verified Providers" },
-            { stat: "4.9★", label: "Average Rating" },
-            { stat: "100%", label: "Escrow Protected" },
-          ].map(({ stat, label }) => (
-            <div key={label} style={{ textAlign: "center" }}>
-              <div style={{ fontFamily: "var(--font-jakarta)", fontWeight: 800, fontSize: 28, color: C.text, letterSpacing: "-0.04em" }}>{stat}</div>
-              <div style={{ fontSize: 13, color: C.muted, fontWeight: 500, marginTop: 2 }}>{label}</div>
+            { icon: "🛡️", label: "Australian Owned & Operated" },
+            { icon: "🔒", label: "Stripe Escrow Payments" },
+            { icon: "🆔", label: "ID-Verified Members" },
+          ].map(({ icon, label }) => (
+            <div key={label} style={{
+              display: "inline-flex", alignItems: "center", gap: 8,
+              fontSize: 13, fontWeight: 600, color: C.textSub,
+              background: "rgba(255,255,255,0.8)", padding: "8px 16px",
+              borderRadius: 100, border: `1px solid ${C.borderLight}`,
+            }}>
+              <span aria-hidden="true">{icon}</span>
+              <span>{label}</span>
             </div>
           ))}
         </div>
@@ -278,45 +304,46 @@ function HowItWorks() {
     {
       n: "01",
       icon: <Icon d={Icons.clipboard} size={28} color={C.brand} />,
-      title: "Post Your Task",
-      desc: "Describe what you need done, set your budget, and choose a deadline. Takes under 2 minutes.",
+      title: "Post Your Task for Free",
+      desc: "Describe what you need done, your location, and your flexible budget. Receive quotes from verified local providers in minutes.",
       color: C.brand,
     },
     {
       n: "02",
-      icon: <Icon d={Icons.messageCircle} size={28} color={C.brandMid} />,
-      title: "Receive Bids",
-      desc: "Verified local providers review your task and send competitive bids with their approach and price.",
-      color: C.brandMid,
+      icon: <Icon d={Icons.lock} size={28} color={C.brandDeep} />,
+      title: "Secure Your Funds Safely",
+      desc: "Once you choose your Tasker, your funds are held securely in our Stripe Escrow system. The money leaves your account but is not sent to the provider yet.",
+      color: C.brandDeep,
     },
     {
       n: "03",
-      icon: <Icon d={Icons.lock} size={28} color="#A78BFA" />,
-      title: "Hire & Secure Funds",
-      desc: "Accept the best bid. Your payment is held safely in escrow — the provider can't access it until you approve.",
-      color: "#A78BFA",
+      icon: <Icon d={Icons.camera} size={28} color={C.brandMid} />,
+      title: "Track the Progress",
+      desc: "Your provider arrives, completes the job to your standard, and uploads proof of completion directly through the app.",
+      color: C.brandMid,
     },
     {
       n: "04",
-      icon: <Icon d={Icons.checkCircle} size={28} color="#F59E0B" />,
-      title: "Confirm & Release",
-      desc: "Task done? Approve the work and funds are instantly released. Raise a dispute if anything isn't right.",
-      color: "#F59E0B",
+      icon: <Icon d={Icons.creditCardCheck} size={28} color="#0A8FCC" />,
+      title: "Release Payment",
+      desc: "Only when you are 100% satisfied with the work do you click \"Release\". The funds are instantly transferred to your Tasker. Safe, seamless, guaranteed.",
+      color: "#0A8FCC",
     },
   ];
 
   return (
     <section id="how-it-works" style={{ padding: "120px 24px", background: "#ffffff", position: "relative" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-        <SectionLabel color={C.brand}>Simple Process</SectionLabel>
-        <h2 style={h2Style}>How HelpingHandsAU Works</h2>
-        <p style={subStyle}>Four simple steps between you and a completed task.</p>
+        <SectionLabel color={C.brand}>Trust & Protection</SectionLabel>
+        <h2 style={h2Style}>How HelpingHandsAU Protects You</h2>
+        <p style={subStyle}>A clear, escrow-backed process from posting to payment — built for peace of mind.</p>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 24, marginTop: 64 }}>
+        <div className="hh-trust-steps" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 20, marginTop: 64 }}>
           {steps.map((s) => (
             <div key={s.n} className="hh-step-card" style={{
-              background: "#F8FAFC", border: "1px solid #E2E8F0",
-              borderRadius: 20, padding: 32, position: "relative", overflow: "hidden",
+              background: C.bgCard, border: `1px solid ${C.border}`,
+              borderRadius: 20, padding: 28, position: "relative", overflow: "hidden",
+              display: "flex", flexDirection: "column",
             }}>
               <div style={{
                 width: 56, height: 56, borderRadius: 14,
@@ -325,12 +352,12 @@ function HowItWorks() {
                 marginBottom: 20, border: `1px solid ${s.color}20`,
               }}>{s.icon}</div>
               <div style={{
-                position: "absolute", top: 24, right: 24,
-                fontSize: 64, fontWeight: 900, color: "rgba(0,0,0,0.04)",
+                position: "absolute", top: 20, right: 20,
+                fontSize: 48, fontWeight: 900, color: "rgba(0,0,0,0.04)",
                 fontFamily: "var(--font-jakarta)", lineHeight: 1,
               }}>{s.n}</div>
-              <h3 style={{ fontSize: 20, fontWeight: 700, color: "#0F172A", marginBottom: 12, letterSpacing: "-0.02em" }}>{s.title}</h3>
-              <p style={{ fontSize: 15, color: "#64748B", lineHeight: 1.7 }}>{s.desc}</p>
+              <h3 style={{ fontSize: 18, fontWeight: 700, color: C.text, marginBottom: 12, letterSpacing: "-0.02em", lineHeight: 1.3 }}>{s.title}</h3>
+              <p style={{ fontSize: 14, color: C.muted, lineHeight: 1.7, flex: 1 }}>{s.desc}</p>
               <div style={{ width: 40, height: 3, borderRadius: 4, background: s.color, marginTop: 20 }} />
             </div>
           ))}
@@ -391,14 +418,14 @@ function Features() {
 ══════════════════════════════════════════════ */
 function Categories() {
   const cats = [
-    { icon: <Icon d={Icons.home} size={22} color={C.brand} />, name: "Home & Garden", tasks: "8,400+ tasks", color: C.brand },
-    { icon: <Icon d={Icons.wrench} size={22} color="#3B82F6" />, name: "Repairs & Trades", tasks: "6,200+ tasks", color: "#3B82F6" },
-    { icon: <Icon d={Icons.truck} size={22} color="#F59E0B" />, name: "Removals & Delivery", tasks: "4,800+ tasks", color: "#F59E0B" },
-    { icon: <Icon d={Icons.monitor} size={22} color="#A78BFA" />, name: "Tech & IT", tasks: "3,500+ tasks", color: "#A78BFA" },
-    { icon: <Icon d={Icons.camera} size={22} color="#EC4899" />, name: "Photography & Video", tasks: "2,100+ tasks", color: "#EC4899" },
-    { icon: <Icon d={Icons.sparkles} size={22} color={C.brandDeep} />, name: "Cleaning", tasks: "5,600+ tasks", color: C.brandDeep },
-    { icon: <Icon d={Icons.palette} size={22} color="#F97316" viewBox="0 0 24 24" strokeWidth={0} />, name: "Design & Creative", tasks: "1,900+ tasks", color: "#F97316" },
-    { icon: <Icon d={Icons.users} size={22} color="#06B6D4" />, name: "Childcare & Tutoring", tasks: "2,700+ tasks", color: "#06B6D4" },
+    { icon: <Icon d={Icons.home} size={22} color={C.brand} />, name: "Home & Garden", color: C.brand },
+    { icon: <Icon d={Icons.wrench} size={22} color="#3B82F6" />, name: "Repairs & Trades", color: "#3B82F6" },
+    { icon: <Icon d={Icons.truck} size={22} color="#F59E0B" />, name: "Removals & Delivery", color: "#F59E0B" },
+    { icon: <Icon d={Icons.monitor} size={22} color="#A78BFA" />, name: "Tech & IT", color: "#A78BFA" },
+    { icon: <Icon d={Icons.camera} size={22} color="#EC4899" />, name: "Photography & Video", color: "#EC4899" },
+    { icon: <Icon d={Icons.sparkles} size={22} color={C.brandDeep} />, name: "Cleaning", color: C.brandDeep },
+    { icon: <Icon d={Icons.palette} size={22} color="#F97316" viewBox="0 0 24 24" strokeWidth={0} />, name: "Design & Creative", color: "#F97316" },
+    { icon: <Icon d={Icons.users} size={22} color="#06B6D4" />, name: "Childcare & Tutoring", color: "#06B6D4" },
   ];
 
   return (
@@ -406,7 +433,7 @@ function Categories() {
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
         <SectionLabel color={C.brand}>Popular Categories</SectionLabel>
         <h2 style={h2Style}>What Can We Help You With?</h2>
-        <p style={subStyle}>Thousands of tasks posted daily across every service category imaginable.</p>
+        <p style={subStyle}>Popular local services — post a task in your suburb and get quotes from verified providers nearby.</p>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 16, marginTop: 56 }}>
           {cats.map(c => (
@@ -422,8 +449,8 @@ function Categories() {
                 flexShrink: 0, border: `1px solid ${c.color}20`,
               }}>{c.icon}</div>
               <div>
-                <div style={{ fontSize: 15, fontWeight: 700, color: "#0F172A", letterSpacing: "-0.01em" }}>{c.name}</div>
-                <div style={{ fontSize: 12, color: "#94A3B8", marginTop: 2, fontWeight: 500 }}>{c.tasks}</div>
+                <div style={{ fontSize: 15, fontWeight: 700, color: C.text, letterSpacing: "-0.01em" }}>{c.name}</div>
+                <div style={{ fontSize: 12, color: C.muted, marginTop: 2, fontWeight: 500 }}>Local providers near you</div>
               </div>
             </div>
           ))}
@@ -464,7 +491,7 @@ function TrustSafety() {
       iconColor: C.brandDeep,
       title: "Ratings System",
       desc: "Every completed task generates a rating. Poor performers are removed. Excellent providers rise to the top.",
-      badge: "4.9★ Average",
+      badge: "Fair Outcomes",
     },
   ];
 
@@ -531,7 +558,7 @@ function ForProviders() {
             <span style={{ color: C.brandDeep }}>On Your Terms.</span>
           </h2>
           <p style={{ fontSize: 17, color: "#475569", lineHeight: 1.75, marginBottom: 36 }}>
-            Join thousands of skilled Australians earning on HelpingHandsAU. Browse tasks, place bids, and build a client base — all without the overhead of running your own marketing.
+            Earn on your schedule with HelpingHandsAU. Browse local tasks, place bids, and build a client base — all without the overhead of running your own marketing.
           </p>
           <ul style={{ listStyle: "none", padding: 0, margin: "0 0 40px", display: "flex", flexDirection: "column", gap: 14 }}>
             {perks.map(p => (
@@ -659,84 +686,97 @@ function Testimonials() {
 }
 
 /* ══════════════════════════════════════════════
-   APP DOWNLOAD
+   STICKY APP BANNER (mobile) / DOWNLOAD SECTION (desktop)
 ══════════════════════════════════════════════ */
-function AppDownload() {
+function StickyAppBanner() {
+  const trustBadges = [
+    { icon: "🛡️", label: "100% Australian Owned & Operated" },
+    { icon: "🔒", label: "Secure Stripe Payment Gateway" },
+    { icon: "🆔", label: "Real-ID Identity Verified Members" },
+  ];
+
   return (
-    <section id="download" style={{
-      padding: "120px 24px",
-      background: "linear-gradient(135deg, #EEF6FC 0%, #E8F3FA 50%, #F4F8FB 100%)",
-      position: "relative", overflow: "hidden",
-    }}>
-      <div style={{
-        position: "absolute", inset: 0,
-        background: `radial-gradient(ellipse 50% 80% at 50% 50%, rgba(26,171,240,0.08) 0%, transparent 70%)`,
-      }} />
-      <div style={{ maxWidth: 760, margin: "0 auto", textAlign: "center", position: "relative" }}>
-        {/* App icon */}
-        <div style={{ margin: "0 auto 32px", width: 80, height: 80 }}>
-          <Image
-            src="/icon-helpinghandsau.png"
-            alt="HelpingHandsAU"
-            width={80}
-            height={80}
-            style={{ borderRadius: 22, display: "block", boxShadow: `0 16px 48px rgba(26,171,240,0.28)` }}
-          />
-        </div>
-
-        <h2 style={{ fontFamily: "var(--font-jakarta)", fontWeight: 800, fontSize: "clamp(32px, 5vw, 54px)", color: C.text, letterSpacing: "-0.04em", marginBottom: 20 }}>
-          Download HelpingHandsAU
-        </h2>
-        <p style={{ fontSize: 18, color: C.muted, lineHeight: 1.7, marginBottom: 56 }}>
-          Available on iOS and Android. Post tasks, place bids, chat, pay — everything in your pocket.
-        </p>
-
-        {/* Store badges + QR codes */}
-        <div style={{ display: "flex", gap: 40, justifyContent: "center", flexWrap: "wrap", alignItems: "flex-start" }}>
-          {/* App Store */}
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-            <div style={{ display: "block" }}>
-              <AppleStoreBadge width={160} />
-            </div>
-            {/* QR Code */}
-            <div style={{
-              background: "#fff", borderRadius: 16, padding: 12,
-              boxShadow: "0 8px 40px rgba(0,0,0,0.2)",
-              border: `2px solid ${C.brand}40`,
-            }}>
-              <Image src="/qr-apple.png" alt="Scan to download HelpingHandsAU on the App Store" width={120} height={120} style={{ display: "block", borderRadius: 8 }} />
-            </div>
-            <span style={{ fontSize: 11, color: C.muted, fontWeight: 500 }}>Scan for iOS</span>
+    <section id="download" className="hh-app-banner" aria-label="Download the HelpingHandsAU app">
+      <div className="hh-app-banner-inner">
+        <div className="hh-app-banner-content">
+          <div style={{ margin: "0 auto 20px", width: 56, height: 56 }} className="hh-app-banner-icon">
+            <Image
+              src="/icon-helpinghandsau.png"
+              alt=""
+              width={56}
+              height={56}
+              style={{ borderRadius: 14, display: "block", boxShadow: `0 8px 24px rgba(26,171,240,0.25)` }}
+            />
           </div>
 
-          {/* Divider */}
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", paddingTop: 12 }}>
-            <div style={{ width: 1, height: 180, background: `linear-gradient(to bottom, transparent, ${C.border}, transparent)` }} />
+          <h2 style={{
+            fontFamily: "var(--font-jakarta)", fontWeight: 800,
+            fontSize: "clamp(24px, 4vw, 40px)", color: C.text,
+            letterSpacing: "-0.04em", marginBottom: 12, textAlign: "center",
+          }}>
+            Your Community, Handled.
+          </h2>
+
+          <p style={{
+            fontSize: "clamp(15px, 2vw, 17px)", color: C.muted, lineHeight: 1.7,
+            marginBottom: 28, textAlign: "center", maxWidth: 560, margin: "0 auto 28px",
+          }}>
+            Whether you need a weekend side-hustle or a hand with your to-do list, HelpingHandsAU keeps your transactions local, secure, and 100% transparent.
+          </p>
+
+          <div className="hh-app-banner-badges" style={{
+            display: "flex", flexWrap: "wrap", gap: 10, justifyContent: "center", marginBottom: 28,
+          }}>
+            {trustBadges.map(({ icon, label }) => (
+              <span key={label} style={{
+                display: "inline-flex", alignItems: "center", gap: 6,
+                fontSize: 12, fontWeight: 600, color: C.textSub,
+                background: "#ffffff", padding: "8px 14px",
+                borderRadius: 100, border: `1px solid ${C.border}`,
+              }}>
+                <span aria-hidden="true">{icon}</span>
+                {label}
+              </span>
+            ))}
           </div>
 
-          {/* Google Play */}
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-            <div style={{ display: "block" }}>
-              <GooglePlayBadge width={180} />
+          <div className="hh-app-banner-stores" style={{
+            display: "flex", gap: 40, justifyContent: "center", flexWrap: "wrap", alignItems: "flex-start",
+          }}>
+            {/* App Store */}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+              <a href="#download" aria-label="Download on the App Store" style={{ display: "block", lineHeight: 0 }}>
+                <AppleStoreBadge width={160} />
+              </a>
+              <div className="hh-app-banner-qr" style={{
+                background: "#fff", borderRadius: 16, padding: 12,
+                boxShadow: "0 8px 40px rgba(0,0,0,0.12)",
+                border: `2px solid ${C.brand}40`,
+              }}>
+                <Image src="/qr-apple.png" alt="Scan to download HelpingHandsAU on the App Store" width={120} height={120} style={{ display: "block", borderRadius: 8 }} />
+              </div>
+              <span className="hh-app-banner-qr" style={{ fontSize: 11, color: C.muted, fontWeight: 500 }}>Scan for iOS</span>
             </div>
-            {/* QR Code */}
-            <div style={{
-              background: "#fff", borderRadius: 16, padding: 12,
-              boxShadow: "0 8px 40px rgba(0,0,0,0.2)",
-              border: `2px solid ${C.brand}40`,
-            }}>
-              <Image src="/qr-android.png" alt="Scan to download HelpingHandsAU on Google Play" width={120} height={120} style={{ display: "block", borderRadius: 8 }} />
-            </div>
-            <span style={{ fontSize: 11, color: C.muted, fontWeight: 500 }}>Scan for Android</span>
-          </div>
-        </div>
 
-        {/* Trust line */}
-        <div style={{ marginTop: 48, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={C.brand} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          </svg>
-          <span style={{ fontSize: 13, color: C.muted }}>Free to download · Australian servers · Privacy Act 1988 compliant</span>
+            <div className="hh-app-banner-divider" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", paddingTop: 12 }}>
+              <div style={{ width: 1, height: 180, background: `linear-gradient(to bottom, transparent, ${C.border}, transparent)` }} />
+            </div>
+
+            {/* Google Play */}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
+              <a href={STORE_LINKS.android} target="_blank" rel="noopener noreferrer" aria-label="Get it on Google Play" style={{ display: "block", lineHeight: 0 }}>
+                <GooglePlayBadge width={180} />
+              </a>
+              <div className="hh-app-banner-qr" style={{
+                background: "#fff", borderRadius: 16, padding: 12,
+                boxShadow: "0 8px 40px rgba(0,0,0,0.12)",
+                border: `2px solid ${C.brand}40`,
+              }}>
+                <Image src="/qr-android.png" alt="Scan to download HelpingHandsAU on Google Play" width={120} height={120} style={{ display: "block", borderRadius: 8 }} />
+              </div>
+              <span className="hh-app-banner-qr" style={{ fontSize: 11, color: C.muted, fontWeight: 500 }}>Scan for Android</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -849,6 +889,9 @@ export function HelpingHandsAUMarketingPage({ logoHref }: { logoHref: string }) 
         section, nav, footer { overflow: hidden; }
         @media(max-width:900px){ .hh-for-providers-grid { grid-template-columns: 1fr !important; } }
         @media(max-width:900px){ .hh-footer-grid { grid-template-columns: 1fr 1fr !important; } }
+        @media(max-width:768px){ .hh-hero-split-cta { grid-template-columns: 1fr !important; } }
+        @media(max-width:1024px){ .hh-trust-steps { grid-template-columns: repeat(2, 1fr) !important; } }
+        @media(max-width:560px){ .hh-trust-steps { grid-template-columns: 1fr !important; } }
 
         .hh-step-card { transition: transform 0.3s, box-shadow 0.3s; }
         .hh-step-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.1); }
@@ -866,13 +909,54 @@ export function HelpingHandsAUMarketingPage({ logoHref }: { logoHref: string }) 
         .hh-cta-btn:hover { opacity: 0.85; }
         .hh-hero-btn-primary { transition: transform 0.2s, box-shadow 0.2s; }
         .hh-hero-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 48px rgba(26,171,240,0.45) !important; }
-        .hh-hero-btn-secondary { transition: border-color 0.2s, background 0.2s; }
-        .hh-hero-btn-secondary:hover { border-color: #1AABF0 !important; background: rgba(26,171,240,0.06) !important; }
+        .hh-hero-btn-secondary { transition: border-color 0.2s, background 0.2s, transform 0.2s; }
+        .hh-hero-btn-secondary:hover { transform: translateY(-2px); opacity: 0.92; }
         .hh-footer-link { transition: color 0.2s; }
         .hh-footer-link:hover { color: #ffffff !important; }
+
+        /* Desktop: compelling bottom download section */
+        .hh-app-banner {
+          padding: 100px 24px;
+          background: linear-gradient(135deg, #EEF6FC 0%, #E8F3FA 50%, #F4F8FB 100%);
+          position: relative;
+        }
+        .hh-app-banner-inner {
+          max-width: 900px;
+          margin: 0 auto;
+        }
+        .hh-app-banner-icon { display: none; }
+
+        /* Mobile: persistent sticky footer banner */
+        @media(max-width:768px) {
+          .hh-main-with-sticky { padding-bottom: 200px; }
+          footer { padding-bottom: calc(200px + env(safe-area-inset-bottom, 0px)) !important; }
+          .hh-app-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 90;
+            padding: 16px 16px calc(16px + env(safe-area-inset-bottom, 0px));
+            background: rgba(255,255,255,0.97);
+            backdrop-filter: blur(16px);
+            border-top: 1px solid #D5E3EE;
+            box-shadow: 0 -8px 32px rgba(11,18,32,0.12);
+            overflow: visible;
+          }
+          .hh-app-banner-inner { max-width: 100%; }
+          .hh-app-banner-icon { display: block !important; }
+          .hh-app-banner-content h2 { font-size: 20px !important; margin-bottom: 8px !important; }
+          .hh-app-banner-content p { font-size: 13px !important; margin-bottom: 14px !important; line-height: 1.5 !important; }
+          .hh-app-banner-badges { display: none !important; }
+          .hh-app-banner-qr { display: none !important; }
+          .hh-app-banner-divider { display: none !important; }
+          .hh-app-banner-stores { gap: 10px !important; flex-direction: row !important; align-items: center !important; }
+          .hh-app-banner-stores > div { flex-direction: row !important; gap: 0 !important; }
+          .hh-app-banner-stores a svg { width: 130px !important; height: auto !important; }
+        }
       `}</style>
       <Nav logoHref={logoHref} />
-      <main>
+      <main className="hh-main-with-sticky">
         <Hero />
         <HowItWorks />
         <Features />
@@ -880,7 +964,7 @@ export function HelpingHandsAUMarketingPage({ logoHref }: { logoHref: string }) 
         <TrustSafety />
         <ForProviders />
         <Testimonials />
-        <AppDownload />
+        <StickyAppBanner />
       </main>
       <Footer />
       <CookieBannerHH />
