@@ -525,62 +525,6 @@ function ForDrivers() {
 }
 
 /* ══════════════════════════════════════════════
-   TESTIMONIALS
-══════════════════════════════════════════════ */
-function Testimonials() {
-  const reviews = [
-    { name: "Jessica T.", role: "Rider · Sydney", rating: 5, text: "I use LetsGO every day for work. The upfront pricing is the best feature — I know exactly what I'm paying before I even get in the car. No more fare shock!", avatar: "JT" },
-    { name: "Ahmed K.", role: "Driver · Melbourne", rating: 5, text: "Been driving with LetsGO for 6 months. The AI dispatch is incredible — trips just come to me while I'm already moving. My earnings are up 30% vs my old platform.", avatar: "AK" },
-    { name: "Rachel P.", role: "Rider · Brisbane", rating: 5, text: "The live tracking and trip sharing gives me total peace of mind riding home late. My partner can see exactly where I am. This should be standard on every rideshare app.", avatar: "RP" },
-    { name: "Darren H.", role: "Driver · Perth", rating: 5, text: "Stripe weekly payout is fast and transparent. I can see every fare breakdown, every deduction. LetsGO treats drivers like professionals, not just contractors.", avatar: "DH" },
-    { name: "Sophie L.", role: "Rider · Adelaide", rating: 5, text: "Booked an XL for my family of 6 to the airport. One price, one booking, everyone in one car. The driver was fantastic — 5 stars every time.", avatar: "SL" },
-    { name: "Marcus T.", role: "Driver · Gold Coast", rating: 5, text: "The in-app support actually responds in minutes. Had a rider dispute once — resolved fairly and quickly. LetsGO has real humans behind the tech.", avatar: "MT" },
-  ];
-
-  return (
-    <section id="testimonials" style={{ padding: "120px 24px", background: "#F8F7FF" }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-        <SectionLabel color={C.violet}>Real Stories</SectionLabel>
-        <h2 style={{ ...h2Style, color: C.text }}>What Riders & Drivers Are Saying</h2>
-        <p style={{ ...subStyle, color: C.muted }}>Real Australians. Real trips. Real results.</p>
-
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: 20, marginTop: 64 }}>
-          {reviews.map(r => (
-            <div key={r.name} className="lg-review-card" style={{
-              background: "#ffffff", border: `1px solid ${C.border}`,
-              borderRadius: 20, padding: 28,
-            }}>
-              <div style={{ display: "flex", gap: 3, marginBottom: 16 }}>
-                {Array.from({ length: r.rating }).map((_, i) => (
-                  <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="#F59E0B" aria-hidden="true">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
-                ))}
-              </div>
-              <p style={{ fontSize: 14, color: "#374151", lineHeight: 1.75, marginBottom: 20, fontStyle: "italic" }}>
-                &ldquo;{r.text}&rdquo;
-              </p>
-              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <div style={{
-                  width: 40, height: 40, borderRadius: "50%",
-                  background: `linear-gradient(135deg, ${C.violet}, ${C.orange})`,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 13, fontWeight: 800, color: "#fff", flexShrink: 0,
-                }}>{r.avatar}</div>
-                <div>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: C.text }}>{r.name}</div>
-                  <div style={{ fontSize: 12, color: C.muted }}>{r.role}</div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ══════════════════════════════════════════════
    APP DOWNLOAD
 ══════════════════════════════════════════════ */
 function AppDownload() {
@@ -770,8 +714,6 @@ export default function LetsGoPage() {
         .lg-feat-card:hover { transform: translateY(-4px); }
         .lg-ride-card { transition: transform 0.3s, box-shadow 0.3s; }
         .lg-ride-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.1); }
-        .lg-review-card { transition: border-color 0.3s, transform 0.3s; }
-        .lg-review-card:hover { transform: translateY(-4px); border-color: rgba(124,58,237,0.25) !important; }
         .lg-nav-link { transition: color 0.2s; }
         .lg-nav-link:hover { color: #0F172A !important; }
         .lg-cta-btn { transition: opacity 0.2s; }
@@ -790,7 +732,6 @@ export default function LetsGoPage() {
         <Features />
         <RideTypes />
         <ForDrivers />
-        <Testimonials />
         <AppDownload />
       </main>
       <Footer />

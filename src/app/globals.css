@@ -1,26 +1,50 @@
 @import "tailwindcss";
 
 :root {
-  /* Cool paper — slight blue bias reads premium next to logo cyan */
-  --bg-primary: #F4F8FB;
-  --bg-secondary: #E8EEF3;
-  --text-primary: #0B1220;
-  --text-secondary: #1A2433;
-  --text-muted: #5C6B7A;
-  /* Logo cyan + deep shade (icon / HelpingHandsAu lockup) */
-  --accent-primary: #1AABF0;
-  --accent-primary-deep: #0A8FCC;
-  --accent-graphite: #3D4A5C;
-  --border-subtle: rgba(0, 0, 0, 0.06);
-  --border-medium: rgba(0, 0, 0, 0.1);
-  --shadow-subtle: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.03);
-  --shadow-card: 0 4px 24px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
-  --shadow-elevated: 0 16px 48px rgba(0,0,0,0.1), 0 4px 16px rgba(0,0,0,0.06);
+  /* Brand — always the same in both themes */
+  --brand:           #1AABF0;
+  --brand-deep:      #0A8FCC;
+  --brand-mid:       #55CCFF;
+  --brand-dim:       rgba(26,171,240,0.12);
+  --amber:           #F59E0B;
+  --violet:          #7C3AED;
+  --emerald:         #10B981;
+
+  /* Light theme defaults */
+  --bg:              #F7F9FC;
+  --bg2:             #EEF3FA;
+  --bg3:             #E2EBF6;
+  --card:            #FFFFFF;
+  --card2:           #F4F8FF;
+  --border:          rgba(26,171,240,0.16);
+  --border2:         rgba(26,171,240,0.08);
+  --text:            #070F1E;
+  --text2:           #334155;
+  --text3:           #64748B;
+  --nav-bg:          rgba(247,249,252,0.82);
+  --shadow:          0 8px 32px rgba(10,30,80,0.10);
+  --shadow-sm:       0 2px 10px rgba(10,30,80,0.07);
+  --glow:            rgba(26,171,240,0.18);
+
+  /* Legacy aliases */
+  --bg-primary:      var(--bg);
+  --bg-secondary:    var(--card);
+  --text-primary:    var(--text);
+  --text-secondary:  var(--text2);
+  --text-muted:      var(--text3);
+  --accent-primary:  var(--brand);
+  --accent-primary-deep: var(--brand-deep);
+  --accent-primary-mid:  var(--brand-mid);
+  --border-subtle:   var(--border2);
+  --border-medium:   var(--border);
+  --shadow-subtle:   var(--shadow-sm);
+  --shadow-card:     var(--shadow);
+  --shadow-elevated: var(--shadow);
 }
 
 @theme inline {
-  --color-background: var(--bg-primary);
-  --color-foreground: var(--text-primary);
+  --color-background: var(--bg);
+  --color-foreground: var(--text);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
@@ -33,21 +57,21 @@ html {
 }
 
 body {
-  background: var(--bg-primary);
-  color: var(--text-primary);
+  background: var(--bg);
+  color: var(--text);
   font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   overflow-x: hidden;
 }
 
 *:focus-visible {
-  outline: 2px solid var(--accent-primary);
+  outline: 2px solid var(--brand);
   outline-offset: 2px;
   border-radius: 4px;
 }
 
 ::selection {
-  background: rgba(26, 171, 240, 0.18);
-  color: var(--text-primary);
+  background: rgba(26, 171, 240, 0.2);
+  color: var(--text);
 }
 
 .glass {
@@ -69,7 +93,7 @@ body {
 }
 
 .gradient-text {
-  background: linear-gradient(135deg, #1AABF0 0%, #0A8FCC 45%, #3D4A5C 100%);
+  background: linear-gradient(135deg, #1AABF0 0%, #55CCFF 50%, #0A8FCC 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -124,6 +148,12 @@ body {
 @media (max-width: 768px) {
   .section-padding {
     padding: 80px 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }
 

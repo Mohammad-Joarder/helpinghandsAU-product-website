@@ -1,110 +1,177 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import CookieBannerHH from "@/components/CookieBannerHH";
+import { APPLE_EASE, ScrollReveal, ScrollRevealGroup, ScrollRevealItem, ScrollSectionIntro } from "@/components/ScrollReveal";
+
+/* ── Lucide React icons ── */
+import {
+  ClipboardList, Lock, Camera, BadgeCheck,
+  ShieldCheck, UserCheck, Star, MessageSquare, Zap, Smartphone,
+  Bell, Globe, Wallet, Home, Wrench, Truck, Monitor,
+  Sparkles, Users, Palette, Award, Check, CreditCard,
+  Sun, Moon, TrendingUp, MapPin, CheckCircle2, Banknote,
+  BarChart3, Shield, HeartHandshake, Briefcase, Building2,
+  ChevronRight, ArrowRight,
+} from "lucide-react";
 
 const STORE_LINKS = {
   android: "https://play.google.com/store/apps/details?id=com.helpinghandsau.app",
 };
-const C = {
-  brand: "#1AABF0",
-  brandDeep: "#0A8FCC",
-  brandMid: "#4DC4FF",
-  bg: "#F4F8FB",
-  bgAlt: "#ffffff",
-  bgCard: "#F6FAFD",
-  bgCardHover: "#EDF5FA",
-  border: "#D5E3EE",
-  borderLight: "#E8F2F9",
-  muted: "#5C6B7A",
-  text: "#0B1220",
-  textSub: "#364152",
-  white: "#0F172A",
+
+/* ──────────────────────────────────────────────────────────────
+   THEME TOKENS
+────────────────────────────────────────────────────────────── */
+const LIGHT = {
+  "--bg":       "#F7F9FC",
+  "--bg2":      "#EEF3FA",
+  "--bg3":      "#E2EBF6",
+  "--card":     "#FFFFFF",
+  "--card2":    "#F4F8FF",
+  "--border":   "rgba(26,171,240,0.16)",
+  "--border2":  "rgba(26,171,240,0.08)",
+  "--text":     "#070F1E",
+  "--text2":    "#334155",
+  "--text3":    "#64748B",
+  "--nav-bg":   "rgba(247,249,252,0.88)",
+  "--shadow":   "0 8px 32px rgba(10,30,80,0.10)",
+  "--shadow-sm":"0 2px 10px rgba(10,30,80,0.07)",
+  "--glow":     "rgba(26,171,240,0.22)",
+};
+const DARK = {
+  "--bg":       "#060C18",
+  "--bg2":      "#0A1220",
+  "--bg3":      "#0E1828",
+  "--card":     "#0D1728",
+  "--card2":    "#111E30",
+  "--border":   "rgba(26,171,240,0.18)",
+  "--border2":  "rgba(26,171,240,0.09)",
+  "--text":     "#EDF2FF",
+  "--text2":    "#94A3B8",
+  "--text3":    "#475569",
+  "--nav-bg":   "rgba(6,12,24,0.88)",
+  "--shadow":   "0 8px 40px rgba(0,0,0,0.6)",
+  "--shadow-sm":"0 2px 12px rgba(0,0,0,0.4)",
+  "--glow":     "rgba(26,171,240,0.28)",
+};
+const BRAND = {
+  "--brand":      "#1AABF0",
+  "--brand-deep": "#0A8FCC",
+  "--brand-mid":  "#55CCFF",
+  "--brand-dim":  "rgba(26,171,240,0.12)",
+  "--amber":      "#F59E0B",
+  "--violet":     "#7C3AED",
+  "--emerald":    "#10B981",
 };
 
-/* ─── SVG icon library ─── */
-function Icon({ d, size = 24, color = "currentColor", viewBox = "0 0 24 24", strokeWidth = 1.75 }: {
-  d: string | string[]; size?: number; color?: string; viewBox?: string; strokeWidth?: number;
-}) {
-  const paths = Array.isArray(d) ? d : [d];
+/* ── Shared style helpers ── */
+const h2S: React.CSSProperties = {
+  fontFamily: "var(--font-jakarta)", fontWeight: 800, letterSpacing: "-0.05em",
+  fontSize: "clamp(34px,4.5vw,60px)", color: "var(--text)", lineHeight: 1.06,
+  marginBottom: 18, textAlign: "center",
+};
+const subS: React.CSSProperties = {
+  fontSize: 19, color: "var(--text2)", textAlign: "center",
+  maxWidth: 580, margin: "0 auto", lineHeight: 1.6, letterSpacing: "-0.01em",
+};
+
+/* ── Section label pill ── */
+function SectionLabel({ color, children, align = "center" }: { color: string; children: React.ReactNode; align?: "center" | "left" }) {
   return (
-    <svg width={size} height={size} viewBox={viewBox} fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      {paths.map((p, i) => <path key={i} d={p} />)}
-    </svg>
+    <div style={{ textAlign: align, marginBottom: 14 }}>
+      <span style={{
+        display: "inline-flex", alignItems: "center", gap: 6,
+        fontSize: 11, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase",
+        color, background: `${color}18`, padding: "6px 14px", borderRadius: 100,
+        border: `1px solid ${color}30`,
+      }}>{children}</span>
+    </div>
   );
 }
 
-/* Individual named icons */
-const Icons = {
-  clipboard: "M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2M9 5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2M9 5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2m-6 9 2 2 4-4",
-  messageCircle: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z",
-  lock: ["M19 11H5a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2z", "M7 11V7a5 5 0 0 1 10 0v4"],
-  checkCircle: "M22 11.08V12a10 10 0 1 1-5.93-9.14M22 4 12 14.01l-3-3",
-  shield: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z",
-  userCheck: ["M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2", "M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8", "M16 11l2 2 4-4"],
-  star: "M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z",
-  messageSquare: "M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z",
-  zap: "M13 2 3 14h9l-1 8 10-12h-9l1-8z",
-  smartphone: ["M17 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z", "M12 18h.01"],
-  bell: ["M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9", "M13.73 21a2 2 0 0 1-3.46 0"],
-  globe: ["M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z", "M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"],
-  wallet: ["M21 12V7H5a2 2 0 0 1 0-4h14v4", "M3 5v14a2 2 0 0 0 2 2h16v-5H5a2 2 0 0 1 0-4h16", "M18 12h.01"],
-  home: "M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z M9 22V12h6v10",
-  wrench: "M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z",
-  truck: ["M1 3h15v13H1z", "M16 8h4l3 3v5h-7V8z", "M5.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z", "M18.5 21a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"],
-  monitor: ["M20 3H4a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1z", "M8 21h8M12 17v4"],
-  camera: ["M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z", "M12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"],
-  sparkles: "M9.5 2 11 6.5l4.5 1.5-4.5 1.5L9.5 14 8 9.5 3.5 8 8 6.5 9.5 2zM18 12l1.5 4 4 1.5-4 1.5L18 23l-1.5-4.5L12 17l4.5-1.5L18 12z",
-  users: ["M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2", "M23 21v-2a4 4 0 0 0-3-3.87", "M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8z", "M16 3.13a4 4 0 0 1 0 7.75"],
-  briefcase: ["M20 7H4a2 2 0 0 0-2 2v11a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z", "M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"],
-  creditCard: ["M1 4h22v16H1z", "M1 10h22"],
-  broom: "M3 21 12 12M15 3l6 6-8.5 8.5c-.83.83-2.17.83-3 0L8 16l7-13zM9.5 6.5 17 14",
-  baby: ["M9 12h.01M15 12h.01", "M8 20v2h8v-2", "M12 2a5 5 0 0 1 5 5v3a5 5 0 0 1-10 0V7a5 5 0 0 1 5-5z", "M2 14c0-2 2-3 3-3h14c1 0 3 1 3 3"],
-  palette: "M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-.99 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 8 6.5 8 8 8.67 8 9.5 7.33 11 6.5 11zm3-4C8.67 7 8 6.33 8 5.5S8.67 4 9.5 4s1.5.67 1.5 1.5S10.33 7 9.5 7zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 4 14.5 4s1.5.67 1.5 1.5S15.33 7 14.5 7zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 8 17.5 8s1.5.67 1.5 1.5S18.33 11 17.5 11z",
-  creditCardCheck: ["M1 4h22v16H1z", "M1 10h22", "M15 15l2 2 4-4"],
-  shieldCheck: ["M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z", "M9 12l2 2 4-4"],
-  award: ["M12 15a6 6 0 1 0 0-12 6 6 0 0 0 0 12z", "M8.21 13.89L7 23l5-3 5 3-1.21-9.12"],
-  trendingUp: "M23 6l-9.5 9.5-5-5L1 18M17 6h6v6",
-  check: "M20 6 9 17l-5-5",
-};
+/* ── Icon wrapper: coloured tinted box ── */
+function IconBox({ icon, color, size = 50 }: { icon: React.ReactNode; color: string; size?: number }) {
+  return (
+    <div style={{
+      width: size, height: size, borderRadius: Math.round(size * 0.28),
+      background: `${color}15`,
+      border: `1px solid ${color}28`,
+      display: "flex", alignItems: "center", justifyContent: "center",
+      flexShrink: 0,
+    }}>
+      {icon}
+    </div>
+  );
+}
 
-/* ─── App Store Badges ─── */
+/* ── App Store badges ── */
 function AppleStoreBadge({ width = 160 }: { width?: number }) {
   return (
     <svg viewBox="0 0 160 50" fill="none" xmlns="http://www.w3.org/2000/svg" width={width} aria-label="Download on the App Store">
-      <rect width="160" height="50" rx="9" fill="#000000"/>
-      <rect x="0.5" y="0.5" width="159" height="49" rx="8.5" stroke="rgba(255,255,255,0.15)"/>
-      {/* Apple logo — official proportions */}
-      <path d="M22.5 22.8c.03-2.74 2.24-4.06 2.34-4.13-1.27-1.86-3.25-2.11-3.96-2.14-1.69-.17-3.29.99-4.15.99-.86 0-2.16-.97-3.56-.94-1.83.03-3.51 1.06-4.46 2.68-1.9 3.29-.49 8.17 1.37 10.84.91 1.3 1.99 2.77 3.41 2.72 1.37-.05 1.89-.88 3.55-.88 1.65 0 2.11.88 3.55.86 1.47-.02 2.41-1.34 3.3-2.65 1.05-1.51 1.48-2.97 1.5-3.05-.03-.02-2.87-1.1-2.89-4.3z" fill="white"/>
-      <path d="M19.77 14.88c.75-.92 1.26-2.19 1.11-3.47-1.07.04-2.37.72-3.14 1.62-.69.79-1.25 2.08-1.03 3.3 1.17.09 2.31-.59 3.06-1.45z" fill="white"/>
-      {/* Text */}
-      <text x="35" y="20" fontFamily="-apple-system, Helvetica Neue, sans-serif" fontSize="8" fill="rgba(255,255,255,0.75)" letterSpacing="0.5">Download on the</text>
-      <text x="35" y="35" fontFamily="-apple-system, Helvetica Neue, sans-serif" fontSize="17" fontWeight="600" fill="white" letterSpacing="-0.4">App Store</text>
+      <rect width="160" height="50" rx="9" fill="#000" />
+      <rect x=".5" y=".5" width="159" height="49" rx="8.5" stroke="rgba(255,255,255,0.15)" />
+      <path d="M22.5 22.8c.03-2.74 2.24-4.06 2.34-4.13-1.27-1.86-3.25-2.11-3.96-2.14-1.69-.17-3.29.99-4.15.99-.86 0-2.16-.97-3.56-.94-1.83.03-3.51 1.06-4.46 2.68-1.9 3.29-.49 8.17 1.37 10.84.91 1.3 1.99 2.77 3.41 2.72 1.37-.05 1.89-.88 3.55-.88 1.65 0 2.11.88 3.55.86 1.47-.02 2.41-1.34 3.3-2.65 1.05-1.51 1.48-2.97 1.5-3.05-.03-.02-2.87-1.1-2.89-4.3z" fill="white" />
+      <path d="M19.77 14.88c.75-.92 1.26-2.19 1.11-3.47-1.07.04-2.37.72-3.14 1.62-.69.79-1.25 2.08-1.03 3.3 1.17.09 2.31-.59 3.06-1.45z" fill="white" />
+      <text x="35" y="20" fontFamily="-apple-system,Helvetica Neue,sans-serif" fontSize="8" fill="rgba(255,255,255,0.75)" letterSpacing="0.5">Download on the</text>
+      <text x="35" y="35" fontFamily="-apple-system,Helvetica Neue,sans-serif" fontSize="17" fontWeight="600" fill="white" letterSpacing="-0.4">App Store</text>
+    </svg>
+  );
+}
+function GooglePlayBadge({ width = 180 }: { width?: number }) {
+  return (
+    <svg viewBox="0 0 180 50" fill="none" xmlns="http://www.w3.org/2000/svg" width={width} aria-label="Get it on Google Play">
+      <rect width="180" height="50" rx="9" fill="#000" />
+      <rect x=".5" y=".5" width="179" height="49" rx="8.5" stroke="rgba(255,255,255,0.15)" />
+      <path d="M12 16.5C11.5 16.8 11.5 17.6 11.5 17.6L11.5 33.4C11.5 33.4 11.5 34.2 12 34.5L12.1 34.6L21 25.15V25L12.1 16.4Z" fill="#00D2FF" />
+      <path d="M24 22.4L21 25.15L12 16.5L12.1 16.4C12.5 16.1 13 16.1 13.4 16.4L24 22.4Z" fill="#5FE06A" />
+      <path d="M24 27.6L13.4 33.6C13 33.9 12.5 33.9 12.1 33.6L12 33.5L21 24.85Z" fill="#FF3D51" />
+      <path d="M24 22.4L13.4 16.4C13 16.1 12.5 16.1 12.1 16.4L21 25L24 27.6L27.5 25.78C28.2 25.42 28.2 24.58 27.5 24.22Z" fill="#FFBC00" />
+      <text x="38" y="20" fontFamily="-apple-system,Helvetica Neue,sans-serif" fontSize="8" fill="rgba(255,255,255,0.75)" letterSpacing="0.8">GET IT ON</text>
+      <text x="38" y="35" fontFamily="-apple-system,Helvetica Neue,sans-serif" fontSize="17" fontWeight="600" fill="white" letterSpacing="-0.4">Google Play</text>
     </svg>
   );
 }
 
-function GooglePlayBadge({ width = 180 }: { width?: number }) {
+/* ══════════════════════════════════════════════
+   THEME TOGGLE
+══════════════════════════════════════════════ */
+function ThemeToggle({ dark, onToggle }: { dark: boolean; onToggle: () => void }) {
   return (
-    <svg viewBox="0 0 180 50" fill="none" xmlns="http://www.w3.org/2000/svg" width={width} aria-label="Get it on Google Play">
-      <rect width="180" height="50" rx="9" fill="#000000"/>
-      <rect x="0.5" y="0.5" width="179" height="49" rx="8.5" stroke="rgba(255,255,255,0.15)"/>
-      {/* Google Play triangle — official 4-colour design */}
-      <path d="M12 16.5C11.5 16.8 11.5 17.6 11.5 17.6L11.5 33.4C11.5 33.4 11.5 34.2 12 34.5L12.1 34.6L21 25.15V25L12.1 16.4Z" fill="#00D2FF"/>
-      <path d="M24 22.4L21 25.15L12 16.5L12.1 16.4C12.5 16.1 13 16.1 13.4 16.4L24 22.4Z" fill="#5FE06A"/>
-      <path d="M24 27.6L13.4 33.6C13 33.9 12.5 33.9 12.1 33.6L12 33.5L21 24.85Z" fill="#FF3D51"/>
-      <path d="M24 22.4L13.4 16.4C13 16.1 12.5 16.1 12.1 16.4L21 25L24 27.6L27.5 25.78C28.2 25.42 28.2 24.58 27.5 24.22Z" fill="#FFBC00"/>
-      {/* Text */}
-      <text x="38" y="20" fontFamily="-apple-system, Helvetica Neue, sans-serif" fontSize="8" fill="rgba(255,255,255,0.75)" letterSpacing="0.8">GET IT ON</text>
-      <text x="38" y="35" fontFamily="-apple-system, Helvetica Neue, sans-serif" fontSize="17" fontWeight="600" fill="white" letterSpacing="-0.4">Google Play</text>
-    </svg>
+    <button
+      onClick={onToggle}
+      aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
+      style={{
+        width: 46, height: 26, borderRadius: 13, border: "1px solid var(--border)",
+        background: dark ? "rgba(26,171,240,0.2)" : "rgba(26,171,240,0.08)",
+        cursor: "pointer", position: "relative", padding: 0,
+        display: "flex", alignItems: "center", flexShrink: 0,
+        transition: "background 0.3s",
+      }}
+    >
+      <motion.div
+        animate={{ x: dark ? 22 : 2 }}
+        transition={{ type: "spring", stiffness: 500, damping: 30 }}
+        style={{
+          width: 20, height: 20, borderRadius: "50%",
+          background: "linear-gradient(135deg, var(--brand), var(--brand-deep))",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          boxShadow: "0 2px 8px rgba(26,171,240,0.55)",
+        }}
+      >
+        {dark
+          ? <Moon size={10} color="#fff" strokeWidth={2} />
+          : <Sun size={10} color="#fff" strokeWidth={2} />
+        }
+      </motion.div>
+    </button>
   );
 }
 
 /* ══════════════════════════════════════════════
    NAV
 ══════════════════════════════════════════════ */
-function Nav({ logoHref }: { logoHref: string }) {
+function Nav({ logoHref, dark, onToggleDark }: { logoHref: string; dark: boolean; onToggleDark: () => void }) {
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
     const h = () => setScrolled(window.scrollY > 20);
@@ -115,60 +182,53 @@ function Nav({ logoHref }: { logoHref: string }) {
   const links = [
     { label: "How It Works", href: "#how-it-works" },
     { label: "Features", href: "#features" },
-    { label: "Categories", href: "#categories" },
-    { label: "Trust & Safety", href: "#trust-safety" },
+    { label: "Services", href: "#categories" },
+    { label: "Safety", href: "#trust-safety" },
     { label: "For Providers", href: "#for-providers" },
   ];
 
   return (
-    <nav
-      style={{
-        position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
-        background: scrolled ? "rgba(255,255,255,0.95)" : "transparent",
-        backdropFilter: scrolled ? "blur(20px)" : "none",
-        borderBottom: scrolled ? `1px solid ${C.border}` : "none",
-        transition: "all 0.3s ease",
-      }}
-    >
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", height: 72, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        {/* Logo */}
+    <nav style={{
+      position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
+      background: scrolled ? "var(--nav-bg)" : "transparent",
+      backdropFilter: scrolled ? "saturate(180%) blur(24px)" : "none",
+      WebkitBackdropFilter: scrolled ? "saturate(180%) blur(24px)" : "none",
+      borderBottom: scrolled ? "1px solid var(--border)" : "1px solid transparent",
+      transition: "all 0.4s ease",
+    }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px", height: 62, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
         <a href={logoHref} style={{ display: "flex", alignItems: "center", gap: 10, textDecoration: "none" }}>
-          <Image
-            src="/icon-helpinghandsau.png"
-            alt="HelpingHandsAU"
-            width={36}
-            height={36}
-            style={{ borderRadius: 10, display: "block", flexShrink: 0 }}
-          />
-          <span style={{ fontFamily: "var(--font-jakarta)", fontWeight: 700, fontSize: 18, color: C.text, letterSpacing: "-0.03em" }}>
-            HelpingHands<span style={{ color: C.brand }}>AU</span>
+          <Image src="/icon-helpinghandsau.png" alt="HelpingHandsAU" width={36} height={36}
+            style={{ borderRadius: 10, display: "block", flexShrink: 0 }} />
+          <span style={{ fontFamily: "var(--font-jakarta)", fontWeight: 700, fontSize: 17, color: "var(--text)", letterSpacing: "-0.03em" }}>
+            HelpingHands<span style={{ color: "var(--brand)" }}>AU</span>
           </span>
         </a>
 
-        {/* Desktop links */}
-        <div style={{ display: "flex", gap: 32, alignItems: "center" }} className="hh-hidden-mobile">
+        <div style={{ display: "flex", gap: 30, alignItems: "center" }} className="hh-hidden-mobile">
           {links.map(l => (
             <a key={l.label} href={l.href}
               onClick={e => { e.preventDefault(); document.querySelector(l.href)?.scrollIntoView({ behavior: "smooth" }); }}
               className="hh-nav-link"
-              style={{ color: C.muted, textDecoration: "none", fontSize: 14, fontWeight: 500 }}>
+              style={{ color: "var(--text2)", textDecoration: "none", fontSize: 13, fontWeight: 500, letterSpacing: "-0.01em", display: "flex", alignItems: "center", gap: 4 }}>
               {l.label}
             </a>
           ))}
         </div>
 
-        {/* CTA */}
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+          <ThemeToggle dark={dark} onToggle={onToggleDark} />
           <a href="#download"
             onClick={e => { e.preventDefault(); document.querySelector("#download")?.scrollIntoView({ behavior: "smooth" }); }}
             className="hh-cta-btn"
             style={{
-              background: `linear-gradient(135deg, ${C.brand}, ${C.brandDeep})`,
-              color: "#fff", fontWeight: 700, fontSize: 14, padding: "10px 20px",
+              background: "linear-gradient(135deg, var(--brand), var(--brand-deep))",
+              color: "#fff", fontWeight: 700, fontSize: 13, padding: "9px 20px",
               borderRadius: 10, textDecoration: "none", letterSpacing: "-0.01em",
-              boxShadow: "0 8px 24px rgba(26,171,240,0.25)",
+              display: "flex", alignItems: "center", gap: 6,
+              boxShadow: "0 4px 16px var(--glow)",
             }}>
-            Get the App
+            Get the App <ArrowRight size={13} strokeWidth={2.5} />
           </a>
         </div>
       </div>
@@ -179,119 +239,140 @@ function Nav({ logoHref }: { logoHref: string }) {
 /* ══════════════════════════════════════════════
    HERO
 ══════════════════════════════════════════════ */
-function Hero() {
+function Hero({ dark }: { dark: boolean }) {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, 100]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.65], [1, 0]);
+  const rm = useReducedMotion();
+
+  const in0 = (d: number) => rm ? {} : {
+    initial: { opacity: 0, y: 40 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 1.1, delay: d, ease: APPLE_EASE },
+  };
+
+  const stats = [
+    { icon: <BarChart3 size={16} strokeWidth={2} color="var(--brand)" />, n: "10K+", label: "Tasks Posted" },
+    { icon: <UserCheck size={16} strokeWidth={2} color="var(--emerald)" />, n: "5K+", label: "Verified Providers" },
+    { icon: <Shield size={16} strokeWidth={2} color="var(--violet)" />, n: "100%", label: "Escrow Protected" },
+    { icon: <Star size={16} strokeWidth={2} color="var(--amber)" />, n: "4.9★", label: "Average Rating" },
+  ];
+
   return (
-    <section style={{
-      minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center",
-      alignItems: "center", textAlign: "center", padding: "120px 24px 80px",
-      background: `radial-gradient(ellipse 80% 60% at 50% 0%, rgba(26,171,240,0.14) 0%, transparent 70%),
-                   radial-gradient(ellipse 60% 40% at 80% 50%, rgba(10,143,204,0.09) 0%, transparent 60%),
-                   #F4F8FB`,
-      position: "relative", overflow: "hidden", maxWidth: "100vw",
+    <section ref={ref} style={{
+      minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center",
+      textAlign: "center", padding: "120px 24px 80px", position: "relative", overflow: "hidden",
+      background: dark
+        ? "radial-gradient(ellipse 110% 80% at 50% -15%, rgba(26,171,240,0.22) 0%, transparent 55%), radial-gradient(ellipse 70% 50% at 85% 55%, rgba(124,58,237,0.12) 0%, transparent 50%), var(--bg)"
+        : "radial-gradient(ellipse 110% 80% at 50% -15%, rgba(26,171,240,0.14) 0%, transparent 55%), radial-gradient(ellipse 60% 40% at 85% 55%, rgba(26,171,240,0.06) 0%, transparent 50%), var(--bg)",
     }}>
-      <div style={{
-        position: "absolute", inset: 0, opacity: 0.03,
-        backgroundImage: `linear-gradient(${C.text} 1px, transparent 1px), linear-gradient(90deg, ${C.text} 1px, transparent 1px)`,
-        backgroundSize: "40px 40px",
+      {/* Dot-grid background */}
+      <div aria-hidden style={{
+        position: "absolute", inset: 0, pointerEvents: "none",
+        backgroundImage: dark
+          ? "radial-gradient(rgba(26,171,240,0.25) 1px, transparent 1px)"
+          : "radial-gradient(rgba(26,171,240,0.2) 1px, transparent 1px)",
+        backgroundSize: "32px 32px",
+        maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 80%)",
       }} />
-      <div style={{ position: "absolute", width: 600, height: 600, borderRadius: "50%", background: `radial-gradient(circle, rgba(26,171,240,0.07) 0%, transparent 70%)`, top: -200, left: "50%", transform: "translateX(-50%)", pointerEvents: "none" }} />
 
-      <div style={{ position: "relative", maxWidth: 960, zIndex: 1, width: "100%" }}>
-        <div style={{
-          display: "inline-flex", alignItems: "center", gap: 8,
-          background: "rgba(26,171,240,0.1)", border: `1px solid rgba(26,171,240,0.22)`,
-          borderRadius: 100, padding: "6px 16px", marginBottom: 32,
-        }}>
-          <span style={{ width: 6, height: 6, borderRadius: "50%", background: C.brand, display: "inline-block", boxShadow: `0 0 8px ${C.brand}` }} />
-          <span style={{ fontSize: 13, fontWeight: 600, color: C.brand, letterSpacing: "0.05em", textTransform: "uppercase" }}>
-            Local · Verified · Escrow-Protected
+      {/* Floating orbs */}
+      <motion.div aria-hidden animate={{ y: [0, -20, 0] }} transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
+        style={{
+          position: "absolute", width: 520, height: 520, borderRadius: "50%", top: "-15%", right: "-8%", pointerEvents: "none",
+          background: dark ? "radial-gradient(circle, rgba(26,171,240,0.13) 0%, transparent 70%)" : "radial-gradient(circle, rgba(26,171,240,0.09) 0%, transparent 70%)",
+        }} />
+      <motion.div aria-hidden animate={{ y: [0, 16, 0] }} transition={{ repeat: Infinity, duration: 10, ease: "easeInOut", delay: 2 }}
+        style={{
+          position: "absolute", width: 380, height: 380, borderRadius: "50%", bottom: "5%", left: "-5%", pointerEvents: "none",
+          background: dark ? "radial-gradient(circle, rgba(124,58,237,0.11) 0%, transparent 70%)" : "radial-gradient(circle, rgba(26,171,240,0.07) 0%, transparent 70%)",
+        }} />
+
+      <motion.div style={{ position: "relative", maxWidth: 1000, zIndex: 1, width: "100%",
+        opacity: rm ? 1 : heroOpacity, y: rm ? 0 : heroY }}>
+
+        {/* Badge */}
+        <motion.div {...in0(0)} style={{ marginBottom: 28 }}>
+          <span style={{
+            display: "inline-flex", alignItems: "center", gap: 8, fontSize: 11, fontWeight: 700,
+            letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--brand)",
+            background: "var(--brand-dim)", padding: "7px 18px", borderRadius: 100,
+            border: "1px solid var(--border)",
+          }}>
+            <MapPin size={12} strokeWidth={2.5} />
+            Australia&rsquo;s #1 Local Task Marketplace
           </span>
-        </div>
+        </motion.div>
 
-        <h1 style={{
-          fontFamily: "var(--font-jakarta)", fontWeight: 800, letterSpacing: "-0.04em",
-          lineHeight: 1.08, color: C.text, marginBottom: 24,
-          fontSize: "clamp(36px, 5.5vw, 64px)",
+        {/* Headline */}
+        <motion.h1 {...in0(0.12)} className="text-balance" style={{
+          fontFamily: "var(--font-jakarta)", fontWeight: 800, letterSpacing: "-0.05em",
+          lineHeight: 1.02, color: "var(--text)", marginBottom: 24,
+          fontSize: "clamp(44px, 7vw, 88px)",
         }}>
-          Get Any Local Task Done. Safe, Fast, and Escrow-Protected.
-        </h1>
+          Any task. Any suburb.<br />
+          <span style={{
+            backgroundImage: "linear-gradient(135deg, var(--brand) 0%, var(--brand-mid) 50%, var(--brand-deep) 100%)",
+            WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+          }}>Done right.</span>
+        </motion.h1>
 
-        <h2 style={{
-          fontFamily: "var(--font-jakarta)", fontWeight: 500, letterSpacing: "-0.02em",
-          fontSize: "clamp(17px, 2vw, 22px)", color: C.muted, maxWidth: 720,
-          margin: "0 auto 48px", lineHeight: 1.65,
+        {/* Subheading */}
+        <motion.p {...in0(0.26)} className="text-balance" style={{
+          fontSize: "clamp(18px, 2.2vw, 22px)", color: "var(--text2)", maxWidth: 660,
+          margin: "0 auto 52px", lineHeight: 1.6, letterSpacing: "-0.01em",
         }}>
-          Australia&rsquo;s community marketplace connecting homeowners with verified local providers. No upfront fees to join, no hidden catches.
-        </h2>
+          Connect with verified local providers. Post a task, receive bids, and pay only when you&rsquo;re satisfied — backed by Stripe escrow.
+        </motion.p>
 
-        {/* Split CTA — Customers vs Providers */}
-        <div className="hh-hero-split-cta" style={{
-          display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 20,
-          maxWidth: 720, margin: "0 auto", textAlign: "center",
-        }}>
-          <div style={{
-            background: "#ffffff", border: `1px solid ${C.border}`,
-            borderRadius: 20, padding: "28px 24px",
-            boxShadow: "0 12px 40px rgba(11,18,32,0.06)",
-          }}>
-            <a href="#download"
-              onClick={e => { e.preventDefault(); document.querySelector("#download")?.scrollIntoView({ behavior: "smooth" }); }}
-              className="hh-hero-btn-primary"
-              style={{
-                display: "block", width: "100%",
-                background: `linear-gradient(135deg, ${C.brand}, ${C.brandDeep})`,
-                color: "#fff", fontWeight: 800, fontSize: 16,
-                padding: "16px 20px", borderRadius: 14, textDecoration: "none",
-                letterSpacing: "-0.02em", boxShadow: `0 12px 40px rgba(26,171,240,0.35)`,
-              }}>
-              Need Help? Post a Task Free →
-            </a>
-            <p style={{ fontSize: 13, color: C.muted, marginTop: 12, marginBottom: 0, fontWeight: 500 }}>
-              Takes less than 2 minutes.
-            </p>
-          </div>
-
-          <div style={{
-            background: "#ffffff", border: `1px solid ${C.border}`,
-            borderRadius: 20, padding: "28px 24px",
-            boxShadow: "0 12px 40px rgba(11,18,32,0.06)",
-          }}>
-            <a href="#for-providers"
-              onClick={e => { e.preventDefault(); document.querySelector("#for-providers")?.scrollIntoView({ behavior: "smooth" }); }}
-              className="hh-hero-btn-secondary"
-              style={{
-                display: "block", width: "100%",
-                background: C.text, color: "#fff", fontWeight: 800, fontSize: 16,
-                padding: "16px 20px", borderRadius: 14, textDecoration: "none",
-                letterSpacing: "-0.02em", border: `1px solid ${C.text}`,
-              }}>
-              Want to Earn? Become a Provider →
-            </a>
-            <p style={{ fontSize: 13, color: C.muted, marginTop: 12, marginBottom: 0, fontWeight: 500 }}>
-              Keep 100% of your first 3 jobs.
-            </p>
-          </div>
-        </div>
-
-        {/* Local trust signals — no inflated global stats */}
-        <div style={{ display: "flex", gap: 24, justifyContent: "center", marginTop: 56, flexWrap: "wrap" }}>
-          {[
-            { icon: "🛡️", label: "Australian Owned & Operated" },
-            { icon: "🔒", label: "Stripe Escrow Payments" },
-            { icon: "🆔", label: "ID-Verified Members" },
-          ].map(({ icon, label }) => (
-            <div key={label} style={{
-              display: "inline-flex", alignItems: "center", gap: 8,
-              fontSize: 13, fontWeight: 600, color: C.textSub,
-              background: "rgba(255,255,255,0.8)", padding: "8px 16px",
-              borderRadius: 100, border: `1px solid ${C.borderLight}`,
+        {/* CTAs */}
+        <motion.div {...in0(0.38)} style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap", marginBottom: 56 }}>
+          <a href="#download"
+            onClick={e => { e.preventDefault(); document.querySelector("#download")?.scrollIntoView({ behavior: "smooth" }); }}
+            className="hh-hero-btn-primary"
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 10, justifyContent: "center",
+              background: "linear-gradient(135deg, var(--brand), var(--brand-deep))",
+              color: "#fff", fontWeight: 700, fontSize: 17,
+              padding: "16px 34px", borderRadius: 12, textDecoration: "none",
+              letterSpacing: "-0.022em", boxShadow: "0 12px 36px var(--glow)",
             }}>
-              <span aria-hidden="true">{icon}</span>
-              <span>{label}</span>
+            <ClipboardList size={20} strokeWidth={2} />
+            Post a Task — It&rsquo;s Free
+          </a>
+          <a href="#for-providers"
+            onClick={e => { e.preventDefault(); document.querySelector("#for-providers")?.scrollIntoView({ behavior: "smooth" }); }}
+            className="hh-hero-btn-secondary"
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 10, justifyContent: "center",
+              background: "var(--card)", color: "var(--text)", fontWeight: 600, fontSize: 17,
+              padding: "16px 34px", borderRadius: 12, textDecoration: "none",
+              letterSpacing: "-0.022em", border: "1px solid var(--border)",
+              boxShadow: "var(--shadow-sm)",
+            }}>
+            <Briefcase size={20} strokeWidth={2} />
+            Start Earning Today
+          </a>
+        </motion.div>
+
+        {/* Stats row */}
+        <motion.div {...in0(0.50)} style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
+          {stats.map(s => (
+            <div key={s.n} style={{
+              display: "flex", alignItems: "center", gap: 10,
+              background: "var(--card)", padding: "12px 18px", borderRadius: 12,
+              border: "1px solid var(--border)", boxShadow: "var(--shadow-sm)",
+            }}>
+              {s.icon}
+              <div>
+                <div style={{ fontSize: 18, fontWeight: 800, color: "var(--text)", fontFamily: "var(--font-jakarta)", letterSpacing: "-0.04em", lineHeight: 1 }}>{s.n}</div>
+                <div style={{ fontSize: 11, color: "var(--text2)", fontWeight: 500, marginTop: 2 }}>{s.label}</div>
+              </div>
             </div>
           ))}
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
@@ -303,65 +384,67 @@ function HowItWorks() {
   const steps = [
     {
       n: "01",
-      icon: <Icon d={Icons.clipboard} size={28} color={C.brand} />,
-      title: "Post Your Task for Free",
-      desc: "Describe what you need done, your location, and your flexible budget. Receive quotes from verified local providers in minutes.",
-      color: C.brand,
+      icon: <ClipboardList size={26} strokeWidth={1.75} color="var(--brand)" />,
+      title: "Post Your Task Free",
+      desc: "Describe the job, your location, and budget. Get bids from verified local providers within minutes.",
+      color: "var(--brand)",
     },
     {
       n: "02",
-      icon: <Icon d={Icons.lock} size={28} color={C.brandDeep} />,
-      title: "Secure Your Funds Safely",
-      desc: "Once you choose your Tasker, your funds are held securely in our Stripe Escrow system. The money leaves your account but is not sent to the provider yet.",
-      color: C.brandDeep,
+      icon: <Lock size={26} strokeWidth={1.75} color="var(--violet)" />,
+      title: "Funds Go Into Escrow",
+      desc: "Your payment is held securely by Stripe — not released until you confirm the job is complete.",
+      color: "var(--violet)",
     },
     {
       n: "03",
-      icon: <Icon d={Icons.camera} size={28} color={C.brandMid} />,
-      title: "Track the Progress",
-      desc: "Your provider arrives, completes the job to your standard, and uploads proof of completion directly through the app.",
-      color: C.brandMid,
+      icon: <Camera size={26} strokeWidth={1.75} color="var(--emerald)" />,
+      title: "Track the Job Live",
+      desc: "Your provider completes the work and uploads photo proof directly through the app.",
+      color: "var(--emerald)",
     },
     {
       n: "04",
-      icon: <Icon d={Icons.creditCardCheck} size={28} color="#0A8FCC" />,
-      title: "Release Payment",
-      desc: "Only when you are 100% satisfied with the work do you click \"Release\". The funds are instantly transferred to your Tasker. Safe, seamless, guaranteed.",
-      color: "#0A8FCC",
+      icon: <BadgeCheck size={26} strokeWidth={1.75} color="var(--amber)" />,
+      title: "Release & Rate",
+      desc: "Satisfied? Hit release. Payment transfers instantly. Leave a rating for your provider.",
+      color: "var(--amber)",
     },
   ];
 
   return (
-    <section id="how-it-works" style={{ padding: "120px 24px", background: "#ffffff", position: "relative" }}>
+    <section id="how-it-works" style={{ padding: "100px 24px", background: "var(--bg2)" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-        <SectionLabel color={C.brand}>Trust & Protection</SectionLabel>
-        <h2 style={h2Style}>How HelpingHandsAU Protects You</h2>
-        <p style={subStyle}>A clear, escrow-backed process from posting to payment — built for peace of mind.</p>
+        <ScrollSectionIntro>
+          <SectionLabel color="var(--brand)">How It Works</SectionLabel>
+          <h2 className="text-balance" style={h2S}>From post to paid — safely.</h2>
+          <p style={subS}>Every step is protected. Every payment is secure. Every provider is verified.</p>
+        </ScrollSectionIntro>
 
-        <div className="hh-trust-steps" style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 20, marginTop: 64 }}>
-          {steps.map((s) => (
-            <div key={s.n} className="hh-step-card" style={{
-              background: C.bgCard, border: `1px solid ${C.border}`,
-              borderRadius: 20, padding: 28, position: "relative", overflow: "hidden",
+        <ScrollRevealGroup className="hh-steps-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 16, marginTop: 64 }}>
+          {steps.map(s => (
+            <ScrollRevealItem key={s.n} className="hh-step-card" style={{
+              background: "var(--card)", border: "1px solid var(--border)",
+              borderRadius: 20, padding: 32, position: "relative", overflow: "hidden",
               display: "flex", flexDirection: "column",
             }}>
-              <div style={{
-                width: 56, height: 56, borderRadius: 14,
-                background: `${s.color}12`,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                marginBottom: 20, border: `1px solid ${s.color}20`,
-              }}>{s.icon}</div>
-              <div style={{
-                position: "absolute", top: 20, right: 20,
-                fontSize: 48, fontWeight: 900, color: "rgba(0,0,0,0.04)",
-                fontFamily: "var(--font-jakarta)", lineHeight: 1,
+              {/* Giant watermark number */}
+              <div aria-hidden style={{
+                position: "absolute", top: 12, right: 16,
+                fontSize: 80, fontWeight: 900, lineHeight: 1,
+                color: s.color, opacity: 0.07,
+                fontFamily: "var(--font-jakarta)", letterSpacing: "-0.05em",
+                userSelect: "none",
               }}>{s.n}</div>
-              <h3 style={{ fontSize: 18, fontWeight: 700, color: C.text, marginBottom: 12, letterSpacing: "-0.02em", lineHeight: 1.3 }}>{s.title}</h3>
-              <p style={{ fontSize: 14, color: C.muted, lineHeight: 1.7, flex: 1 }}>{s.desc}</p>
-              <div style={{ width: 40, height: 3, borderRadius: 4, background: s.color, marginTop: 20 }} />
-            </div>
+
+              <IconBox icon={s.icon} color={s.color} size={52} />
+              <p style={{ fontSize: 11, fontWeight: 800, color: s.color, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 10, marginTop: 24 }}>Step {s.n}</p>
+              <h3 style={{ fontSize: 20, fontWeight: 700, color: "var(--text)", marginBottom: 12, letterSpacing: "-0.025em", lineHeight: 1.2 }}>{s.title}</h3>
+              <p style={{ fontSize: 14, color: "var(--text2)", lineHeight: 1.75, flex: 1 }}>{s.desc}</p>
+              <div style={{ width: 40, height: 3, borderRadius: 3, background: s.color, marginTop: 24 }} />
+            </ScrollRevealItem>
           ))}
-        </div>
+        </ScrollRevealGroup>
       </div>
     </section>
   );
@@ -372,42 +455,38 @@ function HowItWorks() {
 ══════════════════════════════════════════════ */
 function Features() {
   const feats = [
-    { icon: <Icon d={Icons.shieldCheck} size={24} color={C.brand} />, iconColor: C.brand, title: "Escrow Protection", desc: "Every payment is held securely until you confirm the job is done. Zero risk of losing your money." },
-    { icon: <Icon d={Icons.userCheck} size={24} color={C.brandMid} />, iconColor: C.brandMid, title: "Verified Providers", desc: "All service providers undergo identity verification and background checks before joining the platform." },
-    { icon: <Icon d={Icons.star} size={24} color="#F59E0B" />, iconColor: "#F59E0B", title: "Ratings & Reviews", desc: "Transparent feedback system so you always know who you're hiring — and providers build their reputation." },
-    { icon: <Icon d={Icons.messageSquare} size={24} color="#A78BFA" />, iconColor: "#A78BFA", title: "Built-in Messaging", desc: "Communicate directly with providers, share files and photos, all within the secure HelpingHandsAU chat." },
-    { icon: <Icon d={Icons.zap} size={24} color="#F97316" />, iconColor: "#F97316", title: "Instant Bids", desc: "Receive bids from multiple providers within minutes of posting. Compare and choose the best fit." },
-    { icon: <Icon d={Icons.smartphone} size={24} color="#06B6D4" />, iconColor: "#06B6D4", title: "Mobile First", desc: "Manage tasks, bids, chat, and payments seamlessly on iOS or Android — wherever you are." },
-    { icon: <Icon d={Icons.bell} size={24} color="#EC4899" />, iconColor: "#EC4899", title: "Smart Notifications", desc: "Action Centre keeps you on top of bids, messages, task updates, and payment confirmations in real time." },
-    { icon: <Icon d={Icons.globe} size={24} color={C.brand} />, iconColor: C.brand, title: "Australian Made", desc: "Built for Australia — AUD payments, Australian providers, local support. GST compliant." },
-    { icon: <Icon d={Icons.wallet} size={24} color={C.brandDeep} />, iconColor: C.brandDeep, title: "Wallet & Payouts", desc: "Providers get paid via Stripe Connect. Takers top up a wallet. Fast, reliable, transparent." },
+    { icon: <ShieldCheck size={22} strokeWidth={1.75} color="var(--brand)" />, c: "var(--brand)", title: "Escrow Protection", desc: "Every dollar held by Stripe until the job is confirmed complete. Zero financial risk, guaranteed." },
+    { icon: <UserCheck size={22} strokeWidth={1.75} color="var(--emerald)" />, c: "var(--emerald)", title: "ID-Verified Providers", desc: "All providers submit identity verification before accepting a single task on the platform." },
+    { icon: <Star size={22} strokeWidth={1.75} color="var(--amber)" />, c: "var(--amber)", title: "Ratings & Reviews", desc: "Transparent feedback builds accountability. Poor providers are removed. Great ones rise." },
+    { icon: <MessageSquare size={22} strokeWidth={1.75} color="var(--violet)" />, c: "var(--violet)", title: "Secure Messaging", desc: "Chat, share files, and agree scope — all inside the encrypted app, no third-party tools needed." },
+    { icon: <Zap size={22} strokeWidth={1.75} color="var(--brand)" />, c: "var(--brand)", title: "Instant Bids", desc: "Multiple bids arrive within minutes. Compare providers by price, rating, and experience." },
+    { icon: <Smartphone size={22} strokeWidth={1.75} color="var(--brand-mid)" />, c: "var(--brand-mid)", title: "iOS & Android", desc: "Full-featured native apps for both platforms. Manage tasks, bids, and payments on the go." },
+    { icon: <Bell size={22} strokeWidth={1.75} color="var(--amber)" />, c: "var(--amber)", title: "Smart Notifications", desc: "Action Centre keeps you informed on bids, messages, and payment events in real time." },
+    { icon: <Globe size={22} strokeWidth={1.75} color="var(--emerald)" />, c: "var(--emerald)", title: "Australian Made", desc: "Built for AU — AUD payments, local support, GST compliant, Privacy Act aligned." },
+    { icon: <Wallet size={22} strokeWidth={1.75} color="var(--violet)" />, c: "var(--violet)", title: "Wallet & Payouts", desc: "Stripe Connect delivers provider earnings directly to their bank. Fast, transparent, reliable." },
   ];
 
   return (
-    <section id="features" style={{ padding: "120px 24px", background: C.bg, position: "relative" }}>
+    <section id="features" style={{ padding: "100px 24px", background: "var(--bg)" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-        <SectionLabel color={C.brandDeep}>Platform Features</SectionLabel>
-        <h2 style={{ ...h2Style, color: C.text }}>Everything You Need to Get Things Done</h2>
-        <p style={{ ...subStyle, color: C.muted }}>Built with enterprise-grade security and a consumer-grade experience.</p>
+        <ScrollSectionIntro>
+          <SectionLabel color="var(--emerald)">Platform</SectionLabel>
+          <h2 className="text-balance" style={h2S}>Everything you need.<br />Nothing you don&rsquo;t.</h2>
+          <p style={subS}>Enterprise security with consumer simplicity — the two rarely coexist. We made them.</p>
+        </ScrollSectionIntro>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: 20, marginTop: 64 }}>
+        <ScrollRevealGroup style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 14, marginTop: 64 }} stagger={0.06}>
           {feats.map(f => (
-            <div key={f.title} className="hh-feat-card" style={{
-              background: C.bgCard, border: `1px solid ${C.border}`,
-              borderRadius: 16, padding: "28px 28px 28px",
-              cursor: "default",
+            <ScrollRevealItem key={f.title} className="hh-feat-card" style={{
+              background: "var(--card)", border: "1px solid var(--border)", borderRadius: 18,
+              padding: "30px 28px", cursor: "default",
             }}>
-              <div style={{
-                width: 48, height: 48, borderRadius: 12,
-                background: `${f.iconColor}15`,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                marginBottom: 18, border: `1px solid ${f.iconColor}20`,
-              }}>{f.icon}</div>
-              <h3 style={{ fontSize: 17, fontWeight: 700, color: C.text, marginBottom: 10, letterSpacing: "-0.02em" }}>{f.title}</h3>
-              <p style={{ fontSize: 14, color: C.muted, lineHeight: 1.7 }}>{f.desc}</p>
-            </div>
+              <IconBox icon={f.icon} color={f.c} size={46} />
+              <h3 style={{ fontSize: 18, fontWeight: 700, color: "var(--text)", marginBottom: 8, letterSpacing: "-0.022em", marginTop: 20 }}>{f.title}</h3>
+              <p style={{ fontSize: 14, color: "var(--text2)", lineHeight: 1.75 }}>{f.desc}</p>
+            </ScrollRevealItem>
           ))}
-        </div>
+        </ScrollRevealGroup>
       </div>
     </section>
   );
@@ -418,43 +497,40 @@ function Features() {
 ══════════════════════════════════════════════ */
 function Categories() {
   const cats = [
-    { icon: <Icon d={Icons.home} size={22} color={C.brand} />, name: "Home & Garden", color: C.brand },
-    { icon: <Icon d={Icons.wrench} size={22} color="#3B82F6" />, name: "Repairs & Trades", color: "#3B82F6" },
-    { icon: <Icon d={Icons.truck} size={22} color="#F59E0B" />, name: "Removals & Delivery", color: "#F59E0B" },
-    { icon: <Icon d={Icons.monitor} size={22} color="#A78BFA" />, name: "Tech & IT", color: "#A78BFA" },
-    { icon: <Icon d={Icons.camera} size={22} color="#EC4899" />, name: "Photography & Video", color: "#EC4899" },
-    { icon: <Icon d={Icons.sparkles} size={22} color={C.brandDeep} />, name: "Cleaning", color: C.brandDeep },
-    { icon: <Icon d={Icons.palette} size={22} color="#F97316" viewBox="0 0 24 24" strokeWidth={0} />, name: "Design & Creative", color: "#F97316" },
-    { icon: <Icon d={Icons.users} size={22} color="#06B6D4" />, name: "Childcare & Tutoring", color: "#06B6D4" },
+    { icon: <Home size={20} strokeWidth={1.75} color="var(--brand)" />, name: "Home & Garden", sub: "Gardening, landscaping, maintenance", c: "var(--brand)" },
+    { icon: <Wrench size={20} strokeWidth={1.75} color="#3B82F6" />, name: "Repairs & Trades", sub: "Plumbing, electrical, carpentry", c: "#3B82F6" },
+    { icon: <Truck size={20} strokeWidth={1.75} color="var(--amber)" />, name: "Removals & Delivery", sub: "Furniture, storage, couriers", c: "var(--amber)" },
+    { icon: <Monitor size={20} strokeWidth={1.75} color="var(--violet)" />, name: "Tech & IT", sub: "Setup, repairs, smart home", c: "var(--violet)" },
+    { icon: <Camera size={20} strokeWidth={1.75} color="#EC4899" />, name: "Photography & Video", sub: "Portraits, events, reels", c: "#EC4899" },
+    { icon: <Sparkles size={20} strokeWidth={1.75} color="var(--emerald)" />, name: "Cleaning", sub: "Home, office, end of lease", c: "var(--emerald)" },
+    { icon: <Palette size={20} strokeWidth={1.75} color="var(--amber)" />, name: "Design & Creative", sub: "Branding, illustration, UX", c: "var(--amber)" },
+    { icon: <Users size={20} strokeWidth={1.75} color="#06B6D4" />, name: "Childcare & Tutoring", sub: "Babysitting, tutoring, coaching", c: "#06B6D4" },
   ];
 
   return (
-    <section id="categories" style={{ padding: "120px 24px", background: "#ffffff" }}>
+    <section id="categories" style={{ padding: "100px 24px", background: "var(--bg2)" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-        <SectionLabel color={C.brand}>Popular Categories</SectionLabel>
-        <h2 style={h2Style}>What Can We Help You With?</h2>
-        <p style={subStyle}>Popular local services — post a task in your suburb and get quotes from verified providers nearby.</p>
+        <ScrollSectionIntro>
+          <SectionLabel color="var(--amber)">Services</SectionLabel>
+          <h2 className="text-balance" style={h2S}>What can we help you with?</h2>
+          <p style={subS}>Every category. Every suburb. Post in under two minutes.</p>
+        </ScrollSectionIntro>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 16, marginTop: 56 }}>
+        <ScrollRevealGroup style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 12, marginTop: 64 }} stagger={0.05}>
           {cats.map(c => (
-            <div key={c.name} className="hh-cat-card" style={{
-              background: "#F8FAFC", border: "1px solid #E2E8F0", borderRadius: 16,
-              padding: "24px 20px", display: "flex", alignItems: "center", gap: 14,
-              cursor: "default",
+            <ScrollRevealItem key={c.name} className="hh-cat-card" style={{
+              background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16,
+              padding: "22px 20px", display: "flex", alignItems: "center", gap: 16, cursor: "default",
             }}>
-              <div style={{
-                width: 48, height: 48, borderRadius: 12,
-                background: `${c.color}15`,
-                display: "flex", alignItems: "center", justifyContent: "center",
-                flexShrink: 0, border: `1px solid ${c.color}20`,
-              }}>{c.icon}</div>
-              <div>
-                <div style={{ fontSize: 15, fontWeight: 700, color: C.text, letterSpacing: "-0.01em" }}>{c.name}</div>
-                <div style={{ fontSize: 12, color: C.muted, marginTop: 2, fontWeight: 500 }}>Local providers near you</div>
+              <IconBox icon={c.icon} color={c.c} size={46} />
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontSize: 16, fontWeight: 700, color: "var(--text)", letterSpacing: "-0.02em" }}>{c.name}</div>
+                <div style={{ fontSize: 12, color: "var(--text2)", marginTop: 3, fontWeight: 400 }}>{c.sub}</div>
               </div>
-            </div>
+              <ChevronRight size={14} color="var(--text3)" style={{ marginLeft: "auto", flexShrink: 0 }} />
+            </ScrollRevealItem>
           ))}
-        </div>
+        </ScrollRevealGroup>
       </div>
     </section>
   );
@@ -466,69 +542,62 @@ function Categories() {
 function TrustSafety() {
   const pillars = [
     {
-      icon: <Icon d={Icons.creditCard} size={28} color={C.brand} />,
-      iconColor: C.brand,
-      title: "Stripe Escrow",
-      desc: "Payments are held by Stripe — not HelpingHandsAU — until you confirm the job is complete. Industry-standard financial security.",
-      badge: "PCI-DSS Compliant",
+      icon: <CreditCard size={26} strokeWidth={1.75} color="var(--brand)" />,
+      c: "var(--brand)", badge: "PCI-DSS Compliant",
+      title: "Stripe Escrow", badgeColor: "var(--brand)",
+      desc: "Payments held by Stripe — not us — until you confirm the job is complete. Industry-standard financial security.",
     },
     {
-      icon: <Icon d={Icons.userCheck} size={28} color={C.brandDeep} />,
-      iconColor: C.brandDeep,
-      title: "Identity Verified",
-      desc: "Every provider submits ID verification before they can accept tasks. You always know who's coming to your door.",
-      badge: "ID Checked",
+      icon: <UserCheck size={26} strokeWidth={1.75} color="var(--emerald)" />,
+      c: "var(--emerald)", badge: "ID Checked",
+      title: "Identity Verified", badgeColor: "var(--emerald)",
+      desc: "Every provider submits government-grade identity verification before they can accept a single task.",
     },
     {
-      icon: <Icon d={Icons.award} size={28} color={C.brand} />,
-      iconColor: C.brand,
-      title: "Dispute Resolution",
-      desc: "If something goes wrong, our trained dispute team steps in. Evidence-based resolution with fair outcomes for both parties.",
-      badge: "24/7 Protection",
+      icon: <HeartHandshake size={26} strokeWidth={1.75} color="var(--amber)" />,
+      c: "var(--amber)", badge: "24/7 Support",
+      title: "Dispute Resolution", badgeColor: "var(--amber)",
+      desc: "Our trained team steps in when things go wrong. Evidence-based, fair outcomes guaranteed for both parties.",
     },
     {
-      icon: <Icon d={Icons.star} size={28} color={C.brandDeep} />,
-      iconColor: C.brandDeep,
-      title: "Ratings System",
-      desc: "Every completed task generates a rating. Poor performers are removed. Excellent providers rise to the top.",
-      badge: "Fair Outcomes",
+      icon: <ShieldCheck size={26} strokeWidth={1.75} color="var(--violet)" />,
+      c: "var(--violet)", badge: "Multi-Layer",
+      title: "Safety Architecture", badgeColor: "var(--violet)",
+      desc: "ID, escrow, ratings, and dispute systems all working together — safety is baked into every layer of the platform.",
     },
   ];
 
   return (
-    <section id="trust-safety" style={{
-      padding: "120px 24px",
-      background: `linear-gradient(180deg, #EEF6FC 0%, #E4F1FA 100%)`,
-    }}>
+    <section id="trust-safety" style={{ padding: "100px 24px", background: "var(--bg3)" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-        <SectionLabel color={C.brand}>Trust & Safety</SectionLabel>
-        <h2 style={{ ...h2Style, color: C.text }}>Your Safety is Non-Negotiable</h2>
-        <p style={{ ...subStyle, color: C.muted }}>
-          We built every feature around one principle: you should be able to hire anyone on HelpingHandsAU with complete confidence.
-        </p>
+        <ScrollSectionIntro>
+          <SectionLabel color="var(--violet)">Trust & Safety</SectionLabel>
+          <h2 className="text-balance" style={h2S}>Safety isn&rsquo;t a feature.<br />It&rsquo;s the foundation.</h2>
+          <p style={subS}>Hire with complete confidence — every safeguard exists to protect you.</p>
+        </ScrollSectionIntro>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 24, marginTop: 64 }}>
+        <ScrollRevealGroup style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: 14, marginTop: 64 }}>
           {pillars.map(p => (
-            <div key={p.title} className="hh-trust-card" style={{
-              background: "#ffffff", border: `1px solid ${C.border}`,
-              borderRadius: 20, padding: 36,
+            <ScrollRevealItem key={p.title} className="hh-trust-card" style={{
+              background: "var(--card)", border: "1px solid var(--border)", borderRadius: 20, padding: 36,
             }}>
-              <div style={{
-                width: 56, height: 56, borderRadius: 14,
-                background: "rgba(26,171,240,0.1)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-                marginBottom: 20, border: "1px solid rgba(26,171,240,0.22)",
-              }}>{p.icon}</div>
-              <div style={{
-                display: "inline-block", background: "rgba(26,171,240,0.12)", color: C.brandDeep,
-                fontSize: 11, fontWeight: 700, padding: "4px 10px", borderRadius: 6,
-                letterSpacing: "0.05em", textTransform: "uppercase", marginBottom: 16,
-              }}>{p.badge}</div>
-              <h3 style={{ fontSize: 19, fontWeight: 700, color: C.text, marginBottom: 12, letterSpacing: "-0.02em" }}>{p.title}</h3>
-              <p style={{ fontSize: 14, color: C.muted, lineHeight: 1.75 }}>{p.desc}</p>
-            </div>
+              <IconBox icon={p.icon} color={p.c} size={54} />
+              <div style={{ marginTop: 20, marginBottom: 14 }}>
+                <span style={{
+                  display: "inline-flex", alignItems: "center", gap: 5,
+                  fontSize: 10, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase",
+                  color: p.badgeColor, background: `${p.badgeColor}15`,
+                  padding: "4px 12px", borderRadius: 6,
+                }}>
+                  <CheckCircle2 size={10} strokeWidth={2.5} />
+                  {p.badge}
+                </span>
+              </div>
+              <h3 style={{ fontSize: 22, fontWeight: 700, color: "var(--text)", marginBottom: 12, letterSpacing: "-0.025em" }}>{p.title}</h3>
+              <p style={{ fontSize: 15, color: "var(--text2)", lineHeight: 1.75 }}>{p.desc}</p>
+            </ScrollRevealItem>
           ))}
-        </div>
+        </ScrollRevealGroup>
       </div>
     </section>
   );
@@ -539,245 +608,205 @@ function TrustSafety() {
 ══════════════════════════════════════════════ */
 function ForProviders() {
   const perks = [
-    "Browse hundreds of new tasks every day in your area",
-    "Set your own rates — you control what you earn",
-    "Build a verified profile with reviews and ratings",
-    "Get paid fast via Stripe Connect — direct to your bank",
-    "Manage bids, conversations, and jobs from one app",
-    "Grow your business with zero upfront cost to join",
+    { icon: <BarChart3 size={15} strokeWidth={2} />, text: "Browse hundreds of new local tasks posted every day" },
+    { icon: <Banknote size={15} strokeWidth={2} />, text: "Set your own rates — you control exactly what you earn" },
+    { icon: <Award size={15} strokeWidth={2} />, text: "Build a verified profile with reviews and ratings" },
+    { icon: <TrendingUp size={15} strokeWidth={2} />, text: "Get paid via Stripe Connect — direct to your bank account" },
+    { icon: <Smartphone size={15} strokeWidth={2} />, text: "Manage bids, conversations, and jobs all from one app" },
+    { icon: <Building2 size={15} strokeWidth={2} />, text: "Grow your business with zero upfront cost to join" },
   ];
 
   return (
-    <section id="for-providers" style={{ padding: "120px 24px", background: "#ffffff" }}>
+    <section id="for-providers" style={{ padding: "100px 24px", background: "var(--bg)" }}>
       <div className="hh-for-providers-grid" style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80, alignItems: "center" }}>
-        {/* Left */}
-        <div>
-          <SectionLabel color={C.brand} align="left">For Service Providers</SectionLabel>
-          <h2 style={{ ...h2Style, textAlign: "left" }}>
-            Grow Your Business.<br />
-            <span style={{ color: C.brandDeep }}>On Your Terms.</span>
+
+        <ScrollReveal y={40}>
+          <SectionLabel color="var(--brand)" align="left">For Service Providers</SectionLabel>
+          <h2 className="text-balance" style={{ ...h2S, textAlign: "left" }}>
+            Your skills.<br />
+            <span style={{
+              backgroundImage: "linear-gradient(135deg, var(--brand) 0%, var(--brand-mid) 100%)",
+              WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
+            }}>Your income.</span>
           </h2>
-          <p style={{ fontSize: 17, color: "#475569", lineHeight: 1.75, marginBottom: 36 }}>
-            Earn on your schedule with HelpingHandsAU. Browse local tasks, place bids, and build a client base — all without the overhead of running your own marketing.
+          <p style={{ fontSize: 18, color: "var(--text2)", lineHeight: 1.65, marginBottom: 36, letterSpacing: "-0.01em" }}>
+            Earn on your schedule. No marketing overhead. No chasing invoices. Just reliable local work, paid on completion.
           </p>
           <ul style={{ listStyle: "none", padding: 0, margin: "0 0 40px", display: "flex", flexDirection: "column", gap: 14 }}>
             {perks.map(p => (
-              <li key={p} style={{ display: "flex", alignItems: "flex-start", gap: 12 }}>
+              <li key={p.text} style={{ display: "flex", alignItems: "flex-start", gap: 14 }}>
                 <div style={{
-                  width: 20, height: 20, borderRadius: "50%", background: `${C.brand}20`,
-                  display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, marginTop: 1,
+                  width: 28, height: 28, borderRadius: 8, flexShrink: 0,
+                  background: "var(--brand-dim)", border: "1px solid var(--border)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  color: "var(--brand)", marginTop: 1,
                 }}>
-                  <Icon d={Icons.check} size={12} color={C.brand} strokeWidth={2.5} />
+                  {p.icon}
                 </div>
-                <span style={{ fontSize: 15, color: "#374151" }}>{p}</span>
+                <span style={{ fontSize: 15, color: "var(--text2)", lineHeight: 1.6 }}>{p.text}</span>
               </li>
             ))}
           </ul>
-          <a href="#how-it-works"
-            onClick={e => { e.preventDefault(); document.querySelector("#how-it-works")?.scrollIntoView({ behavior: "smooth" }); }}
-            title="Coming soon"
+          <a href="#download"
+            onClick={e => { e.preventDefault(); document.querySelector("#download")?.scrollIntoView({ behavior: "smooth" }); }}
             style={{
-              display: "inline-block",
-              background: `linear-gradient(135deg, ${C.brand}, ${C.brandDeep})`,
-              color: "#fff", fontWeight: 800, fontSize: 15,
-              padding: "14px 32px", borderRadius: 12, textDecoration: "none",
-              boxShadow: "0 8px 28px rgba(26,171,240,0.28)",
+              display: "inline-flex", alignItems: "center", gap: 10,
+              background: "linear-gradient(135deg, var(--brand), var(--brand-deep))",
+              color: "#fff", fontWeight: 700, fontSize: 17,
+              padding: "15px 32px", borderRadius: 12, textDecoration: "none",
+              letterSpacing: "-0.022em", boxShadow: "0 8px 28px var(--glow)",
             }}>
+            <Briefcase size={18} strokeWidth={2} />
             Become a Provider — Free
           </a>
-        </div>
+        </ScrollReveal>
 
-        {/* Right — earnings card (keep dark as product mockup) */}
-        <div style={{ display: "flex", justifyContent: "center" }}>
+        {/* Earnings dashboard */}
+        <ScrollReveal delay={0.18} y={60} style={{ display: "flex", justifyContent: "center" }}>
           <div style={{
-            background: "#0D1117", borderRadius: 24, padding: 40, width: "100%", maxWidth: 400,
-            border: `1px solid ${C.border}`, boxShadow: "0 40px 100px rgba(0,0,0,0.3)",
+            background: "linear-gradient(145deg, #040D1C 0%, #0A1830 100%)",
+            borderRadius: 24, padding: 36, width: "100%", maxWidth: 420,
+            border: "1px solid rgba(26,171,240,0.24)",
+            boxShadow: "0 32px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(26,171,240,0.08)",
           }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-              <span style={{ fontSize: 14, color: C.muted, fontWeight: 600 }}>Monthly Earnings</span>
-              <span style={{ fontSize: 12, background: "rgba(26,171,240,0.15)", color: C.brand, padding: "4px 10px", borderRadius: 6, fontWeight: 700 }}>+24% this month</span>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <BarChart3 size={14} color="#64748B" strokeWidth={2} />
+                <span style={{ fontSize: 12, color: "#64748B", fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase" }}>Monthly Earnings</span>
+              </div>
+              <span style={{ fontSize: 11, background: "rgba(16,185,129,0.15)", color: "#10B981", padding: "4px 10px", borderRadius: 8, fontWeight: 700, display: "flex", alignItems: "center", gap: 4 }}>
+                <TrendingUp size={10} strokeWidth={2.5} />▲ +24%
+              </span>
             </div>
-            <div style={{ fontSize: 52, fontWeight: 800, color: "#F0F6FC", fontFamily: "var(--font-jakarta)", letterSpacing: "-0.04em", marginBottom: 8 }}>
+            <div style={{ fontSize: 52, fontWeight: 800, color: "#F0F6FF", fontFamily: "var(--font-jakarta)", letterSpacing: "-0.05em", marginBottom: 4 }}>
               $4,280
             </div>
-            <div style={{ fontSize: 14, color: "#8B949E", marginBottom: 32 }}>18 tasks completed · 5.0★</div>
+            <div style={{ fontSize: 13, color: "#475569", marginBottom: 28, display: "flex", alignItems: "center", gap: 6 }}>
+              <CheckCircle2 size={13} color="#10B981" strokeWidth={2} />
+              18 tasks completed · 4.9 ★ avg
+            </div>
+
+            {/* Bar chart */}
+            <div style={{ display: "flex", gap: 5, alignItems: "flex-end", height: 44, marginBottom: 28 }}>
+              {[35, 55, 42, 70, 48, 88, 65].map((h, i) => (
+                <div key={i} style={{
+                  flex: 1, borderRadius: 4,
+                  background: `rgba(26,171,240,${i === 5 ? 0.9 : 0.22})`,
+                  height: `${h}%`,
+                  boxShadow: i === 5 ? "0 0 12px rgba(26,171,240,0.55)" : "none",
+                }} />
+              ))}
+            </div>
 
             {[
-              { task: "Bathroom renovation", amt: "$480", date: "Today" },
-              { task: "Office furniture assembly", amt: "$120", date: "Yesterday" },
-              { task: "Garden landscaping", amt: "$650", date: "3 days ago" },
-              { task: "Appliance installation", amt: "$95", date: "5 days ago" },
+              { icon: <Wrench size={12} strokeWidth={2} />, task: "Bathroom renovation", amt: "$480", date: "Today", dot: "#1AABF0" },
+              { icon: <Monitor size={12} strokeWidth={2} />, task: "Office furniture", amt: "$120", date: "Yesterday", dot: "#10B981" },
+              { icon: <Sparkles size={12} strokeWidth={2} />, task: "Garden landscaping", amt: "$650", date: "2 days ago", dot: "#F59E0B" },
+              { icon: <Zap size={12} strokeWidth={2} />, task: "Appliance install", amt: "$95", date: "4 days ago", dot: "#7C3AED" },
             ].map(t => (
               <div key={t.task} style={{
                 display: "flex", justifyContent: "space-between", alignItems: "center",
-                padding: "14px 0", borderBottom: `1px solid #21262D`,
+                padding: "11px 0", borderBottom: "1px solid rgba(255,255,255,0.05)",
               }}>
-                <div>
-                  <div style={{ fontSize: 14, color: "#F0F6FC", fontWeight: 600 }}>{t.task}</div>
-                  <div style={{ fontSize: 12, color: "#8B949E", marginTop: 2 }}>{t.date}</div>
+                <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                  <div style={{
+                    width: 28, height: 28, borderRadius: 8, flexShrink: 0,
+                    background: `${t.dot}20`, border: `1px solid ${t.dot}30`,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    color: t.dot,
+                  }}>{t.icon}</div>
+                  <div>
+                    <div style={{ fontSize: 13, color: "#E2E8F0", fontWeight: 600 }}>{t.task}</div>
+                    <div style={{ fontSize: 11, color: "#475569", marginTop: 1 }}>{t.date}</div>
+                  </div>
                 </div>
-                <div style={{ fontSize: 15, color: C.brand, fontWeight: 700 }}>{t.amt}</div>
+                <div style={{ fontSize: 14, color: "#1AABF0", fontWeight: 700 }}>{t.amt}</div>
               </div>
             ))}
           </div>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );
 }
 
 /* ══════════════════════════════════════════════
-   TESTIMONIALS
+   DOWNLOAD SECTION
 ══════════════════════════════════════════════ */
-function Testimonials() {
-  const reviews = [
-    { name: "Tanzil", role: "Task Poster · Yarrabilba", rating: 5, text: "I needed my pergola built in 3 days. Posted the task, had 7 bids within an hour — incredible work. Escrow made me feel totally safe.", avatar: "TZ" },
-    { name: "Fahim", role: "Service Provider · Brisbane", rating: 5, text: "Been on HelpingHandsAU for months. Better-paying, more reliable work than I was getting elsewhere. The rating system keeps everyone honest.", avatar: "FH" },
-    { name: "Kowser", role: "Task Poster · Gold Coast", rating: 5, text: "Fixed my leaking roof, deep cleaned the house, and got my garden sorted — all through HelpingHandsAU. The chat and payment system is better than anything I've used.", avatar: "KW" },
-    { name: "Sabbin", role: "Service Provider · Labrador", rating: 5, text: "The Stripe Connect payout is seamless. I finish a job, taker approves, and money's in my account same day. This is how it should work.", avatar: "SB" },
-    { name: "Shahrina", role: "Task Poster · Brisbane", rating: 5, text: "Raised a dispute once when a provider didn't show. HelpingHandsAU resolved it quickly and I got a full refund. Trust is everything and they deliver.", avatar: "SH" },
-    { name: "Rizwan", role: "Service Provider · Sydney", rating: 5, text: "The Action Centre notifications are great — I never miss a new task in my area. Steady weekend work without chasing invoices.", avatar: "RZ" },
-    { name: "Sadeq", role: "Task Poster · Sydney", rating: 5, text: "Posted a few odd jobs around the house — each time I got clear bids, good comms in chat, and paid only when the work was done. Very happy.", avatar: "SQ" },
-    { name: "Humaira", role: "Service Provider · Yarrabilba", rating: 5, text: "Local tasks close to home, fair rates, and support actually replies. HelpingHandsAU has become my main way to fill the diary.", avatar: "HM" },
-  ];
-
-  return (
-    <section id="testimonials" style={{ padding: "120px 24px", background: C.bg }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-        <SectionLabel color={C.brand}>Real Stories</SectionLabel>
-        <h2 style={{ ...h2Style, color: C.text }}>What Australians Are Saying</h2>
-        <p style={{ ...subStyle, color: C.muted }}>From first task to loyal platform members — real results, real people.</p>
-
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: 20, marginTop: 64 }}>
-          {reviews.map(r => (
-            <div key={r.name} className="hh-review-card" style={{
-              background: "#ffffff", border: `1px solid ${C.border}`,
-              borderRadius: 20, padding: 28,
-            }}>
-              {/* Star rating */}
-              <div style={{ display: "flex", gap: 3, marginBottom: 16 }}>
-                {Array.from({ length: r.rating }).map((_, i) => (
-                  <svg key={i} width="14" height="14" viewBox="0 0 24 24" fill="#F59E0B" aria-hidden="true">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                  </svg>
-                ))}
-              </div>
-              <p style={{ fontSize: 14, color: "#374151", lineHeight: 1.75, marginBottom: 20, fontStyle: "italic" }}>
-                &ldquo;{r.text}&rdquo;
-              </p>
-              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <div style={{
-                  width: 40, height: 40, borderRadius: "50%",
-                  background: `linear-gradient(135deg, ${C.brand}, ${C.brandDeep})`,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 13, fontWeight: 800, color: "#fff", flexShrink: 0,
-                }}>{r.avatar}</div>
-                <div>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: C.text }}>{r.name}</div>
-                  <div style={{ fontSize: 12, color: C.muted }}>{r.role}</div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
-/* ══════════════════════════════════════════════
-   STICKY APP BANNER (mobile) / DOWNLOAD SECTION (desktop)
-══════════════════════════════════════════════ */
-function StickyAppBanner() {
-  const trustBadges = [
-    { icon: "🛡️", label: "100% Australian Owned & Operated" },
-    { icon: "🔒", label: "Secure Stripe Payment Gateway" },
-    { icon: "🆔", label: "Real-ID Identity Verified Members" },
+function Download({ dark }: { dark: boolean }) {
+  const badges = [
+    { icon: <Building2 size={13} strokeWidth={2} />, label: "Australian Owned & Operated" },
+    { icon: <ShieldCheck size={13} strokeWidth={2} />, label: "Stripe Secured Payments" },
+    { icon: <UserCheck size={13} strokeWidth={2} />, label: "Real-ID Verified Members" },
   ];
 
   return (
     <section id="download" className="hh-app-banner" aria-label="Download the HelpingHandsAU app">
       <div className="hh-app-banner-inner">
-        <div className="hh-app-banner-content">
-          <div style={{ margin: "0 auto 20px", width: 56, height: 56 }} className="hh-app-banner-icon">
-            <Image
-              src="/icon-helpinghandsau.png"
-              alt=""
-              width={56}
-              height={56}
-              style={{ borderRadius: 14, display: "block", boxShadow: `0 8px 24px rgba(26,171,240,0.25)` }}
-            />
+        <ScrollReveal className="hh-app-banner-content">
+          <div style={{ margin: "0 auto 24px", width: 72, height: 72 }} className="hh-app-banner-icon">
+            <Image src="/icon-helpinghandsau.png" alt="" width={72} height={72}
+              style={{ borderRadius: 18, display: "block", boxShadow: "0 12px 40px rgba(26,171,240,0.35)" }} />
           </div>
 
-          <h2 style={{
+          <h2 className="text-balance" style={{
             fontFamily: "var(--font-jakarta)", fontWeight: 800,
-            fontSize: "clamp(24px, 4vw, 40px)", color: C.text,
-            letterSpacing: "-0.04em", marginBottom: 12, textAlign: "center",
+            fontSize: "clamp(32px, 4.5vw, 56px)", color: dark ? "#EDF2FF" : "var(--text)",
+            letterSpacing: "-0.05em", marginBottom: 16, textAlign: "center",
           }}>
-            Your Community, Handled.
+            Your community, in your pocket.
           </h2>
-
           <p style={{
-            fontSize: "clamp(15px, 2vw, 17px)", color: C.muted, lineHeight: 1.7,
-            marginBottom: 28, textAlign: "center", maxWidth: 560, margin: "0 auto 28px",
+            fontSize: "clamp(17px, 2vw, 20px)", color: dark ? "#94A3B8" : "var(--text2)", lineHeight: 1.6,
+            textAlign: "center", maxWidth: 560, margin: "0 auto 32px", letterSpacing: "-0.01em",
           }}>
-            Whether you need a weekend side-hustle or a hand with your to-do list, HelpingHandsAU keeps your transactions local, secure, and 100% transparent.
+            Post tasks, receive bids, track jobs, and release payments — securely from anywhere.
           </p>
 
-          <div className="hh-app-banner-badges" style={{
-            display: "flex", flexWrap: "wrap", gap: 10, justifyContent: "center", marginBottom: 28,
-          }}>
-            {trustBadges.map(({ icon, label }) => (
-              <span key={label} style={{
-                display: "inline-flex", alignItems: "center", gap: 6,
-                fontSize: 12, fontWeight: 600, color: C.textSub,
-                background: "#ffffff", padding: "8px 14px",
-                borderRadius: 100, border: `1px solid ${C.border}`,
+          <div className="hh-app-banner-badges" style={{ display: "flex", flexWrap: "wrap", gap: 10, justifyContent: "center", marginBottom: 40 }}>
+            {badges.map(b => (
+              <span key={b.label} style={{
+                display: "inline-flex", alignItems: "center", gap: 7,
+                fontSize: 12, fontWeight: 600, color: dark ? "#94A3B8" : "var(--text2)",
+                background: dark ? "rgba(255,255,255,0.06)" : "var(--card)",
+                padding: "8px 16px", borderRadius: 10, border: "1px solid var(--border)",
               }}>
-                <span aria-hidden="true">{icon}</span>
-                {label}
+                <span style={{ color: "var(--brand)" }}>{b.icon}</span>
+                {b.label}
               </span>
             ))}
           </div>
 
-          <div className="hh-app-banner-stores" style={{
-            display: "flex", gap: 40, justifyContent: "center", flexWrap: "wrap", alignItems: "flex-start",
-          }}>
-            {/* App Store */}
+          <div className="hh-app-banner-stores" style={{ display: "flex", gap: 48, justifyContent: "center", flexWrap: "wrap", alignItems: "flex-start" }}>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-              <a href="#download" aria-label="Download on the App Store" style={{ display: "block", lineHeight: 0 }}>
+              <a href="#" aria-label="Download on the App Store" style={{ display: "block", lineHeight: 0 }}>
                 <AppleStoreBadge width={160} />
               </a>
               <div className="hh-app-banner-qr" style={{
                 background: "#fff", borderRadius: 16, padding: 12,
-                boxShadow: "0 8px 40px rgba(0,0,0,0.12)",
-                border: `2px solid ${C.brand}40`,
+                boxShadow: "0 8px 40px rgba(0,0,0,0.2)", border: "2px solid rgba(26,171,240,0.3)",
               }}>
-                <Image src="/qr-apple.png" alt="Scan to download HelpingHandsAU on the App Store" width={120} height={120} style={{ display: "block", borderRadius: 8 }} />
+                <Image src="/qr-apple.png" alt="Scan for App Store" width={120} height={120} style={{ display: "block", borderRadius: 8 }} />
               </div>
-              <span className="hh-app-banner-qr" style={{ fontSize: 11, color: C.muted, fontWeight: 500 }}>Scan for iOS</span>
+              <span className="hh-app-banner-qr" style={{ fontSize: 11, color: dark ? "#64748B" : "var(--text2)", fontWeight: 500 }}>Scan for iOS</span>
             </div>
-
             <div className="hh-app-banner-divider" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", paddingTop: 12 }}>
-              <div style={{ width: 1, height: 180, background: `linear-gradient(to bottom, transparent, ${C.border}, transparent)` }} />
+              <div style={{ width: 1, height: 180, background: "linear-gradient(to bottom, transparent, var(--border), transparent)" }} />
             </div>
-
-            {/* Google Play */}
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
               <a href={STORE_LINKS.android} target="_blank" rel="noopener noreferrer" aria-label="Get it on Google Play" style={{ display: "block", lineHeight: 0 }}>
                 <GooglePlayBadge width={180} />
               </a>
               <div className="hh-app-banner-qr" style={{
                 background: "#fff", borderRadius: 16, padding: 12,
-                boxShadow: "0 8px 40px rgba(0,0,0,0.12)",
-                border: `2px solid ${C.brand}40`,
+                boxShadow: "0 8px 40px rgba(0,0,0,0.2)", border: "2px solid rgba(26,171,240,0.3)",
               }}>
-                <Image src="/qr-android.png" alt="Scan to download HelpingHandsAU on Google Play" width={120} height={120} style={{ display: "block", borderRadius: 8 }} />
+                <Image src="/qr-android.png" alt="Scan for Google Play" width={120} height={120} style={{ display: "block", borderRadius: 8 }} />
               </div>
-              <span className="hh-app-banner-qr" style={{ fontSize: 11, color: C.muted, fontWeight: 500 }}>Scan for Android</span>
+              <span className="hh-app-banner-qr" style={{ fontSize: 11, color: dark ? "#64748B" : "var(--text2)", fontWeight: 500 }}>Scan for Android</span>
             </div>
           </div>
-        </div>
+        </ScrollReveal>
       </div>
     </section>
   );
@@ -798,51 +827,71 @@ function Footer() {
   ];
 
   return (
-    <footer style={{ background: "#090D13", borderTop: `1px solid ${C.border}`, padding: "64px 24px 40px" }}>
+    <footer style={{ background: "#030812", borderTop: "1px solid rgba(26,171,240,0.12)", padding: "72px 24px 44px" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
         <div className="hh-footer-grid" style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr", gap: 48, marginBottom: 64 }}>
           <div>
-            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
-              <Image src="/icon-helpinghandsau.png" alt="HelpingHandsAU" width={32} height={32} style={{ borderRadius: 8, display: "block", flexShrink: 0 }} />
-              <span style={{ fontFamily: "var(--font-jakarta)", fontWeight: 700, fontSize: 16, color: "#F0F6FC" }}>HelpingHands<span style={{ color: C.brand }}>AU</span></span>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 18 }}>
+              <Image src="/icon-helpinghandsau.png" alt="HelpingHandsAU" width={34} height={34}
+                style={{ borderRadius: 10, display: "block", flexShrink: 0 }} />
+              <span style={{ fontFamily: "var(--font-jakarta)", fontWeight: 700, fontSize: 16, color: "#EDF2FF" }}>
+                HelpingHands<span style={{ color: "#1AABF0" }}>AU</span>
+              </span>
             </div>
-            <p style={{ fontSize: 14, color: "#8B949E", lineHeight: 1.75, maxWidth: 280 }}>
-              Australia&rsquo;s trusted marketplace connecting people who need tasks done with skilled local providers. Safe, fast, and affordable.
+            <p style={{ fontSize: 14, color: "#475569", lineHeight: 1.8, maxWidth: 280 }}>
+              Australia&rsquo;s trusted local task marketplace — connecting people with verified, skilled providers. Safe, fast, affordable.
             </p>
+            <div style={{ marginTop: 24, display: "flex", gap: 10 }}>
+              {[
+                { icon: <Globe size={14} strokeWidth={2} />, label: "AU" },
+                { icon: <Lock size={14} strokeWidth={2} />, label: "" },
+                { icon: <CheckCircle2 size={14} strokeWidth={2} />, label: "" },
+              ].map((v, i) => (
+                <div key={i} style={{
+                  width: 34, height: 34, borderRadius: 8,
+                  background: "rgba(26,171,240,0.1)", border: "1px solid rgba(26,171,240,0.2)",
+                  display: "flex", alignItems: "center", justifyContent: "center", color: "#1AABF0",
+                }}>{v.icon}</div>
+              ))}
+            </div>
           </div>
           {[
-            { title: "Platform", links: [
-              { label: "Post a Task", href: "#how-it-works" },
-              { label: "Browse Tasks", href: "#categories" },
-              { label: "How It Works", href: "#how-it-works" },
-              { label: "For Providers", href: "#for-providers" },
-            ]},
-            { title: "For Providers", links: [
-              { label: "Join as Provider", href: "#for-providers" },
-              { label: "How It Works", href: "#how-it-works" },
-              { label: "Earnings", href: "#for-providers" },
-              { label: "Trust & Safety", href: "#trust-safety" },
-            ]},
+            {
+              title: "Platform", links: [
+                { label: "Post a Task", href: "#how-it-works" },
+                { label: "Browse Services", href: "#categories" },
+                { label: "How It Works", href: "#how-it-works" },
+                { label: "For Providers", href: "#for-providers" },
+              ]
+            },
+            {
+              title: "Providers", links: [
+                { label: "Join Free", href: "#for-providers" },
+                { label: "How It Works", href: "#how-it-works" },
+                { label: "Earnings", href: "#for-providers" },
+                { label: "Trust & Safety", href: "#trust-safety" },
+              ]
+            },
             { title: "Legal", links: legalLinks },
           ].map(col => (
             <div key={col.title}>
-              <h4 style={{ fontSize: 13, fontWeight: 700, color: "#F0F6FC", letterSpacing: "0.05em", textTransform: "uppercase", marginBottom: 20 }}>{col.title}</h4>
+              <h4 style={{ fontSize: 11, fontWeight: 800, color: "#EDF2FF", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 20 }}>{col.title}</h4>
               <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 12 }}>
                 {col.links.map(l => (
                   <li key={l.label}>
                     <a href={l.href}
                       onClick={l.href.startsWith("#") ? e => { e.preventDefault(); document.querySelector(l.href)?.scrollIntoView({ behavior: "smooth" }); } : undefined}
                       className="hh-footer-link"
-                      style={{ fontSize: 14, color: "#8B949E", textDecoration: "none" }}>{l.label}</a>
+                      style={{ fontSize: 14, color: "#475569", textDecoration: "none" }}>{l.label}</a>
                   </li>
                 ))}
               </ul>
             </div>
           ))}
         </div>
-        <div style={{ borderTop: `1px solid #21262D`, paddingTop: 32, display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
-          <p style={{ fontSize: 13, color: "#8B949E" }}>© 2026 HelpingHandsAU Pty Ltd. All rights reserved. ABN 94 693 919 185</p>
-          <p style={{ fontSize: 13, color: "#8B949E" }}>Made with care in Australia 🇦🇺</p>
+        <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 32, display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 16 }}>
+          <p style={{ fontSize: 13, color: "#334155" }}>© 2026 HelpingHandsAU Pty Ltd. All rights reserved. ABN 94 693 919 185</p>
+          <p style={{ fontSize: 13, color: "#334155" }}>Made with ❤️ in Australia 🇦🇺</p>
         </div>
       </div>
     </footer>
@@ -850,124 +899,119 @@ function Footer() {
 }
 
 /* ══════════════════════════════════════════════
-   SHARED ATOMS
-══════════════════════════════════════════════ */
-function SectionLabel({ color, children, align = "center" }: { color: string; children: React.ReactNode; align?: "center" | "left" }) {
-  return (
-    <div style={{ textAlign: align, marginBottom: 16 }}>
-      <span style={{
-        display: "inline-flex", alignItems: "center", gap: 6,
-        fontSize: 12, fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase",
-        color, background: `${color}18`, padding: "6px 14px", borderRadius: 100,
-        border: `1px solid ${color}30`,
-      }}>{children}</span>
-    </div>
-  );
-}
-
-const h2Style: React.CSSProperties = {
-  fontFamily: "var(--font-jakarta)", fontWeight: 800, letterSpacing: "-0.04em",
-  fontSize: "clamp(32px, 4vw, 52px)", color: "#0F172A", lineHeight: 1.1,
-  marginBottom: 16, textAlign: "center",
-};
-const subStyle: React.CSSProperties = {
-  fontSize: 18, color: "#475569", textAlign: "center", maxWidth: 560, margin: "0 auto", lineHeight: 1.7,
-};
-
-/* ══════════════════════════════════════════════
    PAGE EXPORT
 ══════════════════════════════════════════════ */
 export function HelpingHandsAUMarketingPage({ logoHref }: { logoHref: string }) {
+  const [dark, setDark] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    const saved = localStorage.getItem("hh-theme");
+    if (saved === "dark") setDark(true);
+    else if (!saved && window.matchMedia("(prefers-color-scheme: dark)").matches) setDark(true);
+  }, []);
+
+  const toggleDark = () => {
+    setDark(d => {
+      const next = !d;
+      localStorage.setItem("hh-theme", next ? "dark" : "light");
+      return next;
+    });
+  };
+
+  const palette = { ...BRAND, ...(dark ? DARK : LIGHT) };
+  const cssVars = Object.entries(palette).map(([k, v]) => `${k}:${v}`).join(";");
+
   return (
-    <>
+    <div className="hh-root" style={{ colorScheme: dark ? "dark" : "light" }}
+      data-dark={dark ? "" : undefined}>
       <style>{`
+        .hh-root { ${cssVars}; }
+
         .hh-hidden-mobile { display: flex; }
         @media(max-width:768px){ .hh-hidden-mobile { display: none !important; } }
         *, *::before, *::after { box-sizing: border-box; }
-        html { overflow-x: hidden; }
+        html { overflow-x: hidden; scroll-behavior: smooth; }
         body { overflow-x: hidden; max-width: 100vw; }
         section, nav, footer { overflow: hidden; }
+
         @media(max-width:900px){ .hh-for-providers-grid { grid-template-columns: 1fr !important; } }
         @media(max-width:900px){ .hh-footer-grid { grid-template-columns: 1fr 1fr !important; } }
-        @media(max-width:768px){ .hh-hero-split-cta { grid-template-columns: 1fr !important; } }
-        @media(max-width:1024px){ .hh-trust-steps { grid-template-columns: repeat(2, 1fr) !important; } }
-        @media(max-width:560px){ .hh-trust-steps { grid-template-columns: 1fr !important; } }
+        @media(max-width:1024px){ .hh-steps-grid { grid-template-columns: repeat(2,1fr) !important; } }
+        @media(max-width:560px){ .hh-steps-grid { grid-template-columns: 1fr !important; } }
 
-        .hh-step-card { transition: transform 0.3s, box-shadow 0.3s; }
-        .hh-step-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,0.1); }
-        .hh-feat-card { transition: transform 0.3s; }
-        .hh-feat-card:hover { transform: translateY(-4px); }
-        .hh-cat-card { transition: transform 0.2s, box-shadow 0.2s; }
-        .hh-cat-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.1); }
-        .hh-trust-card { transition: border-color 0.3s, background 0.3s; }
-        .hh-trust-card:hover { border-color: rgba(26,171,240,0.45) !important; background: rgba(26,171,240,0.04) !important; }
-        .hh-review-card { transition: border-color 0.3s, transform 0.3s; }
-        .hh-review-card:hover { transform: translateY(-4px); border-color: rgba(26,171,240,0.28) !important; }
-        .hh-nav-link { transition: color 0.2s; }
-        .hh-nav-link:hover { color: #0F172A !important; }
-        .hh-cta-btn { transition: opacity 0.2s; }
-        .hh-cta-btn:hover { opacity: 0.85; }
-        .hh-hero-btn-primary { transition: transform 0.2s, box-shadow 0.2s; }
-        .hh-hero-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 48px rgba(26,171,240,0.45) !important; }
-        .hh-hero-btn-secondary { transition: border-color 0.2s, background 0.2s, transform 0.2s; }
-        .hh-hero-btn-secondary:hover { transform: translateY(-2px); opacity: 0.92; }
-        .hh-footer-link { transition: color 0.2s; }
-        .hh-footer-link:hover { color: #ffffff !important; }
+        .hh-step-card  { transition: transform .3s cubic-bezier(.4,0,.2,1), box-shadow .3s, border-color .3s; }
+        .hh-step-card:hover  { transform: translateY(-5px); box-shadow: 0 20px 48px var(--glow); border-color: var(--brand) !important; }
+        .hh-feat-card  { transition: transform .3s cubic-bezier(.4,0,.2,1), box-shadow .3s, border-color .3s; }
+        .hh-feat-card:hover  { transform: translateY(-4px); box-shadow: 0 16px 36px var(--glow); border-color: var(--brand) !important; }
+        .hh-cat-card   { transition: transform .3s cubic-bezier(.4,0,.2,1), box-shadow .3s; }
+        .hh-cat-card:hover   { transform: translateY(-3px); box-shadow: 0 10px 30px var(--glow); }
+        .hh-trust-card { transition: transform .3s cubic-bezier(.4,0,.2,1), box-shadow .3s, border-color .3s; }
+        .hh-trust-card:hover { transform: translateY(-5px); box-shadow: 0 20px 48px var(--glow); border-color: var(--brand) !important; }
 
-        /* Desktop: compelling bottom download section */
+        .hh-nav-link { transition: color .2s; }
+        .hh-nav-link:hover { color: var(--brand) !important; }
+        .hh-cta-btn { transition: transform .2s, box-shadow .2s; }
+        .hh-cta-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 28px var(--glow) !important; }
+        .hh-hero-btn-primary { transition: transform .2s, box-shadow .2s; }
+        .hh-hero-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 20px 52px var(--glow) !important; }
+        .hh-hero-btn-secondary { transition: background .2s, border-color .2s, transform .2s; }
+        .hh-hero-btn-secondary:hover { border-color: var(--brand) !important; transform: translateY(-2px); }
+        .hh-footer-link { transition: color .2s; }
+        .hh-footer-link:hover { color: var(--brand) !important; }
+
         .hh-app-banner {
           padding: 100px 24px;
-          background: linear-gradient(135deg, #EEF6FC 0%, #E8F3FA 50%, #F4F8FB 100%);
+          background: ${dark
+            ? "linear-gradient(135deg, #060C18 0%, #0A1220 50%, #0D1728 100%)"
+            : "linear-gradient(135deg, rgba(26,171,240,0.05) 0%, #fff 40%, rgba(26,171,240,0.04) 100%)"};
+          border-top: 1px solid var(--border);
           position: relative;
         }
-        .hh-app-banner-inner {
-          max-width: 900px;
-          margin: 0 auto;
-        }
+        .hh-app-banner-inner { max-width: 900px; margin: 0 auto; }
         .hh-app-banner-icon { display: none; }
 
-        /* Mobile: persistent sticky footer banner */
         @media(max-width:768px) {
-          .hh-main-with-sticky { padding-bottom: 200px; }
-          footer { padding-bottom: calc(200px + env(safe-area-inset-bottom, 0px)) !important; }
+          .hh-main-with-sticky { padding-bottom: 180px; }
+          footer { padding-bottom: calc(180px + env(safe-area-inset-bottom,0px)) !important; }
           .hh-app-banner {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 90;
-            padding: 16px 16px calc(16px + env(safe-area-inset-bottom, 0px));
-            background: rgba(255,255,255,0.97);
-            backdrop-filter: blur(16px);
-            border-top: 1px solid #D5E3EE;
-            box-shadow: 0 -8px 32px rgba(11,18,32,0.12);
-            overflow: visible;
+            position: fixed; bottom: 0; left: 0; right: 0; z-index: 90;
+            padding: 14px 16px calc(14px + env(safe-area-inset-bottom,0px));
+            background: ${dark ? "rgba(6,12,24,0.96)" : "rgba(247,249,252,0.97)"} !important;
+            backdrop-filter: blur(20px); border-top: 1px solid var(--border);
+            box-shadow: 0 -8px 40px rgba(0,0,0,0.18); overflow: visible;
           }
           .hh-app-banner-inner { max-width: 100%; }
           .hh-app-banner-icon { display: block !important; }
-          .hh-app-banner-content h2 { font-size: 20px !important; margin-bottom: 8px !important; }
-          .hh-app-banner-content p { font-size: 13px !important; margin-bottom: 14px !important; line-height: 1.5 !important; }
-          .hh-app-banner-badges { display: none !important; }
-          .hh-app-banner-qr { display: none !important; }
-          .hh-app-banner-divider { display: none !important; }
+          .hh-app-banner-content h2 { font-size: 18px !important; margin-bottom: 6px !important; }
+          .hh-app-banner-content p { font-size: 12px !important; margin-bottom: 12px !important; line-height: 1.4 !important; }
+          .hh-app-banner-badges, .hh-app-banner-qr, .hh-app-banner-divider { display: none !important; }
           .hh-app-banner-stores { gap: 10px !important; flex-direction: row !important; align-items: center !important; }
           .hh-app-banner-stores > div { flex-direction: row !important; gap: 0 !important; }
-          .hh-app-banner-stores a svg { width: 130px !important; height: auto !important; }
+          .hh-app-banner-stores a svg { width: 120px !important; height: auto !important; }
         }
+
+        .hh-root * { transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease; }
+        .hh-root img, .hh-root svg, .hh-root button { transition: none; }
       `}</style>
-      <Nav logoHref={logoHref} />
+
+      <style>{`body { background: ${dark ? "#060C18" : "#F7F9FC"} !important; }`}</style>
+
+      {mounted && <Nav logoHref={logoHref} dark={dark} onToggleDark={toggleDark} />}
+      {!mounted && <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, height: 62 }} />}
+
       <main className="hh-main-with-sticky">
-        <Hero />
+        <Hero dark={dark} />
         <HowItWorks />
         <Features />
         <Categories />
         <TrustSafety />
         <ForProviders />
-        <Testimonials />
-        <StickyAppBanner />
+        <Download dark={dark} />
       </main>
       <Footer />
       <CookieBannerHH />
-    </>
+    </div>
   );
 }
