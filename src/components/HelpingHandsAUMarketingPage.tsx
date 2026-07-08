@@ -5,12 +5,11 @@ import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion
 import CookieBannerHH from "@/components/CookieBannerHH";
 import { APPLE_EASE, ScrollReveal, ScrollRevealGroup, ScrollRevealItem, ScrollSectionIntro } from "@/components/ScrollReveal";
 
-/* ── Lucide React icons ── */
 import {
   ClipboardList, Lock, Camera, BadgeCheck,
   ShieldCheck, UserCheck, Star, MessageSquare, Zap, Smartphone,
   Bell, Globe, Wallet, Home, Wrench, Truck, Monitor,
-  Sparkles, Users, Palette, Award, Check, CreditCard,
+  Sparkles, Users, Palette, Award, CreditCard,
   Sun, Moon, TrendingUp, MapPin, CheckCircle2, Banknote,
   BarChart3, Shield, HeartHandshake, Briefcase, Building2,
   ChevronRight, ArrowRight,
@@ -18,87 +17,103 @@ import {
 
 const STORE_LINKS = {
   android: "https://play.google.com/store/apps/details?id=com.helpinghandsau.app",
+  apple: "https://apps.apple.com/app/helpinghandsau/id6761107489",
 };
 
-/* ──────────────────────────────────────────────────────────────
+/* ─────────────────────────────────────────────────
    THEME TOKENS
-────────────────────────────────────────────────────────────── */
+   Section tints give each section its own colour mood.
+───────────────────────────────────────────────── */
 const LIGHT = {
-  "--bg":       "#F7F9FC",
-  "--bg2":      "#EEF3FA",
-  "--bg3":      "#E2EBF6",
-  "--card":     "#FFFFFF",
-  "--card2":    "#F4F8FF",
-  "--border":   "rgba(26,171,240,0.16)",
-  "--border2":  "rgba(26,171,240,0.08)",
-  "--text":     "#070F1E",
-  "--text2":    "#334155",
-  "--text3":    "#64748B",
-  "--nav-bg":   "rgba(247,249,252,0.88)",
-  "--shadow":   "0 8px 32px rgba(10,30,80,0.10)",
-  "--shadow-sm":"0 2px 10px rgba(10,30,80,0.07)",
-  "--glow":     "rgba(26,171,240,0.22)",
+  "--bg":         "#FAFAFA",
+  "--card":       "#FFFFFF",
+  "--border":     "rgba(0,0,0,0.08)",
+  "--border2":    "rgba(0,0,0,0.05)",
+  "--text":       "#0A0F1E",
+  "--text2":      "#374151",
+  "--text3":      "#6B7280",
+  "--nav-bg":     "rgba(250,250,250,0.88)",
+  "--shadow":     "0 8px 32px rgba(0,0,0,0.09)",
+  "--shadow-sm":  "0 2px 10px rgba(0,0,0,0.06)",
+  "--glow":       "rgba(26,171,240,0.20)",
+  /* Per-section tints */
+  "--s-hero":     "#FFFFFF",
+  "--s-how":      "#FFFBF4",   /* warm amber */
+  "--s-feat":     "#F9FAFB",   /* near-white neutral */
+  "--s-cat":      "#F5F3FF",   /* soft violet */
+  "--s-trust":    "#F0FDF7",   /* soft mint */
+  "--s-prov":     "#FAFAFA",   /* neutral */
+  "--s-dl":       "#FFF7F0",   /* warm peach */
 };
 const DARK = {
-  "--bg":       "#060C18",
-  "--bg2":      "#0A1220",
-  "--bg3":      "#0E1828",
-  "--card":     "#0D1728",
-  "--card2":    "#111E30",
-  "--border":   "rgba(26,171,240,0.18)",
-  "--border2":  "rgba(26,171,240,0.09)",
-  "--text":     "#EDF2FF",
-  "--text2":    "#94A3B8",
-  "--text3":    "#475569",
-  "--nav-bg":   "rgba(6,12,24,0.88)",
-  "--shadow":   "0 8px 40px rgba(0,0,0,0.6)",
-  "--shadow-sm":"0 2px 12px rgba(0,0,0,0.4)",
-  "--glow":     "rgba(26,171,240,0.28)",
+  "--bg":         "#080C14",
+  "--card":       "#0E1420",
+  "--border":     "rgba(255,255,255,0.08)",
+  "--border2":    "rgba(255,255,255,0.04)",
+  "--text":       "#EDF2FF",
+  "--text2":      "#94A3B8",
+  "--text3":      "#4B5563",
+  "--nav-bg":     "rgba(8,12,20,0.90)",
+  "--shadow":     "0 8px 40px rgba(0,0,0,0.55)",
+  "--shadow-sm":  "0 2px 12px rgba(0,0,0,0.40)",
+  "--glow":       "rgba(26,171,240,0.25)",
+  "--s-hero":     "#080C14",
+  "--s-how":      "#100C04",
+  "--s-feat":     "#0A0F18",
+  "--s-cat":      "#0D0A1C",
+  "--s-trust":    "#06130D",
+  "--s-prov":     "#080C14",
+  "--s-dl":       "#130C06",
 };
 const BRAND = {
-  "--brand":      "#1AABF0",
-  "--brand-deep": "#0A8FCC",
-  "--brand-mid":  "#55CCFF",
-  "--brand-dim":  "rgba(26,171,240,0.12)",
-  "--amber":      "#F59E0B",
-  "--violet":     "#7C3AED",
-  "--emerald":    "#10B981",
+  "--brand":       "#1AABF0",
+  "--brand-deep":  "#0A8FCC",
+  "--brand-mid":   "#55CCFF",
+  "--brand-dim":   "rgba(26,171,240,0.12)",
+  "--amber":       "#F59E0B",
+  "--amber-dim":   "rgba(245,158,11,0.12)",
+  "--violet":      "#7C3AED",
+  "--violet-dim":  "rgba(124,58,237,0.12)",
+  "--emerald":     "#10B981",
+  "--emerald-dim": "rgba(16,185,129,0.12)",
+  "--rose":        "#F43F5E",
+  "--rose-dim":    "rgba(244,63,94,0.12)",
 };
 
 /* ── Shared style helpers ── */
 const h2S: React.CSSProperties = {
   fontFamily: "var(--font-jakarta)", fontWeight: 800, letterSpacing: "-0.05em",
-  fontSize: "clamp(34px,4.5vw,60px)", color: "var(--text)", lineHeight: 1.06,
+  fontSize: "clamp(34px,4.5vw,58px)", color: "var(--text)", lineHeight: 1.06,
   marginBottom: 18, textAlign: "center",
 };
 const subS: React.CSSProperties = {
-  fontSize: 19, color: "var(--text2)", textAlign: "center",
-  maxWidth: 580, margin: "0 auto", lineHeight: 1.6, letterSpacing: "-0.01em",
+  fontSize: 18, color: "var(--text2)", textAlign: "center",
+  maxWidth: 560, margin: "0 auto", lineHeight: 1.65, letterSpacing: "-0.01em",
 };
 
 /* ── Section label pill ── */
-function SectionLabel({ color, children, align = "center" }: { color: string; children: React.ReactNode; align?: "center" | "left" }) {
+function SectionLabel({ color, children, align = "center" }: {
+  color: string; children: React.ReactNode; align?: "center" | "left";
+}) {
   return (
     <div style={{ textAlign: align, marginBottom: 14 }}>
       <span style={{
         display: "inline-flex", alignItems: "center", gap: 6,
-        fontSize: 11, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase",
-        color, background: `${color}18`, padding: "6px 14px", borderRadius: 100,
-        border: `1px solid ${color}30`,
+        fontSize: 11, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase",
+        color, background: `${color}18`, padding: "5px 14px", borderRadius: 100,
+        border: `1px solid ${color}28`,
       }}>{children}</span>
     </div>
   );
 }
 
-/* ── Icon wrapper: coloured tinted box ── */
+/* ── Coloured icon box ── */
 function IconBox({ icon, color, size = 50 }: { icon: React.ReactNode; color: string; size?: number }) {
   return (
     <div style={{
       width: size, height: size, borderRadius: Math.round(size * 0.28),
-      background: `${color}15`,
-      border: `1px solid ${color}28`,
-      display: "flex", alignItems: "center", justifyContent: "center",
-      flexShrink: 0,
+      background: `${color}15`, border: `1px solid ${color}25`,
+      display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
     }}>
       {icon}
     </div>
@@ -138,31 +153,21 @@ function GooglePlayBadge({ width = 180 }: { width?: number }) {
 ══════════════════════════════════════════════ */
 function ThemeToggle({ dark, onToggle }: { dark: boolean; onToggle: () => void }) {
   return (
-    <button
-      onClick={onToggle}
-      aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
+    <button onClick={onToggle} aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
       style={{
         width: 46, height: 26, borderRadius: 13, border: "1px solid var(--border)",
-        background: dark ? "rgba(26,171,240,0.2)" : "rgba(26,171,240,0.08)",
+        background: dark ? "rgba(26,171,240,0.2)" : "rgba(0,0,0,0.06)",
         cursor: "pointer", position: "relative", padding: 0,
-        display: "flex", alignItems: "center", flexShrink: 0,
-        transition: "background 0.3s",
-      }}
-    >
-      <motion.div
-        animate={{ x: dark ? 22 : 2 }}
-        transition={{ type: "spring", stiffness: 500, damping: 30 }}
+        display: "flex", alignItems: "center", flexShrink: 0, transition: "background 0.3s",
+      }}>
+      <motion.div animate={{ x: dark ? 22 : 2 }} transition={{ type: "spring", stiffness: 500, damping: 30 }}
         style={{
           width: 20, height: 20, borderRadius: "50%",
           background: "linear-gradient(135deg, var(--brand), var(--brand-deep))",
           display: "flex", alignItems: "center", justifyContent: "center",
           boxShadow: "0 2px 8px rgba(26,171,240,0.55)",
-        }}
-      >
-        {dark
-          ? <Moon size={10} color="#fff" strokeWidth={2} />
-          : <Sun size={10} color="#fff" strokeWidth={2} />
-        }
+        }}>
+        {dark ? <Moon size={10} color="#fff" strokeWidth={2} /> : <Sun size={10} color="#fff" strokeWidth={2} />}
       </motion.div>
     </button>
   );
@@ -178,7 +183,6 @@ function Nav({ logoHref, dark, onToggleDark }: { logoHref: string; dark: boolean
     window.addEventListener("scroll", h, { passive: true });
     return () => window.removeEventListener("scroll", h);
   }, []);
-
   const links = [
     { label: "How It Works", href: "#how-it-works" },
     { label: "Features", href: "#features" },
@@ -186,7 +190,6 @@ function Nav({ logoHref, dark, onToggleDark }: { logoHref: string; dark: boolean
     { label: "Safety", href: "#trust-safety" },
     { label: "For Providers", href: "#for-providers" },
   ];
-
   return (
     <nav style={{
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 100,
@@ -204,18 +207,16 @@ function Nav({ logoHref, dark, onToggleDark }: { logoHref: string; dark: boolean
             HelpingHands<span style={{ color: "var(--brand)" }}>AU</span>
           </span>
         </a>
-
         <div style={{ display: "flex", gap: 30, alignItems: "center" }} className="hh-hidden-mobile">
           {links.map(l => (
             <a key={l.label} href={l.href}
               onClick={e => { e.preventDefault(); document.querySelector(l.href)?.scrollIntoView({ behavior: "smooth" }); }}
               className="hh-nav-link"
-              style={{ color: "var(--text2)", textDecoration: "none", fontSize: 13, fontWeight: 500, letterSpacing: "-0.01em", display: "flex", alignItems: "center", gap: 4 }}>
+              style={{ color: "var(--text2)", textDecoration: "none", fontSize: 13, fontWeight: 500, letterSpacing: "-0.01em" }}>
               {l.label}
             </a>
           ))}
         </div>
-
         <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
           <ThemeToggle dark={dark} onToggle={onToggleDark} />
           <a href="#download"
@@ -237,7 +238,7 @@ function Nav({ logoHref, dark, onToggleDark }: { logoHref: string; dark: boolean
 }
 
 /* ══════════════════════════════════════════════
-   HERO
+   HERO  — multi-colour aurora
 ══════════════════════════════════════════════ */
 function Hero({ dark }: { dark: boolean }) {
   const ref = useRef<HTMLElement>(null);
@@ -247,61 +248,93 @@ function Hero({ dark }: { dark: boolean }) {
   const rm = useReducedMotion();
 
   const in0 = (d: number) => rm ? {} : {
-    initial: { opacity: 0, y: 40 },
+    initial: { opacity: 0, y: 44 },
     animate: { opacity: 1, y: 0 },
     transition: { duration: 1.1, delay: d, ease: APPLE_EASE },
   };
 
-  const stats = [
-    { icon: <BarChart3 size={16} strokeWidth={2} color="var(--brand)" />, n: "10K+", label: "Tasks Posted" },
-    { icon: <UserCheck size={16} strokeWidth={2} color="var(--emerald)" />, n: "5K+", label: "Verified Providers" },
-    { icon: <Shield size={16} strokeWidth={2} color="var(--violet)" />, n: "100%", label: "Escrow Protected" },
-    { icon: <Star size={16} strokeWidth={2} color="var(--amber)" />, n: "4.9★", label: "Average Rating" },
+  /* Floating category chips — adds colour life to hero */
+  const chips = [
+    { label: "🏡 Home & Garden", color: "#1AABF0" },
+    { label: "🔧 Repairs & Trades", color: "#7C3AED" },
+    { label: "✨ Cleaning", color: "#10B981" },
+    { label: "🚚 Removals", color: "#F59E0B" },
+    { label: "📷 Photography", color: "#F43F5E" },
+    { label: "💻 Tech & IT", color: "#06B6D4" },
   ];
 
   return (
     <section ref={ref} style={{
       minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center",
       textAlign: "center", padding: "120px 24px 80px", position: "relative", overflow: "hidden",
-      background: dark
-        ? "radial-gradient(ellipse 110% 80% at 50% -15%, rgba(26,171,240,0.22) 0%, transparent 55%), radial-gradient(ellipse 70% 50% at 85% 55%, rgba(124,58,237,0.12) 0%, transparent 50%), var(--bg)"
-        : "radial-gradient(ellipse 110% 80% at 50% -15%, rgba(26,171,240,0.14) 0%, transparent 55%), radial-gradient(ellipse 60% 40% at 85% 55%, rgba(26,171,240,0.06) 0%, transparent 50%), var(--bg)",
+      background: "var(--s-hero)",
     }}>
-      {/* Dot-grid background */}
+      {/* Multi-colour aurora — the rainbow effect */}
       <div aria-hidden style={{
         position: "absolute", inset: 0, pointerEvents: "none",
-        backgroundImage: dark
-          ? "radial-gradient(rgba(26,171,240,0.25) 1px, transparent 1px)"
-          : "radial-gradient(rgba(26,171,240,0.2) 1px, transparent 1px)",
-        backgroundSize: "32px 32px",
-        maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 20%, transparent 80%)",
+        background: dark ? [
+          "radial-gradient(ellipse 70% 60% at 20% 20%, rgba(124,58,237,0.22) 0%, transparent 60%)",
+          "radial-gradient(ellipse 60% 50% at 80% 15%, rgba(26,171,240,0.24) 0%, transparent 55%)",
+          "radial-gradient(ellipse 50% 40% at 10% 80%, rgba(16,185,129,0.16) 0%, transparent 55%)",
+          "radial-gradient(ellipse 55% 45% at 90% 75%, rgba(245,158,11,0.14) 0%, transparent 55%)",
+          "radial-gradient(ellipse 40% 35% at 50% 50%, rgba(244,63,94,0.10) 0%, transparent 60%)",
+        ].join(",") : [
+          "radial-gradient(ellipse 70% 60% at 20% 20%, rgba(124,58,237,0.12) 0%, transparent 60%)",
+          "radial-gradient(ellipse 60% 50% at 80% 15%, rgba(26,171,240,0.14) 0%, transparent 55%)",
+          "radial-gradient(ellipse 50% 40% at 10% 80%, rgba(16,185,129,0.10) 0%, transparent 55%)",
+          "radial-gradient(ellipse 55% 45% at 90% 75%, rgba(245,158,11,0.09) 0%, transparent 55%)",
+          "radial-gradient(ellipse 40% 35% at 50% 50%, rgba(244,63,94,0.06) 0%, transparent 60%)",
+        ].join(","),
+      }} />
+      {/* Dot grid */}
+      <div aria-hidden style={{
+        position: "absolute", inset: 0, pointerEvents: "none",
+        backgroundImage: "radial-gradient(rgba(120,120,120,0.18) 1px, transparent 1px)",
+        backgroundSize: "28px 28px",
+        maskImage: "radial-gradient(ellipse 75% 75% at 50% 50%, black 20%, transparent 80%)",
       }} />
 
-      {/* Floating orbs */}
-      <motion.div aria-hidden animate={{ y: [0, -20, 0] }} transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
-        style={{
-          position: "absolute", width: 520, height: 520, borderRadius: "50%", top: "-15%", right: "-8%", pointerEvents: "none",
-          background: dark ? "radial-gradient(circle, rgba(26,171,240,0.13) 0%, transparent 70%)" : "radial-gradient(circle, rgba(26,171,240,0.09) 0%, transparent 70%)",
-        }} />
-      <motion.div aria-hidden animate={{ y: [0, 16, 0] }} transition={{ repeat: Infinity, duration: 10, ease: "easeInOut", delay: 2 }}
-        style={{
-          position: "absolute", width: 380, height: 380, borderRadius: "50%", bottom: "5%", left: "-5%", pointerEvents: "none",
-          background: dark ? "radial-gradient(circle, rgba(124,58,237,0.11) 0%, transparent 70%)" : "radial-gradient(circle, rgba(26,171,240,0.07) 0%, transparent 70%)",
-        }} />
+      {/* Floating chips (decorative) */}
+      {chips.map((c, i) => {
+        const positions = [
+          { top: "18%", left: "6%" }, { top: "30%", right: "5%" },
+          { top: "60%", left: "4%" }, { top: "68%", right: "6%" },
+          { top: "82%", left: "12%" }, { top: "15%", right: "12%" },
+        ];
+        return (
+          <motion.div key={c.label} aria-hidden
+            animate={{ y: [0, i % 2 === 0 ? -10 : 10, 0] }}
+            transition={{ repeat: Infinity, duration: 5 + i * 0.8, ease: "easeInOut", delay: i * 0.4 }}
+            style={{
+              position: "absolute", ...positions[i],
+              display: "flex", alignItems: "center", gap: 6,
+              background: `${c.color}14`, border: `1px solid ${c.color}28`,
+              borderRadius: 100, padding: "7px 14px",
+              fontSize: 12, fontWeight: 600, color: c.color,
+              backdropFilter: "blur(8px)",
+              whiteSpace: "nowrap",
+            }}
+            className="hh-hidden-mobile"
+          >
+            {c.label}
+          </motion.div>
+        );
+      })}
 
-      <motion.div style={{ position: "relative", maxWidth: 1000, zIndex: 1, width: "100%",
-        opacity: rm ? 1 : heroOpacity, y: rm ? 0 : heroY }}>
-
+      <motion.div style={{
+        position: "relative", maxWidth: 900, zIndex: 1, width: "100%",
+        opacity: rm ? 1 : heroOpacity, y: rm ? 0 : heroY,
+      }}>
         {/* Badge */}
         <motion.div {...in0(0)} style={{ marginBottom: 28 }}>
           <span style={{
-            display: "inline-flex", alignItems: "center", gap: 8, fontSize: 11, fontWeight: 700,
-            letterSpacing: "0.12em", textTransform: "uppercase", color: "var(--brand)",
-            background: "var(--brand-dim)", padding: "7px 18px", borderRadius: 100,
-            border: "1px solid var(--border)",
+            display: "inline-flex", alignItems: "center", gap: 8, fontSize: 12, fontWeight: 700,
+            letterSpacing: "0.08em", textTransform: "uppercase",
+            color: "var(--brand)", background: "var(--brand-dim)",
+            padding: "7px 18px", borderRadius: 100, border: "1px solid var(--border)",
           }}>
             <MapPin size={12} strokeWidth={2.5} />
-            Australia&rsquo;s #1 Local Task Marketplace
+            Local tasks, local people, local trust
           </span>
         </motion.div>
 
@@ -309,34 +342,35 @@ function Hero({ dark }: { dark: boolean }) {
         <motion.h1 {...in0(0.12)} className="text-balance" style={{
           fontFamily: "var(--font-jakarta)", fontWeight: 800, letterSpacing: "-0.05em",
           lineHeight: 1.02, color: "var(--text)", marginBottom: 24,
-          fontSize: "clamp(44px, 7vw, 88px)",
+          fontSize: "clamp(42px, 7vw, 84px)",
         }}>
-          Any task. Any suburb.<br />
+          Get local tasks done<br />
           <span style={{
-            backgroundImage: "linear-gradient(135deg, var(--brand) 0%, var(--brand-mid) 50%, var(--brand-deep) 100%)",
+            backgroundImage: "linear-gradient(135deg, #7C3AED 0%, #1AABF0 40%, #10B981 75%, #F59E0B 100%)",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-          }}>Done right.</span>
+          }}>the smarter way.</span>
         </motion.h1>
 
-        {/* Subheading */}
+        {/* Sub */}
         <motion.p {...in0(0.26)} className="text-balance" style={{
-          fontSize: "clamp(18px, 2.2vw, 22px)", color: "var(--text2)", maxWidth: 660,
+          fontSize: "clamp(18px, 2.2vw, 22px)", color: "var(--text2)", maxWidth: 620,
           margin: "0 auto 52px", lineHeight: 1.6, letterSpacing: "-0.01em",
         }}>
-          Connect with verified local providers. Post a task, receive bids, and pay only when you&rsquo;re satisfied — backed by Stripe escrow.
+          Connect with local service providers, agree on price, and release payment only when you&rsquo;re happy — all through one simple app.
         </motion.p>
 
         {/* CTAs */}
-        <motion.div {...in0(0.38)} style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap", marginBottom: 56 }}>
+        <motion.div {...in0(0.38)} style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap", marginBottom: 52 }}>
           <a href="#download"
             onClick={e => { e.preventDefault(); document.querySelector("#download")?.scrollIntoView({ behavior: "smooth" }); }}
             className="hh-hero-btn-primary"
             style={{
               display: "inline-flex", alignItems: "center", gap: 10, justifyContent: "center",
-              background: "linear-gradient(135deg, var(--brand), var(--brand-deep))",
+              background: "linear-gradient(135deg, #7C3AED, #1AABF0)",
               color: "#fff", fontWeight: 700, fontSize: 17,
               padding: "16px 34px", borderRadius: 12, textDecoration: "none",
-              letterSpacing: "-0.022em", boxShadow: "0 12px 36px var(--glow)",
+              letterSpacing: "-0.022em",
+              boxShadow: "0 12px 40px rgba(124,58,237,0.30), 0 4px 16px rgba(26,171,240,0.20)",
             }}>
             <ClipboardList size={20} strokeWidth={2} />
             Post a Task — It&rsquo;s Free
@@ -352,24 +386,25 @@ function Hero({ dark }: { dark: boolean }) {
               boxShadow: "var(--shadow-sm)",
             }}>
             <Briefcase size={20} strokeWidth={2} />
-            Start Earning Today
+            Earn as a Provider
           </a>
         </motion.div>
 
-        {/* Stats row */}
-        <motion.div {...in0(0.50)} style={{ display: "flex", gap: 16, justifyContent: "center", flexWrap: "wrap" }}>
-          {stats.map(s => (
-            <div key={s.n} style={{
-              display: "flex", alignItems: "center", gap: 10,
-              background: "var(--card)", padding: "12px 18px", borderRadius: 12,
-              border: "1px solid var(--border)", boxShadow: "var(--shadow-sm)",
+        {/* Trust chips — softened wording */}
+        <motion.div {...in0(0.50)} style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+          {[
+            { icon: <Shield size={14} strokeWidth={2} color="#7C3AED" />, label: "Escrow-backed payments", bg: "var(--violet-dim)", border: "rgba(124,58,237,0.2)" },
+            { icon: <UserCheck size={14} strokeWidth={2} color="#10B981" />, label: "Provider ID verification", bg: "var(--emerald-dim)", border: "rgba(16,185,129,0.2)" },
+            { icon: <MapPin size={14} strokeWidth={2} color="#1AABF0" />, label: "Australian community", bg: "var(--brand-dim)", border: "rgba(26,171,240,0.2)" },
+          ].map(b => (
+            <span key={b.label} style={{
+              display: "inline-flex", alignItems: "center", gap: 7,
+              fontSize: 12, fontWeight: 600, color: "var(--text2)",
+              background: b.bg, padding: "9px 16px", borderRadius: 10,
+              border: `1px solid ${b.border}`,
             }}>
-              {s.icon}
-              <div>
-                <div style={{ fontSize: 18, fontWeight: 800, color: "var(--text)", fontFamily: "var(--font-jakarta)", letterSpacing: "-0.04em", lineHeight: 1 }}>{s.n}</div>
-                <div style={{ fontSize: 11, color: "var(--text2)", fontWeight: 500, marginTop: 2 }}>{s.label}</div>
-              </div>
-            </div>
+              {b.icon}{b.label}
+            </span>
           ))}
         </motion.div>
       </motion.div>
@@ -378,65 +413,34 @@ function Hero({ dark }: { dark: boolean }) {
 }
 
 /* ══════════════════════════════════════════════
-   HOW IT WORKS
+   HOW IT WORKS  — warm amber section
 ══════════════════════════════════════════════ */
 function HowItWorks() {
   const steps = [
-    {
-      n: "01",
-      icon: <ClipboardList size={26} strokeWidth={1.75} color="var(--brand)" />,
-      title: "Post Your Task Free",
-      desc: "Describe the job, your location, and budget. Get bids from verified local providers within minutes.",
-      color: "var(--brand)",
-    },
-    {
-      n: "02",
-      icon: <Lock size={26} strokeWidth={1.75} color="var(--violet)" />,
-      title: "Funds Go Into Escrow",
-      desc: "Your payment is held securely by Stripe — not released until you confirm the job is complete.",
-      color: "var(--violet)",
-    },
-    {
-      n: "03",
-      icon: <Camera size={26} strokeWidth={1.75} color="var(--emerald)" />,
-      title: "Track the Job Live",
-      desc: "Your provider completes the work and uploads photo proof directly through the app.",
-      color: "var(--emerald)",
-    },
-    {
-      n: "04",
-      icon: <BadgeCheck size={26} strokeWidth={1.75} color="var(--amber)" />,
-      title: "Release & Rate",
-      desc: "Satisfied? Hit release. Payment transfers instantly. Leave a rating for your provider.",
-      color: "var(--amber)",
-    },
+    { n: "01", icon: <ClipboardList size={26} strokeWidth={1.75} color="#F59E0B" />, title: "Post Your Task", desc: "Describe what you need, your location, and the budget range that works for you. No commitment to post.", color: "#F59E0B" },
+    { n: "02", icon: <Lock size={26} strokeWidth={1.75} color="#7C3AED" />, title: "Funds Held in Escrow", desc: "Once you choose a provider, your payment is held securely by Stripe — not us — until the job is done.", color: "#7C3AED" },
+    { n: "03", icon: <Camera size={26} strokeWidth={1.75} color="#10B981" />, title: "Track Progress", desc: "Your provider uploads photo proof of completion through the app. You can follow along the whole time.", color: "#10B981" },
+    { n: "04", icon: <BadgeCheck size={26} strokeWidth={1.75} color="#1AABF0" />, title: "Release & Review", desc: "Happy with the work? Release the payment and leave a review. Simple, fair, transparent.", color: "#1AABF0" },
   ];
-
   return (
-    <section id="how-it-works" style={{ padding: "100px 24px", background: "var(--bg2)" }}>
+    <section id="how-it-works" style={{ padding: "100px 24px", background: "var(--s-how)" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
         <ScrollSectionIntro>
-          <SectionLabel color="var(--brand)">How It Works</SectionLabel>
-          <h2 className="text-balance" style={h2S}>From post to paid — safely.</h2>
-          <p style={subS}>Every step is protected. Every payment is secure. Every provider is verified.</p>
+          <SectionLabel color="#F59E0B">How It Works</SectionLabel>
+          <h2 className="text-balance" style={h2S}>Simple. Secure. Straightforward.</h2>
+          <p style={subS}>Four steps that keep you in control from the moment you post to the moment you pay.</p>
         </ScrollSectionIntro>
-
         <ScrollRevealGroup className="hh-steps-grid" style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 16, marginTop: 64 }}>
           {steps.map(s => (
             <ScrollRevealItem key={s.n} className="hh-step-card" style={{
               background: "var(--card)", border: "1px solid var(--border)",
-              borderRadius: 20, padding: 32, position: "relative", overflow: "hidden",
-              display: "flex", flexDirection: "column",
+              borderRadius: 20, padding: 32, position: "relative", overflow: "hidden", display: "flex", flexDirection: "column",
             }}>
-              {/* Giant watermark number */}
               <div aria-hidden style={{
-                position: "absolute", top: 12, right: 16,
-                fontSize: 80, fontWeight: 900, lineHeight: 1,
-                color: s.color, opacity: 0.07,
-                fontFamily: "var(--font-jakarta)", letterSpacing: "-0.05em",
-                userSelect: "none",
+                position: "absolute", top: 12, right: 16, fontSize: 80, fontWeight: 900,
+                lineHeight: 1, color: s.color, opacity: 0.07,
+                fontFamily: "var(--font-jakarta)", letterSpacing: "-0.05em", userSelect: "none",
               }}>{s.n}</div>
-
               <IconBox icon={s.icon} color={s.color} size={52} />
               <p style={{ fontSize: 11, fontWeight: 800, color: s.color, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 10, marginTop: 24 }}>Step {s.n}</p>
               <h3 style={{ fontSize: 20, fontWeight: 700, color: "var(--text)", marginBottom: 12, letterSpacing: "-0.025em", lineHeight: 1.2 }}>{s.title}</h3>
@@ -451,30 +455,28 @@ function HowItWorks() {
 }
 
 /* ══════════════════════════════════════════════
-   FEATURES
+   FEATURES  — neutral section
 ══════════════════════════════════════════════ */
 function Features() {
   const feats = [
-    { icon: <ShieldCheck size={22} strokeWidth={1.75} color="var(--brand)" />, c: "var(--brand)", title: "Escrow Protection", desc: "Every dollar held by Stripe until the job is confirmed complete. Zero financial risk, guaranteed." },
-    { icon: <UserCheck size={22} strokeWidth={1.75} color="var(--emerald)" />, c: "var(--emerald)", title: "ID-Verified Providers", desc: "All providers submit identity verification before accepting a single task on the platform." },
-    { icon: <Star size={22} strokeWidth={1.75} color="var(--amber)" />, c: "var(--amber)", title: "Ratings & Reviews", desc: "Transparent feedback builds accountability. Poor providers are removed. Great ones rise." },
-    { icon: <MessageSquare size={22} strokeWidth={1.75} color="var(--violet)" />, c: "var(--violet)", title: "Secure Messaging", desc: "Chat, share files, and agree scope — all inside the encrypted app, no third-party tools needed." },
-    { icon: <Zap size={22} strokeWidth={1.75} color="var(--brand)" />, c: "var(--brand)", title: "Instant Bids", desc: "Multiple bids arrive within minutes. Compare providers by price, rating, and experience." },
-    { icon: <Smartphone size={22} strokeWidth={1.75} color="var(--brand-mid)" />, c: "var(--brand-mid)", title: "iOS & Android", desc: "Full-featured native apps for both platforms. Manage tasks, bids, and payments on the go." },
-    { icon: <Bell size={22} strokeWidth={1.75} color="var(--amber)" />, c: "var(--amber)", title: "Smart Notifications", desc: "Action Centre keeps you informed on bids, messages, and payment events in real time." },
-    { icon: <Globe size={22} strokeWidth={1.75} color="var(--emerald)" />, c: "var(--emerald)", title: "Australian Made", desc: "Built for AU — AUD payments, local support, GST compliant, Privacy Act aligned." },
-    { icon: <Wallet size={22} strokeWidth={1.75} color="var(--violet)" />, c: "var(--violet)", title: "Wallet & Payouts", desc: "Stripe Connect delivers provider earnings directly to their bank. Fast, transparent, reliable." },
+    { icon: <ShieldCheck size={22} strokeWidth={1.75} color="#7C3AED" />, c: "#7C3AED", title: "Escrow Protection", desc: "Your money moves to Stripe — not to us — and only transfers when you confirm you're satisfied." },
+    { icon: <UserCheck size={22} strokeWidth={1.75} color="#10B981" />, c: "#10B981", title: "Provider Verification", desc: "We ask providers to submit ID before they can accept tasks. Giving you one less thing to worry about." },
+    { icon: <Star size={22} strokeWidth={1.75} color="#F59E0B" />, c: "#F59E0B", title: "Ratings & Reviews", desc: "Transparent, two-way feedback helps good providers stand out and keeps the community honest." },
+    { icon: <MessageSquare size={22} strokeWidth={1.75} color="#1AABF0" />, c: "#1AABF0", title: "In-App Messaging", desc: "Agree on scope, share photos, and clarify details — all within the app without sharing personal numbers." },
+    { icon: <Zap size={22} strokeWidth={1.75} color="#F43F5E" />, c: "#F43F5E", title: "Quick Bids", desc: "Post your task and hear back from local providers in minutes. Compare and choose at your own pace." },
+    { icon: <Smartphone size={22} strokeWidth={1.75} color="#06B6D4" />, c: "#06B6D4", title: "iOS & Android", desc: "A full experience on both platforms. Post, manage, and pay from wherever you are." },
+    { icon: <Bell size={22} strokeWidth={1.75} color="#F59E0B" />, c: "#F59E0B", title: "Timely Notifications", desc: "Stay on top of new bids, messages, and job updates without having to constantly check the app." },
+    { icon: <Globe size={22} strokeWidth={1.75} color="#10B981" />, c: "#10B981", title: "Built for Australia", desc: "AUD payments, local support, GST-aware — designed specifically for the Australian market." },
+    { icon: <Wallet size={22} strokeWidth={1.75} color="#7C3AED" />, c: "#7C3AED", title: "Provider Payouts", desc: "Stripe Connect handles provider payouts directly to their bank. Fast turnaround, transparent fees." },
   ];
-
   return (
-    <section id="features" style={{ padding: "100px 24px", background: "var(--bg)" }}>
+    <section id="features" style={{ padding: "100px 24px", background: "var(--s-feat)" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
         <ScrollSectionIntro>
-          <SectionLabel color="var(--emerald)">Platform</SectionLabel>
-          <h2 className="text-balance" style={h2S}>Everything you need.<br />Nothing you don&rsquo;t.</h2>
-          <p style={subS}>Enterprise security with consumer simplicity — the two rarely coexist. We made them.</p>
+          <SectionLabel color="#06B6D4">Platform Features</SectionLabel>
+          <h2 className="text-balance" style={h2S}>Built to make hiring easy.</h2>
+          <p style={subS}>The tools that help tasks go smoothly — from first message to final payment.</p>
         </ScrollSectionIntro>
-
         <ScrollRevealGroup style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))", gap: 14, marginTop: 64 }} stagger={0.06}>
           {feats.map(f => (
             <ScrollRevealItem key={f.title} className="hh-feat-card" style={{
@@ -493,29 +495,27 @@ function Features() {
 }
 
 /* ══════════════════════════════════════════════
-   CATEGORIES
+   CATEGORIES  — soft violet section
 ══════════════════════════════════════════════ */
 function Categories() {
   const cats = [
-    { icon: <Home size={20} strokeWidth={1.75} color="var(--brand)" />, name: "Home & Garden", sub: "Gardening, landscaping, maintenance", c: "var(--brand)" },
-    { icon: <Wrench size={20} strokeWidth={1.75} color="#3B82F6" />, name: "Repairs & Trades", sub: "Plumbing, electrical, carpentry", c: "#3B82F6" },
-    { icon: <Truck size={20} strokeWidth={1.75} color="var(--amber)" />, name: "Removals & Delivery", sub: "Furniture, storage, couriers", c: "var(--amber)" },
-    { icon: <Monitor size={20} strokeWidth={1.75} color="var(--violet)" />, name: "Tech & IT", sub: "Setup, repairs, smart home", c: "var(--violet)" },
-    { icon: <Camera size={20} strokeWidth={1.75} color="#EC4899" />, name: "Photography & Video", sub: "Portraits, events, reels", c: "#EC4899" },
-    { icon: <Sparkles size={20} strokeWidth={1.75} color="var(--emerald)" />, name: "Cleaning", sub: "Home, office, end of lease", c: "var(--emerald)" },
-    { icon: <Palette size={20} strokeWidth={1.75} color="var(--amber)" />, name: "Design & Creative", sub: "Branding, illustration, UX", c: "var(--amber)" },
-    { icon: <Users size={20} strokeWidth={1.75} color="#06B6D4" />, name: "Childcare & Tutoring", sub: "Babysitting, tutoring, coaching", c: "#06B6D4" },
+    { icon: <Home size={20} strokeWidth={1.75} color="#1AABF0" />, name: "Home & Garden", sub: "Gardening, landscaping, odd jobs", c: "#1AABF0" },
+    { icon: <Wrench size={20} strokeWidth={1.75} color="#7C3AED" />, name: "Repairs & Trades", sub: "Plumbing, electrical, carpentry", c: "#7C3AED" },
+    { icon: <Truck size={20} strokeWidth={1.75} color="#F59E0B" />, name: "Removals & Delivery", sub: "Furniture, storage, couriers", c: "#F59E0B" },
+    { icon: <Monitor size={20} strokeWidth={1.75} color="#06B6D4" />, name: "Tech & IT", sub: "Setup, repairs, smart home", c: "#06B6D4" },
+    { icon: <Camera size={20} strokeWidth={1.75} color="#F43F5E" />, name: "Photography & Video", sub: "Portraits, events, content", c: "#F43F5E" },
+    { icon: <Sparkles size={20} strokeWidth={1.75} color="#10B981" />, name: "Cleaning", sub: "Home, office, end of lease", c: "#10B981" },
+    { icon: <Palette size={20} strokeWidth={1.75} color="#F97316" />, name: "Design & Creative", sub: "Branding, illustration, UX", c: "#F97316" },
+    { icon: <Users size={20} strokeWidth={1.75} color="#EC4899" />, name: "Childcare & Tutoring", sub: "Babysitting, tutoring, coaching", c: "#EC4899" },
   ];
-
   return (
-    <section id="categories" style={{ padding: "100px 24px", background: "var(--bg2)" }}>
+    <section id="categories" style={{ padding: "100px 24px", background: "var(--s-cat)" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
         <ScrollSectionIntro>
-          <SectionLabel color="var(--amber)">Services</SectionLabel>
-          <h2 className="text-balance" style={h2S}>What can we help you with?</h2>
-          <p style={subS}>Every category. Every suburb. Post in under two minutes.</p>
+          <SectionLabel color="#7C3AED">Services</SectionLabel>
+          <h2 className="text-balance" style={h2S}>What do you need done today?</h2>
+          <p style={subS}>Browse by category or just describe your task — local providers will come to you.</p>
         </ScrollSectionIntro>
-
         <ScrollRevealGroup style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(260px,1fr))", gap: 12, marginTop: 64 }} stagger={0.05}>
           {cats.map(c => (
             <ScrollRevealItem key={c.name} className="hh-cat-card" style={{
@@ -525,7 +525,7 @@ function Categories() {
               <IconBox icon={c.icon} color={c.c} size={46} />
               <div style={{ minWidth: 0 }}>
                 <div style={{ fontSize: 16, fontWeight: 700, color: "var(--text)", letterSpacing: "-0.02em" }}>{c.name}</div>
-                <div style={{ fontSize: 12, color: "var(--text2)", marginTop: 3, fontWeight: 400 }}>{c.sub}</div>
+                <div style={{ fontSize: 12, color: "var(--text2)", marginTop: 3 }}>{c.sub}</div>
               </div>
               <ChevronRight size={14} color="var(--text3)" style={{ marginLeft: "auto", flexShrink: 0 }} />
             </ScrollRevealItem>
@@ -537,45 +537,43 @@ function Categories() {
 }
 
 /* ══════════════════════════════════════════════
-   TRUST & SAFETY
+   TRUST & SAFETY  — soft mint section
 ══════════════════════════════════════════════ */
 function TrustSafety() {
   const pillars = [
     {
-      icon: <CreditCard size={26} strokeWidth={1.75} color="var(--brand)" />,
-      c: "var(--brand)", badge: "PCI-DSS Compliant",
-      title: "Stripe Escrow", badgeColor: "var(--brand)",
-      desc: "Payments held by Stripe — not us — until you confirm the job is complete. Industry-standard financial security.",
+      icon: <CreditCard size={26} strokeWidth={1.75} color="#1AABF0" />,
+      c: "#1AABF0", badge: "Powered by Stripe",
+      title: "Escrow Payments",
+      desc: "We use Stripe to hold funds between tasks. Money doesn't move until you're satisfied — reducing risk for everyone involved.",
     },
     {
-      icon: <UserCheck size={26} strokeWidth={1.75} color="var(--emerald)" />,
-      c: "var(--emerald)", badge: "ID Checked",
-      title: "Identity Verified", badgeColor: "var(--emerald)",
-      desc: "Every provider submits government-grade identity verification before they can accept a single task.",
+      icon: <UserCheck size={26} strokeWidth={1.75} color="#10B981" />,
+      c: "#10B981", badge: "ID Verification",
+      title: "Provider Identity Checks",
+      desc: "Providers are asked to verify their identity before they can take on work. It's one layer of assurance when inviting someone to your home.",
     },
     {
-      icon: <HeartHandshake size={26} strokeWidth={1.75} color="var(--amber)" />,
-      c: "var(--amber)", badge: "24/7 Support",
-      title: "Dispute Resolution", badgeColor: "var(--amber)",
-      desc: "Our trained team steps in when things go wrong. Evidence-based, fair outcomes guaranteed for both parties.",
+      icon: <HeartHandshake size={26} strokeWidth={1.75} color="#F59E0B" />,
+      c: "#F59E0B", badge: "Disputes Team",
+      title: "Dispute Assistance",
+      desc: "If something doesn't go to plan, our team will step in to help both sides reach a fair outcome based on the evidence available.",
     },
     {
-      icon: <ShieldCheck size={26} strokeWidth={1.75} color="var(--violet)" />,
-      c: "var(--violet)", badge: "Multi-Layer",
-      title: "Safety Architecture", badgeColor: "var(--violet)",
-      desc: "ID, escrow, ratings, and dispute systems all working together — safety is baked into every layer of the platform.",
+      icon: <ShieldCheck size={26} strokeWidth={1.75} color="#7C3AED" />,
+      c: "#7C3AED", badge: "Layered Approach",
+      title: "Multiple Safeguards",
+      desc: "Verification, escrow, ratings, and dispute assistance all work together. No single point of failure — just thoughtful, layered protection.",
     },
   ];
-
   return (
-    <section id="trust-safety" style={{ padding: "100px 24px", background: "var(--bg3)" }}>
+    <section id="trust-safety" style={{ padding: "100px 24px", background: "var(--s-trust)" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
         <ScrollSectionIntro>
-          <SectionLabel color="var(--violet)">Trust & Safety</SectionLabel>
-          <h2 className="text-balance" style={h2S}>Safety isn&rsquo;t a feature.<br />It&rsquo;s the foundation.</h2>
-          <p style={subS}>Hire with complete confidence — every safeguard exists to protect you.</p>
+          <SectionLabel color="#10B981">How We Protect You</SectionLabel>
+          <h2 className="text-balance" style={h2S}>We take safety seriously.</h2>
+          <p style={subS}>We can&rsquo;t promise perfection, but we&rsquo;ve built real protections so you can hire local with confidence.</p>
         </ScrollSectionIntro>
-
         <ScrollRevealGroup style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))", gap: 14, marginTop: 64 }}>
           {pillars.map(p => (
             <ScrollRevealItem key={p.title} className="hh-trust-card" style={{
@@ -586,14 +584,12 @@ function TrustSafety() {
                 <span style={{
                   display: "inline-flex", alignItems: "center", gap: 5,
                   fontSize: 10, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase",
-                  color: p.badgeColor, background: `${p.badgeColor}15`,
-                  padding: "4px 12px", borderRadius: 6,
+                  color: p.c, background: `${p.c}15`, padding: "4px 12px", borderRadius: 6,
                 }}>
-                  <CheckCircle2 size={10} strokeWidth={2.5} />
-                  {p.badge}
+                  <CheckCircle2 size={10} strokeWidth={2.5} />{p.badge}
                 </span>
               </div>
-              <h3 style={{ fontSize: 22, fontWeight: 700, color: "var(--text)", marginBottom: 12, letterSpacing: "-0.025em" }}>{p.title}</h3>
+              <h3 style={{ fontSize: 21, fontWeight: 700, color: "var(--text)", marginBottom: 12, letterSpacing: "-0.025em" }}>{p.title}</h3>
               <p style={{ fontSize: 15, color: "var(--text2)", lineHeight: 1.75 }}>{p.desc}</p>
             </ScrollRevealItem>
           ))}
@@ -604,45 +600,40 @@ function TrustSafety() {
 }
 
 /* ══════════════════════════════════════════════
-   FOR PROVIDERS
+   FOR PROVIDERS  — neutral with dark earnings card
 ══════════════════════════════════════════════ */
 function ForProviders() {
   const perks = [
-    { icon: <BarChart3 size={15} strokeWidth={2} />, text: "Browse hundreds of new local tasks posted every day" },
-    { icon: <Banknote size={15} strokeWidth={2} />, text: "Set your own rates — you control exactly what you earn" },
-    { icon: <Award size={15} strokeWidth={2} />, text: "Build a verified profile with reviews and ratings" },
-    { icon: <TrendingUp size={15} strokeWidth={2} />, text: "Get paid via Stripe Connect — direct to your bank account" },
-    { icon: <Smartphone size={15} strokeWidth={2} />, text: "Manage bids, conversations, and jobs all from one app" },
-    { icon: <Building2 size={15} strokeWidth={2} />, text: "Grow your business with zero upfront cost to join" },
+    { icon: <BarChart3 size={15} strokeWidth={2} />, text: "Browse local tasks posted daily in your area", c: "#1AABF0" },
+    { icon: <Banknote size={15} strokeWidth={2} />, text: "Set your own rates — price what feels right to you", c: "#10B981" },
+    { icon: <Award size={15} strokeWidth={2} />, text: "Build a profile with reviews to grow your reputation", c: "#F59E0B" },
+    { icon: <TrendingUp size={15} strokeWidth={2} />, text: "Get paid via Stripe Connect — straight to your bank", c: "#7C3AED" },
+    { icon: <Smartphone size={15} strokeWidth={2} />, text: "Manage bids, chat, and jobs from a single app", c: "#F43F5E" },
+    { icon: <Building2 size={15} strokeWidth={2} />, text: "Free to join — start browsing tasks right away", c: "#06B6D4" },
   ];
-
   return (
-    <section id="for-providers" style={{ padding: "100px 24px", background: "var(--bg)" }}>
+    <section id="for-providers" style={{ padding: "100px 24px", background: "var(--s-prov)" }}>
       <div className="hh-for-providers-grid" style={{ maxWidth: 1200, margin: "0 auto", display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80, alignItems: "center" }}>
-
         <ScrollReveal y={40}>
-          <SectionLabel color="var(--brand)" align="left">For Service Providers</SectionLabel>
+          <SectionLabel color="#F59E0B" align="left">For Service Providers</SectionLabel>
           <h2 className="text-balance" style={{ ...h2S, textAlign: "left" }}>
             Your skills.<br />
             <span style={{
-              backgroundImage: "linear-gradient(135deg, var(--brand) 0%, var(--brand-mid) 100%)",
+              backgroundImage: "linear-gradient(135deg, #F59E0B 0%, #F43F5E 50%, #7C3AED 100%)",
               WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent", backgroundClip: "text",
-            }}>Your income.</span>
+            }}>Your terms.</span>
           </h2>
           <p style={{ fontSize: 18, color: "var(--text2)", lineHeight: 1.65, marginBottom: 36, letterSpacing: "-0.01em" }}>
-            Earn on your schedule. No marketing overhead. No chasing invoices. Just reliable local work, paid on completion.
+            Find local work, set your own schedule, and get paid when the job is done. No monthly fees, no lead charges — just tasks waiting for people like you.
           </p>
           <ul style={{ listStyle: "none", padding: 0, margin: "0 0 40px", display: "flex", flexDirection: "column", gap: 14 }}>
             {perks.map(p => (
               <li key={p.text} style={{ display: "flex", alignItems: "flex-start", gap: 14 }}>
                 <div style={{
                   width: 28, height: 28, borderRadius: 8, flexShrink: 0,
-                  background: "var(--brand-dim)", border: "1px solid var(--border)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  color: "var(--brand)", marginTop: 1,
-                }}>
-                  {p.icon}
-                </div>
+                  background: `${p.c}15`, border: `1px solid ${p.c}25`,
+                  display: "flex", alignItems: "center", justifyContent: "center", color: p.c, marginTop: 1,
+                }}>{p.icon}</div>
                 <span style={{ fontSize: 15, color: "var(--text2)", lineHeight: 1.6 }}>{p.text}</span>
               </li>
             ))}
@@ -651,70 +642,56 @@ function ForProviders() {
             onClick={e => { e.preventDefault(); document.querySelector("#download")?.scrollIntoView({ behavior: "smooth" }); }}
             style={{
               display: "inline-flex", alignItems: "center", gap: 10,
-              background: "linear-gradient(135deg, var(--brand), var(--brand-deep))",
+              background: "linear-gradient(135deg, #F59E0B, #F43F5E)",
               color: "#fff", fontWeight: 700, fontSize: 17,
               padding: "15px 32px", borderRadius: 12, textDecoration: "none",
-              letterSpacing: "-0.022em", boxShadow: "0 8px 28px var(--glow)",
+              letterSpacing: "-0.022em",
+              boxShadow: "0 8px 32px rgba(245,158,11,0.30), 0 4px 12px rgba(244,63,94,0.20)",
             }}>
             <Briefcase size={18} strokeWidth={2} />
-            Become a Provider — Free
+            Join as a Provider — Free
           </a>
         </ScrollReveal>
 
         {/* Earnings dashboard */}
         <ScrollReveal delay={0.18} y={60} style={{ display: "flex", justifyContent: "center" }}>
           <div style={{
-            background: "linear-gradient(145deg, #040D1C 0%, #0A1830 100%)",
+            background: "linear-gradient(145deg, #080E1C 0%, #0D1830 100%)",
             borderRadius: 24, padding: 36, width: "100%", maxWidth: 420,
-            border: "1px solid rgba(26,171,240,0.24)",
-            boxShadow: "0 32px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(26,171,240,0.08)",
+            border: "1px solid rgba(255,255,255,0.07)",
+            boxShadow: "0 32px 80px rgba(0,0,0,0.5)",
           }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
               <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <BarChart3 size={14} color="#64748B" strokeWidth={2} />
-                <span style={{ fontSize: 12, color: "#64748B", fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase" }}>Monthly Earnings</span>
+                <span style={{ fontSize: 12, color: "#64748B", fontWeight: 600, letterSpacing: "0.04em", textTransform: "uppercase" }}>Monthly Snapshot</span>
               </div>
-              <span style={{ fontSize: 11, background: "rgba(16,185,129,0.15)", color: "#10B981", padding: "4px 10px", borderRadius: 8, fontWeight: 700, display: "flex", alignItems: "center", gap: 4 }}>
-                <TrendingUp size={10} strokeWidth={2.5} />▲ +24%
-              </span>
+              <span style={{ fontSize: 11, background: "rgba(16,185,129,0.15)", color: "#10B981", padding: "4px 10px", borderRadius: 8, fontWeight: 700 }}>▲ Active</span>
             </div>
-            <div style={{ fontSize: 52, fontWeight: 800, color: "#F0F6FF", fontFamily: "var(--font-jakarta)", letterSpacing: "-0.05em", marginBottom: 4 }}>
-              $4,280
-            </div>
+            <div style={{ fontSize: 52, fontWeight: 800, color: "#F0F6FF", fontFamily: "var(--font-jakarta)", letterSpacing: "-0.05em", marginBottom: 4 }}>$4,280</div>
             <div style={{ fontSize: 13, color: "#475569", marginBottom: 28, display: "flex", alignItems: "center", gap: 6 }}>
               <CheckCircle2 size={13} color="#10B981" strokeWidth={2} />
-              18 tasks completed · 4.9 ★ avg
+              18 tasks · example earnings
             </div>
-
             {/* Bar chart */}
             <div style={{ display: "flex", gap: 5, alignItems: "flex-end", height: 44, marginBottom: 28 }}>
               {[35, 55, 42, 70, 48, 88, 65].map((h, i) => (
                 <div key={i} style={{
                   flex: 1, borderRadius: 4,
-                  background: `rgba(26,171,240,${i === 5 ? 0.9 : 0.22})`,
-                  height: `${h}%`,
-                  boxShadow: i === 5 ? "0 0 12px rgba(26,171,240,0.55)" : "none",
+                  background: ["rgba(124,58,237,0.5)", "rgba(26,171,240,0.5)", "rgba(16,185,129,0.5)", "rgba(245,158,11,0.5)", "rgba(244,63,94,0.5)", "rgba(6,182,212,0.9)", "rgba(249,115,22,0.5)"][i],
+                  height: `${h}%`, boxShadow: i === 5 ? "0 0 12px rgba(6,182,212,0.5)" : "none",
                 }} />
               ))}
             </div>
-
             {[
               { icon: <Wrench size={12} strokeWidth={2} />, task: "Bathroom renovation", amt: "$480", date: "Today", dot: "#1AABF0" },
               { icon: <Monitor size={12} strokeWidth={2} />, task: "Office furniture", amt: "$120", date: "Yesterday", dot: "#10B981" },
               { icon: <Sparkles size={12} strokeWidth={2} />, task: "Garden landscaping", amt: "$650", date: "2 days ago", dot: "#F59E0B" },
               { icon: <Zap size={12} strokeWidth={2} />, task: "Appliance install", amt: "$95", date: "4 days ago", dot: "#7C3AED" },
             ].map(t => (
-              <div key={t.task} style={{
-                display: "flex", justifyContent: "space-between", alignItems: "center",
-                padding: "11px 0", borderBottom: "1px solid rgba(255,255,255,0.05)",
-              }}>
+              <div key={t.task} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "11px 0", borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                  <div style={{
-                    width: 28, height: 28, borderRadius: 8, flexShrink: 0,
-                    background: `${t.dot}20`, border: `1px solid ${t.dot}30`,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    color: t.dot,
-                  }}>{t.icon}</div>
+                  <div style={{ width: 28, height: 28, borderRadius: 8, flexShrink: 0, background: `${t.dot}20`, border: `1px solid ${t.dot}30`, display: "flex", alignItems: "center", justifyContent: "center", color: t.dot }}>{t.icon}</div>
                   <div>
                     <div style={{ fontSize: 13, color: "#E2E8F0", fontWeight: 600 }}>{t.task}</div>
                     <div style={{ fontSize: 11, color: "#475569", marginTop: 1 }}>{t.date}</div>
@@ -723,6 +700,7 @@ function ForProviders() {
                 <div style={{ fontSize: 14, color: "#1AABF0", fontWeight: 700 }}>{t.amt}</div>
               </div>
             ))}
+            <p style={{ fontSize: 11, color: "#334155", marginTop: 14, textAlign: "center" }}>Illustrative figures only</p>
           </div>
         </ScrollReveal>
       </div>
@@ -731,13 +709,13 @@ function ForProviders() {
 }
 
 /* ══════════════════════════════════════════════
-   DOWNLOAD SECTION
+   DOWNLOAD  — warm section, Apple Coming Soon
 ══════════════════════════════════════════════ */
 function Download({ dark }: { dark: boolean }) {
   const badges = [
-    { icon: <Building2 size={13} strokeWidth={2} />, label: "Australian Owned & Operated" },
-    { icon: <ShieldCheck size={13} strokeWidth={2} />, label: "Stripe Secured Payments" },
-    { icon: <UserCheck size={13} strokeWidth={2} />, label: "Real-ID Verified Members" },
+    { icon: <Building2 size={13} strokeWidth={2} />, label: "Australian Owned", c: "#1AABF0" },
+    { icon: <ShieldCheck size={13} strokeWidth={2} />, label: "Stripe Payments", c: "#10B981" },
+    { icon: <UserCheck size={13} strokeWidth={2} />, label: "ID Verification", c: "#7C3AED" },
   ];
 
   return (
@@ -746,24 +724,23 @@ function Download({ dark }: { dark: boolean }) {
         <ScrollReveal className="hh-app-banner-content">
           <div style={{ margin: "0 auto 24px", width: 72, height: 72 }} className="hh-app-banner-icon">
             <Image src="/icon-helpinghandsau.png" alt="" width={72} height={72}
-              style={{ borderRadius: 18, display: "block", boxShadow: "0 12px 40px rgba(26,171,240,0.35)" }} />
+              style={{ borderRadius: 18, display: "block", boxShadow: "0 12px 40px rgba(124,58,237,0.30)" }} />
           </div>
-
           <h2 className="text-balance" style={{
             fontFamily: "var(--font-jakarta)", fontWeight: 800,
-            fontSize: "clamp(32px, 4.5vw, 56px)", color: dark ? "#EDF2FF" : "var(--text)",
-            letterSpacing: "-0.05em", marginBottom: 16, textAlign: "center",
+            fontSize: "clamp(30px, 4.5vw, 52px)", color: dark ? "#EDF2FF" : "var(--text)",
+            letterSpacing: "-0.05em", marginBottom: 14, textAlign: "center",
           }}>
             Your community, in your pocket.
           </h2>
           <p style={{
-            fontSize: "clamp(17px, 2vw, 20px)", color: dark ? "#94A3B8" : "var(--text2)", lineHeight: 1.6,
-            textAlign: "center", maxWidth: 560, margin: "0 auto 32px", letterSpacing: "-0.01em",
+            fontSize: "clamp(16px, 2vw, 19px)", color: dark ? "#94A3B8" : "var(--text2)", lineHeight: 1.65,
+            textAlign: "center", maxWidth: 520, margin: "0 auto 28px", letterSpacing: "-0.01em",
           }}>
-            Post tasks, receive bids, track jobs, and release payments — securely from anywhere.
+            Post tasks, receive bids, chat with providers, and release payment when you&rsquo;re ready. All in one place.
           </p>
 
-          <div className="hh-app-banner-badges" style={{ display: "flex", flexWrap: "wrap", gap: 10, justifyContent: "center", marginBottom: 40 }}>
+          <div className="hh-app-banner-badges" style={{ display: "flex", flexWrap: "wrap", gap: 10, justifyContent: "center", marginBottom: 36 }}>
             {badges.map(b => (
               <span key={b.label} style={{
                 display: "inline-flex", alignItems: "center", gap: 7,
@@ -771,37 +748,40 @@ function Download({ dark }: { dark: boolean }) {
                 background: dark ? "rgba(255,255,255,0.06)" : "var(--card)",
                 padding: "8px 16px", borderRadius: 10, border: "1px solid var(--border)",
               }}>
-                <span style={{ color: "var(--brand)" }}>{b.icon}</span>
-                {b.label}
+                <span style={{ color: b.c }}>{b.icon}</span>{b.label}
               </span>
             ))}
           </div>
 
           <div className="hh-app-banner-stores" style={{ display: "flex", gap: 48, justifyContent: "center", flexWrap: "wrap", alignItems: "flex-start" }}>
+            {/* Apple Store — live */}
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
-              <a href="#" aria-label="Download on the App Store" style={{ display: "block", lineHeight: 0 }}>
+              <a href={STORE_LINKS.apple} target="_blank" rel="noopener noreferrer" aria-label="Download on the App Store" style={{ display: "block", lineHeight: 0 }}>
                 <AppleStoreBadge width={160} />
               </a>
               <div className="hh-app-banner-qr" style={{
-                background: "#fff", borderRadius: 16, padding: 12,
-                boxShadow: "0 8px 40px rgba(0,0,0,0.2)", border: "2px solid rgba(26,171,240,0.3)",
+                background: "#fff", borderRadius: 14, padding: 10,
+                boxShadow: "0 8px 40px rgba(0,0,0,0.18)", border: "2px solid rgba(26,171,240,0.28)",
               }}>
-                <Image src="/qr-apple.png" alt="Scan for App Store" width={120} height={120} style={{ display: "block", borderRadius: 8 }} />
+                <Image src="/qr-apple.png" alt="Scan to download on the App Store" width={120} height={120} style={{ display: "block", borderRadius: 6 }} />
               </div>
               <span className="hh-app-banner-qr" style={{ fontSize: 11, color: dark ? "#64748B" : "var(--text2)", fontWeight: 500 }}>Scan for iOS</span>
             </div>
+
             <div className="hh-app-banner-divider" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", paddingTop: 12 }}>
               <div style={{ width: 1, height: 180, background: "linear-gradient(to bottom, transparent, var(--border), transparent)" }} />
             </div>
+
+            {/* Google Play — live */}
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}>
               <a href={STORE_LINKS.android} target="_blank" rel="noopener noreferrer" aria-label="Get it on Google Play" style={{ display: "block", lineHeight: 0 }}>
                 <GooglePlayBadge width={180} />
               </a>
               <div className="hh-app-banner-qr" style={{
-                background: "#fff", borderRadius: 16, padding: 12,
-                boxShadow: "0 8px 40px rgba(0,0,0,0.2)", border: "2px solid rgba(26,171,240,0.3)",
+                background: "#fff", borderRadius: 14, padding: 10,
+                boxShadow: "0 8px 40px rgba(0,0,0,0.18)", border: "2px solid rgba(26,171,240,0.28)",
               }}>
-                <Image src="/qr-android.png" alt="Scan for Google Play" width={120} height={120} style={{ display: "block", borderRadius: 8 }} />
+                <Image src="/qr-android.png" alt="Scan to download on Google Play" width={120} height={120} style={{ display: "block", borderRadius: 6 }} />
               </div>
               <span className="hh-app-banner-qr" style={{ fontSize: 11, color: dark ? "#64748B" : "var(--text2)", fontWeight: 500 }}>Scan for Android</span>
             </div>
@@ -825,9 +805,8 @@ function Footer() {
     { label: "Refunds & Disputes", href: "/legal/refunds" },
     { label: "Accessibility", href: "/legal/accessibility" },
   ];
-
   return (
-    <footer style={{ background: "#030812", borderTop: "1px solid rgba(26,171,240,0.12)", padding: "72px 24px 44px" }}>
+    <footer style={{ background: "#040810", borderTop: "1px solid rgba(255,255,255,0.07)", padding: "72px 24px 44px" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
         <div className="hh-footer-grid" style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr", gap: 48, marginBottom: 64 }}>
           <div>
@@ -839,39 +818,17 @@ function Footer() {
               </span>
             </div>
             <p style={{ fontSize: 14, color: "#475569", lineHeight: 1.8, maxWidth: 280 }}>
-              Australia&rsquo;s trusted local task marketplace — connecting people with verified, skilled providers. Safe, fast, affordable.
+              A local task marketplace connecting Australians with skilled providers in their area. Fair, transparent, and community-focused.
             </p>
-            <div style={{ marginTop: 24, display: "flex", gap: 10 }}>
-              {[
-                { icon: <Globe size={14} strokeWidth={2} />, label: "AU" },
-                { icon: <Lock size={14} strokeWidth={2} />, label: "" },
-                { icon: <CheckCircle2 size={14} strokeWidth={2} />, label: "" },
-              ].map((v, i) => (
-                <div key={i} style={{
-                  width: 34, height: 34, borderRadius: 8,
-                  background: "rgba(26,171,240,0.1)", border: "1px solid rgba(26,171,240,0.2)",
-                  display: "flex", alignItems: "center", justifyContent: "center", color: "#1AABF0",
-                }}>{v.icon}</div>
+            <div style={{ marginTop: 24, display: "flex", gap: 8 }}>
+              {[{ i: <Globe size={14} strokeWidth={2} />, c: "#1AABF0" }, { i: <Lock size={14} strokeWidth={2} />, c: "#10B981" }, { i: <CheckCircle2 size={14} strokeWidth={2} />, c: "#7C3AED" }].map((v, i) => (
+                <div key={i} style={{ width: 32, height: 32, borderRadius: 8, background: `${v.c}15`, border: `1px solid ${v.c}25`, display: "flex", alignItems: "center", justifyContent: "center", color: v.c }}>{v.i}</div>
               ))}
             </div>
           </div>
           {[
-            {
-              title: "Platform", links: [
-                { label: "Post a Task", href: "#how-it-works" },
-                { label: "Browse Services", href: "#categories" },
-                { label: "How It Works", href: "#how-it-works" },
-                { label: "For Providers", href: "#for-providers" },
-              ]
-            },
-            {
-              title: "Providers", links: [
-                { label: "Join Free", href: "#for-providers" },
-                { label: "How It Works", href: "#how-it-works" },
-                { label: "Earnings", href: "#for-providers" },
-                { label: "Trust & Safety", href: "#trust-safety" },
-              ]
-            },
+            { title: "Platform", links: [{ label: "Post a Task", href: "#how-it-works" }, { label: "Browse Services", href: "#categories" }, { label: "How It Works", href: "#how-it-works" }, { label: "For Providers", href: "#for-providers" }] },
+            { title: "Providers", links: [{ label: "Join Free", href: "#for-providers" }, { label: "How It Works", href: "#how-it-works" }, { label: "Earnings", href: "#for-providers" }, { label: "Trust & Safety", href: "#trust-safety" }] },
             { title: "Legal", links: legalLinks },
           ].map(col => (
             <div key={col.title}>
@@ -924,8 +881,7 @@ export function HelpingHandsAUMarketingPage({ logoHref }: { logoHref: string }) 
   const cssVars = Object.entries(palette).map(([k, v]) => `${k}:${v}`).join(";");
 
   return (
-    <div className="hh-root" style={{ colorScheme: dark ? "dark" : "light" }}
-      data-dark={dark ? "" : undefined}>
+    <div className="hh-root" style={{ colorScheme: dark ? "dark" : "light" }} data-dark={dark ? "" : undefined}>
       <style>{`
         .hh-root { ${cssVars}; }
 
@@ -944,19 +900,18 @@ export function HelpingHandsAUMarketingPage({ logoHref }: { logoHref: string }) 
         .hh-step-card  { transition: transform .3s cubic-bezier(.4,0,.2,1), box-shadow .3s, border-color .3s; }
         .hh-step-card:hover  { transform: translateY(-5px); box-shadow: 0 20px 48px var(--glow); border-color: var(--brand) !important; }
         .hh-feat-card  { transition: transform .3s cubic-bezier(.4,0,.2,1), box-shadow .3s, border-color .3s; }
-        .hh-feat-card:hover  { transform: translateY(-4px); box-shadow: 0 16px 36px var(--glow); border-color: var(--brand) !important; }
+        .hh-feat-card:hover  { transform: translateY(-4px); box-shadow: 0 14px 36px var(--glow); border-color: var(--brand) !important; }
         .hh-cat-card   { transition: transform .3s cubic-bezier(.4,0,.2,1), box-shadow .3s; }
-        .hh-cat-card:hover   { transform: translateY(-3px); box-shadow: 0 10px 30px var(--glow); }
+        .hh-cat-card:hover   { transform: translateY(-3px); box-shadow: 0 10px 28px var(--glow); }
         .hh-trust-card { transition: transform .3s cubic-bezier(.4,0,.2,1), box-shadow .3s, border-color .3s; }
         .hh-trust-card:hover { transform: translateY(-5px); box-shadow: 0 20px 48px var(--glow); border-color: var(--brand) !important; }
-
         .hh-nav-link { transition: color .2s; }
         .hh-nav-link:hover { color: var(--brand) !important; }
         .hh-cta-btn { transition: transform .2s, box-shadow .2s; }
         .hh-cta-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 28px var(--glow) !important; }
         .hh-hero-btn-primary { transition: transform .2s, box-shadow .2s; }
-        .hh-hero-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 20px 52px var(--glow) !important; }
-        .hh-hero-btn-secondary { transition: background .2s, border-color .2s, transform .2s; }
+        .hh-hero-btn-primary:hover { transform: translateY(-2px); box-shadow: 0 20px 52px rgba(124,58,237,0.35) !important; }
+        .hh-hero-btn-secondary { transition: border-color .2s, transform .2s; }
         .hh-hero-btn-secondary:hover { border-color: var(--brand) !important; transform: translateY(-2px); }
         .hh-footer-link { transition: color .2s; }
         .hh-footer-link:hover { color: var(--brand) !important; }
@@ -964,10 +919,10 @@ export function HelpingHandsAUMarketingPage({ logoHref }: { logoHref: string }) 
         .hh-app-banner {
           padding: 100px 24px;
           background: ${dark
-            ? "linear-gradient(135deg, #060C18 0%, #0A1220 50%, #0D1728 100%)"
-            : "linear-gradient(135deg, rgba(26,171,240,0.05) 0%, #fff 40%, rgba(26,171,240,0.04) 100%)"};
+            ? "linear-gradient(135deg, #09060C 0%, #100808 50%, #060C14 100%)"
+            : "linear-gradient(135deg, rgba(245,158,11,0.06) 0%, #fff 35%, rgba(124,58,237,0.05) 75%, rgba(16,185,129,0.05) 100%)"
+          };
           border-top: 1px solid var(--border);
-          position: relative;
         }
         .hh-app-banner-inner { max-width: 900px; margin: 0 auto; }
         .hh-app-banner-icon { display: none; }
@@ -978,25 +933,24 @@ export function HelpingHandsAUMarketingPage({ logoHref }: { logoHref: string }) 
           .hh-app-banner {
             position: fixed; bottom: 0; left: 0; right: 0; z-index: 90;
             padding: 14px 16px calc(14px + env(safe-area-inset-bottom,0px));
-            background: ${dark ? "rgba(6,12,24,0.96)" : "rgba(247,249,252,0.97)"} !important;
+            background: ${dark ? "rgba(6,6,12,0.97)" : "rgba(250,250,250,0.97)"} !important;
             backdrop-filter: blur(20px); border-top: 1px solid var(--border);
             box-shadow: 0 -8px 40px rgba(0,0,0,0.18); overflow: visible;
           }
           .hh-app-banner-inner { max-width: 100%; }
           .hh-app-banner-icon { display: block !important; }
           .hh-app-banner-content h2 { font-size: 18px !important; margin-bottom: 6px !important; }
-          .hh-app-banner-content p { font-size: 12px !important; margin-bottom: 12px !important; line-height: 1.4 !important; }
+          .hh-app-banner-content p { font-size: 12px !important; margin-bottom: 12px !important; }
           .hh-app-banner-badges, .hh-app-banner-qr, .hh-app-banner-divider { display: none !important; }
           .hh-app-banner-stores { gap: 10px !important; flex-direction: row !important; align-items: center !important; }
           .hh-app-banner-stores > div { flex-direction: row !important; gap: 0 !important; }
-          .hh-app-banner-stores a svg { width: 120px !important; height: auto !important; }
+          .hh-app-banner-stores a svg, .hh-app-banner-stores button svg { width: 120px !important; height: auto !important; }
         }
 
-        .hh-root * { transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease; }
+        .hh-root * { transition: background-color 0.3s, border-color 0.3s, color 0.3s; }
         .hh-root img, .hh-root svg, .hh-root button { transition: none; }
       `}</style>
-
-      <style>{`body { background: ${dark ? "#060C18" : "#F7F9FC"} !important; }`}</style>
+      <style>{`body { background: ${dark ? "#080C14" : "#FAFAFA"} !important; }`}</style>
 
       {mounted && <Nav logoHref={logoHref} dark={dark} onToggleDark={toggleDark} />}
       {!mounted && <nav style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, height: 62 }} />}
